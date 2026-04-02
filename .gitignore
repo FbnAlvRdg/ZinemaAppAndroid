@@ -1,0 +1,73 @@
+# Android Studio
+.idea/
+*.iml
+*.iws
+.gradle/
+local.properties
+captures/
+.externalNativeBuild/
+
+# Build outputs
+/build/
+/app/build/
+/**/build/
+
+# Gradle files
+.gradle/
+build/
+!gradle-wrapper.jar
+
+# Kotlin
+*.kotlin_module
+
+# Logs
+*.log
+
+# Android specific
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+*.so
+*.jar
+*.war
+*.ear
+*.keystore
+
+# NDK
+obj/
+*.o
+*.so
+
+# IntelliJ
+out/
+
+# Misc
+.DS_Store
+*.tmp
+*.temp
+*.swp
+*.swo
+*.swn
+*.bak
+*.orig
+*.rej
+
+# Coverage
+*.ec
+*.em
+coverage/
+*.profraw
+
+# Firebase / Google Services
+google-services.json
+google-services-info.plist
+
+# Mac specific
+*.DS_Store
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
