@@ -1,5 +1,8 @@
 package com.example.proyecto_gestion_peliculas.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable //hai que continuar coa serializacion cando sepamos os campos na api
 data class Pelicula(
     var title: String,
     var genero: String,
