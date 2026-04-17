@@ -1,7 +1,7 @@
 package com.example.proyecto_gestion_peliculas.data
 
 import com.example.proyecto_gestion_peliculas.R
-import com.example.proyecto_gestion_peliculas.models.Pelicula
+import com.example.proyecto_gestion_peliculas.domain.Pelicula
 
 
 fun listarPeliculasPantalla(): List<Pelicula> {

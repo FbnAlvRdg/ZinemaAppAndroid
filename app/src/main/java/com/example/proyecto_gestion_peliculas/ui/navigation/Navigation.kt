@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.example.proyecto_gestion_peliculas.models.Pelicula
+import com.example.proyecto_gestion_peliculas.domain.Pelicula
 import com.example.proyecto_gestion_peliculas.ui.screens.AddFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.screens.DetailFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.screens.EditFilmScreen

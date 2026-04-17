@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.models
+package com.example.proyecto_gestion_peliculas.domain
 
 import kotlinx.serialization.Serializable
 

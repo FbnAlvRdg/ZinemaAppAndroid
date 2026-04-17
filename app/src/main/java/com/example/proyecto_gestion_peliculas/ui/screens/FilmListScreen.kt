@@ -37,7 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_gestion_peliculas.R
 import com.example.proyecto_gestion_peliculas.data.listarPeliculasPantalla
-import com.example.proyecto_gestion_peliculas.models.Pelicula
+import com.example.proyecto_gestion_peliculas.domain.Pelicula
 
 import com.example.proyecto_gestion_peliculas.ui.components.MyBottomBar
 import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar

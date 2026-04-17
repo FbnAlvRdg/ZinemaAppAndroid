@@ -34,14 +34,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_gestion_peliculas.R
 import com.example.proyecto_gestion_peliculas.data.saveEmail
 import com.example.proyecto_gestion_peliculas.ui.theme.PureWhite
-import com.example.proyecto_gestion_peliculas.util.checkEmail
-import com.example.proyecto_gestion_peliculas.util.checkEqualPassword
-import com.example.proyecto_gestion_peliculas.util.checkPassword
+import com.example.proyecto_gestion_peliculas.core.checkEmail
+import com.example.proyecto_gestion_peliculas.core.checkEqualPassword
+import com.example.proyecto_gestion_peliculas.core.checkPassword
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
