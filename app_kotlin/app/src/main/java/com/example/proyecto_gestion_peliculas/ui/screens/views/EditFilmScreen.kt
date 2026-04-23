@@ -1,4 +1,5 @@
-package com.example.proyecto_gestion_peliculas.ui.screens
+package com.example.proyecto_gestion_peliculas.ui.screens.views
+
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,17 +40,18 @@ import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
 import kotlinx.coroutines.launch
 
 @Composable
-fun AddFilmScreen(back: () -> Unit) {
+fun EditFilmScreen(back: () -> Unit) {
+    var header = "Editar película"
     var titulo by remember { mutableStateOf("") }
     var listaGeneros: List<String> = listarGeneros()
     var director by remember { mutableStateOf("") }
     var listaActores: List<String> = listarActores()
     var anho by remember { mutableStateOf("") }
     var valoracion by remember { mutableStateOf("") }
-    var header = "Añadir película"
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val scroll = rememberScrollState()
+
 
     Scaffold(
         topBar = { MyTopBar(header) },
@@ -67,7 +69,6 @@ fun AddFilmScreen(back: () -> Unit) {
                 .verticalScroll(scroll),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Spacer(modifier = Modifier.height(50.dp))
 
             OutlinedTextField(
@@ -167,7 +168,7 @@ fun AddFilmScreen(back: () -> Unit) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Seleccionar portada",
+                        text = "Seleccionar nueva portada",
                     )
                 }
             }
@@ -195,7 +196,7 @@ fun AddFilmScreen(back: () -> Unit) {
                     modifier = Modifier.weight(1f),
                     onClick = {
                         scope.launch {
-                            snackbarHostState.showSnackbar("Película añadida")
+                            snackbarHostState.showSnackbar("Película actualizada")
                             back()
                         }
                     }

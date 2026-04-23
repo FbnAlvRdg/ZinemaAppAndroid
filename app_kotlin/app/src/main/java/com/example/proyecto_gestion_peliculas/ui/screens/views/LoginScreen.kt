@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.screens
+package com.example.proyecto_gestion_peliculas.ui.screens.views
 
 
 import androidx.compose.foundation.Image
@@ -39,19 +39,19 @@ import androidx.compose.ui.unit.sp
 import com.example.proyecto_gestion_peliculas.R
 import com.example.proyecto_gestion_peliculas.data.readEmail
 import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
+import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
+import com.example.proyecto_gestion_peliculas.ui.screens.viewmodels.LoginScreenViewModel
 
 
 @Composable
-fun LoginScreen(toSignUp: () -> Unit, toFilmScreen: () -> Unit) {
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
+fun LoginScreen(navigator: Navigator, loginScreenViewModel: LoginScreenViewModel) {
     val context = LocalContext.current
-    var alertDialogLogIn = remember { mutableStateOf(false) }
-    var header = "Zinema"
+    val alertDialogLogIn = remember { mutableStateOf(false) }
+    val header = "Zinema"
 
     LaunchedEffect(Unit) {
         val savedEmail = readEmail(context)
-        email.value = savedEmail
+        loginScreenViewModel.enterEmail(savedEmail)
     }
 
     Scaffold(
@@ -102,8 +102,8 @@ fun LoginScreen(toSignUp: () -> Unit, toFilmScreen: () -> Unit) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 OutlinedTextField(
-                    value = email.value,
-                    onValueChange = { nuevoEmail -> email.value = nuevoEmail },
+                    value = loginScreenViewModel.email,
+                    onValueChange = { enteredEmail -> loginScreenViewModel.enterEmail(enteredEmail = enteredEmail) },
                     label = {
                         Text(
                             text = "Email"
@@ -136,8 +136,12 @@ fun LoginScreen(toSignUp: () -> Unit, toFilmScreen: () -> Unit) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 OutlinedTextField(
-                    value = password.value,
-                    onValueChange = { nuevoPassword -> password.value = nuevoPassword },
+                    value = loginScreenViewModel.password,
+                    onValueChange = { enteredPassword ->
+                        loginScreenViewModel.enterPassword(
+                            enteredPassword
+                        )
+                    },
                     label = {
                         Text(
                             text = "Contraseña"
@@ -165,10 +169,10 @@ fun LoginScreen(toSignUp: () -> Unit, toFilmScreen: () -> Unit) {
             ) {
                 Button(
                     onClick = {
-                        if (email.value.isBlank() || password.value.isBlank()) {
+                        if (loginScreenViewModel.email.isBlank() || loginScreenViewModel.password.isBlank()) {
                             alertDialogLogIn.value = true
                         } else {
-                            toFilmScreen()
+                            navigator.toFilmList()
                         }
                     },
 
@@ -182,7 +186,7 @@ fun LoginScreen(toSignUp: () -> Unit, toFilmScreen: () -> Unit) {
                 Spacer(modifier = Modifier.width(20.dp))
 
                 Button(
-                    onClick = { toSignUp() },
+                    onClick = { navigator.toSignUp() },
                     modifier = Modifier.width(100.dp)
                 ) {
                     Text(

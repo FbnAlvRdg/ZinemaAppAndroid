@@ -61,6 +61,8 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.converter.kotlinx.serialization)
 
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
 
 
     testImplementation(libs.junit)

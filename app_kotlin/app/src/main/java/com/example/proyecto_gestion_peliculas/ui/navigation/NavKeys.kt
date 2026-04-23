@@ -5,13 +5,13 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data object LoginScreen : NavKey
+data object LoginScreenKey : NavKey
 
 @Serializable
-data object SignUpScreen : NavKey
+data object SignUpScreenKey : NavKey
 
 @Serializable
-data object FilmListScreen : NavKey
+data object FilmListScreenKey : NavKey
 
 @Serializable
 data object AddFilmScreen : NavKey
