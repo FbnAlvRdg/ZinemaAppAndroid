@@ -71,3 +71,4 @@ google-services-info.plist
 .idea/
 *.iml
 *.iws
+application.properties
