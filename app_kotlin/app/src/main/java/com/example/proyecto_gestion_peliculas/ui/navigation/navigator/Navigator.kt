@@ -8,4 +8,6 @@ interface Navigator {
     fun toSignUp()
 
     fun toFilmList()
+
+    fun toEjemplo()
 }

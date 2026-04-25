@@ -186,7 +186,7 @@ fun LoginScreen(navigator: Navigator, loginScreenViewModel: LoginScreenViewModel
                 Spacer(modifier = Modifier.width(20.dp))
 
                 Button(
-                    onClick = { navigator.toSignUp() },
+                    onClick = { navigator.toEjemplo() },
                     modifier = Modifier.width(100.dp)
                 ) {
                     Text(

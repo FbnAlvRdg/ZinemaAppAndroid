@@ -21,3 +21,6 @@ data object EditFilmScreen : NavKey
 
 @Serializable
 data object DetailFilmScreen : NavKey
+
+@Serializable
+data object EjemploApiScreenKey : NavKey
