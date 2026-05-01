@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.screens.views
+package com.example.proyecto_gestion_peliculas.ui.features.views
 
 
 import androidx.compose.foundation.Image
@@ -40,7 +40,7 @@ import com.example.proyecto_gestion_peliculas.R
 import com.example.proyecto_gestion_peliculas.data.readEmail
 import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
-import com.example.proyecto_gestion_peliculas.ui.screens.viewmodels.LoginScreenViewModel
+import com.example.proyecto_gestion_peliculas.ui.features.viewmodels.LoginScreenViewModel
 
 
 @Composable

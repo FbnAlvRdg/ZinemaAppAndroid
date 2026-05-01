@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.screens.views
+package com.example.proyecto_gestion_peliculas.ui.features.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,24 +35,29 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.example.proyecto_gestion_peliculas.R
-import com.example.proyecto_gestion_peliculas.data.listarPeliculasPantalla
-import com.example.proyecto_gestion_peliculas.domain.Pelicula
+import com.example.proyecto_gestion_peliculas.domain.model.Film
 
 import com.example.proyecto_gestion_peliculas.ui.components.MyBottomBar
 import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
+import com.example.proyecto_gestion_peliculas.ui.features.viewmodels.MostPopularFilmsViewModel
+import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun FilmListScreen(
+fun MostPopularScreen(
     back: () -> Unit,
     toAddFilm: () -> Unit,
     toEditScreen: () -> Unit,
-    toDetailFilmScreen: (Pelicula) -> Unit
+    toDetailFilmScreen: (Film) -> Unit
 ) {
+    val viewModel: MostPopularFilmsViewModel = hiltViewModel()
+    val films = viewModel.films
     val header = "Librería de Películas"
     val deleteShowDialog = remember { mutableStateOf(false) }
-    val selectedFilm = remember { mutableStateOf<Pelicula?>(null) }
+    val selectedFilm = remember { mutableStateOf<Film?>(null) }
     Scaffold(
         topBar = { MyTopBar(header) },
         bottomBar = { MyBottomBar(back, toAddFilm) }
@@ -63,7 +68,7 @@ fun FilmListScreen(
                 .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            items(listarPeliculasPantalla()) { pelicula ->
+            items(films) { film ->
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -79,8 +84,8 @@ fun FilmListScreen(
                         .combinedClickable(
                             onClick = {},
                             onLongClick = {
-                                selectedFilm.value = pelicula
-                                toDetailFilmScreen(pelicula)
+                                selectedFilm.value = film
+                                toDetailFilmScreen(film)
                             },
                         ),
                     colors = CardDefaults.cardColors(
@@ -98,9 +103,9 @@ fun FilmListScreen(
                             .padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Image(
+                        AsyncImage(
                             contentDescription = "Portada",
-                            painter = painterResource(pelicula.poster),
+                            model = film.poster,
                             modifier = Modifier
                                 .width(120.dp)
                                 .aspectRatio(2f / 3f),
@@ -116,20 +121,20 @@ fun FilmListScreen(
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 Text(
-                                    text = pelicula.title,
+                                    text = film.title,
                                     fontWeight = FontWeight.Bold
                                 )
                             }
 
                             Text(
-                                text = "Género: " + pelicula.genero
+                                text = "Género: "
                             )
                             Text(
-                                text = "Director: " + pelicula.director
+                                text = "Director: "
                             )
 
                             Text(
-                                text = "Año: " + pelicula.anio
+                                text = "Fecha: " +  film.releaseDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                             )
 
                             Spacer(modifier = Modifier.height(8.dp))
@@ -140,7 +145,7 @@ fun FilmListScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = "Valoración: " + pelicula.valoracion
+                                    text = "Valoración: " + film.rating
                                 )
 
                                 Spacer(modifier = Modifier.width(6.dp))
@@ -158,18 +163,6 @@ fun FilmListScreen(
                                     Image(
                                         contentDescription = "Edición",
                                         painter = painterResource(R.drawable.icono_edit),
-                                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-                                    )
-                                }
-
-                                IconButton(
-                                    onClick = {
-                                        deleteShowDialog.value = true
-                                    }
-                                ) {
-                                    Image(
-                                        contentDescription = "Borrar",
-                                        painter = painterResource(R.drawable.icono_delete),
                                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
                                     )
                                 }

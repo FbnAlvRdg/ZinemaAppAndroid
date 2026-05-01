@@ -7,14 +7,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.proyecto_gestion_peliculas.ui.screens.viewmodels.EjemploViewModel
 
 @Composable
-fun EjemploScreen(viewModel: EjemploViewModel) {
+fun EjemploScreen() {
+
+    val viewModel: EjemploViewModel = hiltViewModel()
     val films = viewModel.films
-    LaunchedEffect(Unit) {
-        viewModel.loadFilms()
-    }
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(films) { film ->
             Text(text = film.title)
