@@ -1,7 +1,7 @@
 package com.zinemaapp.zinemaapp.controller;
 
 import com.zinemaapp.zinemaapp.dto.FilmDTO;
-import com.zinemaapp.zinemaapp.service.FilmService;
+import com.zinemaapp.zinemaapp.application.FilmService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

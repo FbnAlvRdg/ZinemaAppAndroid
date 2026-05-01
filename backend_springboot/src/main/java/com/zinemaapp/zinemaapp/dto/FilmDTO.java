@@ -5,25 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
 
 public class FilmDTO {
-    @JsonProperty("id")
     private int id;
-    @JsonProperty("title")
     private String title;
-    @JsonProperty("original_title")
     private String originalTitle;
-    @JsonProperty("release_date")
-    private String releaseDate;
-    @JsonProperty("overview")
+    private LocalDate releaseDate;
     private String synopsis;
-    @JsonProperty("poster_path")
     private String poster;
-    @JsonProperty("vote_average")
     private double rating;
 
     public FilmDTO() {
     }
 
-    public FilmDTO(int id, String title, String originalTitle, String releaseDate, String synopsis, String poster, double rating) {
+    public FilmDTO(int id, String title, String originalTitle, LocalDate releaseDate, String synopsis, String poster, double rating) {
         this.id = id;
         this.title = title;
         this.originalTitle = originalTitle;
@@ -57,11 +50,11 @@ public class FilmDTO {
         this.originalTitle = originalTitle;
     }
 
-    public String getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 

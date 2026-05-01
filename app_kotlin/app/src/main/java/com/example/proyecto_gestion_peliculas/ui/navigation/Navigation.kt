@@ -7,27 +7,24 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.example.proyecto_gestion_peliculas.data.remote.repository.FilmRepository
-import com.example.proyecto_gestion_peliculas.domain.Pelicula
+import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.NavigatorImpl
-import com.example.proyecto_gestion_peliculas.ui.screens.viewmodels.EjemploViewModel
-import com.example.proyecto_gestion_peliculas.ui.screens.viewmodels.EjemploViewModelFactory
-import com.example.proyecto_gestion_peliculas.ui.screens.viewmodels.LoginScreenViewModel
-import com.example.proyecto_gestion_peliculas.ui.screens.views.AddFilmScreen
-import com.example.proyecto_gestion_peliculas.ui.screens.views.DetailFilmScreen
-import com.example.proyecto_gestion_peliculas.ui.screens.views.EditFilmScreen
-import com.example.proyecto_gestion_peliculas.ui.screens.views.EjemploScreen
-import com.example.proyecto_gestion_peliculas.ui.screens.views.FilmListScreen
-import com.example.proyecto_gestion_peliculas.ui.screens.views.LoginScreen
-import com.example.proyecto_gestion_peliculas.ui.screens.views.SignUpScreen
+import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreenViewModel
+import com.example.proyecto_gestion_peliculas.ui.features.views.AddFilmScreen
+import com.example.proyecto_gestion_peliculas.ui.features.views.DetailFilmScreen
+import com.example.proyecto_gestion_peliculas.ui.features.views.EditFilmScreen
+import com.example.proyecto_gestion_peliculas.ui.features.views.EjemploScreen
+import com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular.MostPopularScreen
+import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreen
+import com.example.proyecto_gestion_peliculas.ui.features.signup.SignUpScreen
 
 
 @Composable
 fun Navigation() {
     val backStack = rememberNavBackStack(LoginScreenKey)
     val navigator: Navigator = NavigatorImpl(backStack)
-    val selectedFilm = remember { mutableStateOf<Pelicula?>(null) }
+    val selectedFilm = remember { mutableStateOf<Film?>(null) }
 
 
     NavDisplay(
@@ -43,7 +40,7 @@ fun Navigation() {
                 }
             }
             entry<FilmListScreenKey> {
-                FilmListScreen(
+                MostPopularScreen(
                     back = { backStack.remove(backStack.last()) },
                     toAddFilm = { backStack.add(AddFilmScreen) },
                     toEditScreen = { backStack.add(EditFilmScreen) }
@@ -63,17 +60,12 @@ fun Navigation() {
                 )
             }
             entry<DetailFilmScreen> {
-                DetailFilmScreen(pelicula = selectedFilm.value) {
+                DetailFilmScreen(film = selectedFilm.value) {
                     backStack.remove(backStack.last())
                 }
             }
             entry<EjemploApiScreenKey> {
-                val viewModel: EjemploViewModel = viewModel(
-                    factory = EjemploViewModelFactory(
-                        FilmRepository()
-                    )
-                )
-                EjemploScreen(viewModel = viewModel)
+                EjemploScreen()
             }
         }
     )

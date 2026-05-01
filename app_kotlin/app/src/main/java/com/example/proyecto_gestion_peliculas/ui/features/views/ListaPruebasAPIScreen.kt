@@ -1,14 +1,13 @@
-package com.example.proyecto_gestion_peliculas.ui.screens.views
+package com.example.proyecto_gestion_peliculas.ui.features.views
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.proyecto_gestion_peliculas.ui.screens.viewmodels.EjemploViewModel
+import com.example.proyecto_gestion_peliculas.ui.features.viewmodels.EjemploViewModel
 
 @Composable
 fun EjemploScreen() {

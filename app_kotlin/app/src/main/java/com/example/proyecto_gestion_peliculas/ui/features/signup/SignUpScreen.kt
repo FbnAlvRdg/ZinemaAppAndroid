@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.features.views
+package com.example.proyecto_gestion_peliculas.ui.features.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

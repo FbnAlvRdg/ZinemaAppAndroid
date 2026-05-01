@@ -1,6 +1,8 @@
-package com.zinemaapp.zinemaapp.service;
+package com.zinemaapp.zinemaapp.application;
 
 import com.zinemaapp.zinemaapp.dto.FilmDTO;
+import com.zinemaapp.zinemaapp.infrastructure.TmdbClient;
+import com.zinemaapp.zinemaapp.mapper.FilmMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.JsonNode;
@@ -15,35 +17,33 @@ import java.util.List;
 
 @Service
 public class FilmService {
-    @Value("${tmdb.api.key}")
-    private String API_KEY;
+    private final TmdbClient tmdbClient;
+    private final FilmMapper filmMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public FilmService(TmdbClient tmdbClient, FilmMapper filmMapper) {
+        this.tmdbClient = tmdbClient;
+        this.filmMapper = filmMapper;
+    }
 
     public List<FilmDTO> getPopularFilms() {
         try {
-            String url = "https://api.themoviedb.org/3/movie/popular?api_key="
-                    + API_KEY + "&language=es-ES";
+            String json = tmdbClient.getPopularFilms();
 
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            ObjectMapper objectMapper = new ObjectMapper();
-
-            JsonNode root = objectMapper.readTree(response.body());
-            JsonNode results = root.get("results");
+            JsonNode root = objectMapper.readTree(json);
+            JsonNode results = root.path("results");
 
             List<FilmDTO> films = new ArrayList<>();
 
-            for (JsonNode jsonNode : results){
-                FilmDTO filmDTO = objectMapper.treeToValue(jsonNode, FilmDTO.class);
-                films.add(filmDTO);
+            for (JsonNode jsonNode : results) {
+                films.add(filmMapper.fromJson(jsonNode));
             }
 
             return films;
-
         } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
+            throw new RuntimeException("Error obteniendo las películas más populares", e);
         }
     }
+
+
 }

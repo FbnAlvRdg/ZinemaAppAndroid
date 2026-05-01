@@ -5,5 +5,5 @@ import retrofit2.http.GET
 
 interface FilmApi {
     @GET("movies/popular")
-    suspend fun getFilms() : List<FilmDTO>
+    suspend fun getPopularFilms() : List<FilmDTO>
 }

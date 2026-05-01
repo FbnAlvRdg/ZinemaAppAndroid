@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.features.views
+package com.example.proyecto_gestion_peliculas.ui.features.login
 
 
 import androidx.compose.foundation.Image
@@ -40,7 +40,7 @@ import com.example.proyecto_gestion_peliculas.R
 import com.example.proyecto_gestion_peliculas.data.readEmail
 import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
-import com.example.proyecto_gestion_peliculas.ui.features.viewmodels.LoginScreenViewModel
+import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreenViewModel
 
 
 @Composable
@@ -186,7 +186,7 @@ fun LoginScreen(navigator: Navigator, loginScreenViewModel: LoginScreenViewModel
                 Spacer(modifier = Modifier.width(20.dp))
 
                 Button(
-                    onClick = { navigator.toEjemplo() },
+                    onClick = { navigator.toSignUp() },
                     modifier = Modifier.width(100.dp)
                 ) {
                     Text(

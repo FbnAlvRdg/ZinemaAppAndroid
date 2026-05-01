@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.screens.viewmodels
+package com.example.proyecto_gestion_peliculas.ui.features.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

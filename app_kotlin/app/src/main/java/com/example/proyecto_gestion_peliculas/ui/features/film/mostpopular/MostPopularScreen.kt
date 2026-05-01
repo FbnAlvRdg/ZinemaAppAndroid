@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.features.views
+package com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,7 +42,6 @@ import com.example.proyecto_gestion_peliculas.domain.model.Film
 
 import com.example.proyecto_gestion_peliculas.ui.components.MyBottomBar
 import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
-import com.example.proyecto_gestion_peliculas.ui.features.viewmodels.MostPopularFilmsViewModel
 import java.time.format.DateTimeFormatter
 
 
@@ -55,9 +54,10 @@ fun MostPopularScreen(
 ) {
     val viewModel: MostPopularFilmsViewModel = hiltViewModel()
     val films = viewModel.films
-    val header = "Librería de Películas"
+    val header = "Populares"
     val deleteShowDialog = remember { mutableStateOf(false) }
     val selectedFilm = remember { mutableStateOf<Film?>(null) }
+
     Scaffold(
         topBar = { MyTopBar(header) },
         bottomBar = { MyBottomBar(back, toAddFilm) }
@@ -134,7 +134,13 @@ fun MostPopularScreen(
                             )
 
                             Text(
-                                text = "Fecha: " +  film.releaseDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                text = "Fecha: ${
+                                    film.releaseDate?.format(
+                                        DateTimeFormatter.ofPattern(
+                                            "dd/MM/yyyy"
+                                        )
+                                    ) ?: ""
+                                }"
                             )
 
                             Spacer(modifier = Modifier.height(8.dp))

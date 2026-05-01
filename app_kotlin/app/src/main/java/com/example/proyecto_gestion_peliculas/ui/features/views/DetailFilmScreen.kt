@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.screens.views
+package com.example.proyecto_gestion_peliculas.ui.features.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,16 +27,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.proyecto_gestion_peliculas.domain.Pelicula
+import coil.compose.AsyncImage
+import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
+import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun DetailFilmScreen(pelicula: Pelicula?, back: () -> Unit) {
+fun DetailFilmScreen(film: Film?, back: () -> Unit) {
     val header = "Zinema"
     val scroll = rememberScrollState()
 
-    if (pelicula == null) {
+    if (film == null) {
         return
     }
 
@@ -51,8 +53,8 @@ fun DetailFilmScreen(pelicula: Pelicula?, back: () -> Unit) {
                 .verticalScroll(scroll)
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            Image(
-                painter = painterResource(id = pelicula.poster),
+            AsyncImage(
+                model = film.poster,
                 contentDescription = "Portada",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -63,7 +65,7 @@ fun DetailFilmScreen(pelicula: Pelicula?, back: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = pelicula.title,
+                text = film.title,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground
@@ -84,7 +86,7 @@ fun DetailFilmScreen(pelicula: Pelicula?, back: () -> Unit) {
                 )
 
                 Text(
-                    text = pelicula.genero,
+                    text = "",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)
@@ -106,7 +108,7 @@ fun DetailFilmScreen(pelicula: Pelicula?, back: () -> Unit) {
                 )
 
                 Text(
-                    text = pelicula.director,
+                    text = "",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)
@@ -127,7 +129,7 @@ fun DetailFilmScreen(pelicula: Pelicula?, back: () -> Unit) {
                 )
 
                 Text(
-                    text = pelicula.actores.joinToString(", "),
+                    text = "",
                     modifier = Modifier.weight(0.7f),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -150,7 +152,7 @@ fun DetailFilmScreen(pelicula: Pelicula?, back: () -> Unit) {
                 )
 
                 Text(
-                    text = pelicula.anio.toString(),
+                    text = film.releaseDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: "",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)
@@ -172,7 +174,7 @@ fun DetailFilmScreen(pelicula: Pelicula?, back: () -> Unit) {
                 )
 
                 Text(
-                    text = pelicula.valoracion.toString(),
+                    text = film.rating.toString(),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)
@@ -190,7 +192,7 @@ fun DetailFilmScreen(pelicula: Pelicula?, back: () -> Unit) {
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = pelicula.sinopsis,
+                text = film.synopsis,
                 textAlign = TextAlign.Justify,
                 fontSize = 16.sp
             )

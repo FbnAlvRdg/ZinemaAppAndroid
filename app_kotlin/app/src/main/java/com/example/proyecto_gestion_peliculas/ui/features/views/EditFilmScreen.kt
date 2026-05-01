@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.screens.views
+package com.example.proyecto_gestion_peliculas.ui.features.views
 
 
 import androidx.compose.foundation.background
