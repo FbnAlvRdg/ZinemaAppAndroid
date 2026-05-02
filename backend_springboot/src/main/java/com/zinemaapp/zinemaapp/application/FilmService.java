@@ -45,5 +45,9 @@ public class FilmService {
         }
     }
 
+    public FilmDTO getFilmById(int id) {
+        FilmDTO filmDTO = tmdbClient.getFilmById(id);
+        return filmDTO;
+    }
 
 }

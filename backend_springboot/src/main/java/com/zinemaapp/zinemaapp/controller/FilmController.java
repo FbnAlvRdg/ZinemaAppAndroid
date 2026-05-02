@@ -3,6 +3,7 @@ package com.zinemaapp.zinemaapp.controller;
 import com.zinemaapp.zinemaapp.dto.FilmDTO;
 import com.zinemaapp.zinemaapp.application.FilmService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,5 +20,10 @@ public class FilmController {
     @GetMapping("/popular")
     public List<FilmDTO> getPopularFilms(){
         return filmService.getPopularFilms();
+    }
+
+    @GetMapping("/{id}")
+    public FilmDTO getFilmById(@PathVariable int id){
+        return filmService.getFilmById(id);
     }
 }

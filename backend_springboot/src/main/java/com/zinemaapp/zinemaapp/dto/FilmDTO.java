@@ -1,8 +1,8 @@
 package com.zinemaapp.zinemaapp.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class FilmDTO {
     private int id;
@@ -12,6 +12,9 @@ public class FilmDTO {
     private String synopsis;
     private String poster;
     private double rating;
+    private List<CastDTO> actors;
+    private String director;
+    private List<GenresDTO> genres;
 
     public FilmDTO() {
     }
@@ -24,6 +27,19 @@ public class FilmDTO {
         this.synopsis = synopsis;
         this.poster = poster;
         this.rating = rating;
+    }
+
+    public FilmDTO(int id, String title, String originalTitle, LocalDate releaseDate, String synopsis, String poster, double rating, List<CastDTO> actors, String director, List<GenresDTO> genres) {
+        this.id = id;
+        this.title = title;
+        this.originalTitle = originalTitle;
+        this.releaseDate = releaseDate;
+        this.synopsis = synopsis;
+        this.poster = poster;
+        this.rating = rating;
+        this.actors = actors;
+        this.director = director;
+        this.genres = genres;
     }
 
     public int getId() {
@@ -80,5 +96,29 @@ public class FilmDTO {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public List<CastDTO> getActors() {
+        return actors;
+    }
+
+    public void setActors(List<CastDTO> actors) {
+        this.actors = actors;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public List<GenresDTO> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<GenresDTO> genres) {
+        this.genres = genres;
     }
 }
