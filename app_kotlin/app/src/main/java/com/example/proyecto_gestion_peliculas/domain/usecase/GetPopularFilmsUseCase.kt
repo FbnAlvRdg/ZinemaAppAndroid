@@ -8,5 +8,4 @@ class GetPopularFilmsUseCase @Inject constructor(private val filmRepository: Fil
     suspend fun invoke() : List<Film>{
         return filmRepository.getPopularFilms()
     }
-
 }

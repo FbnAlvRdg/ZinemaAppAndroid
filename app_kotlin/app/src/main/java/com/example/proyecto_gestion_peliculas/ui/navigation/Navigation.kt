@@ -1,6 +1,7 @@
 package com.example.proyecto_gestion_peliculas.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -12,7 +13,7 @@ import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.NavigatorImpl
 import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreenViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.views.AddFilmScreen
-import com.example.proyecto_gestion_peliculas.ui.features.views.DetailFilmScreen
+import com.example.proyecto_gestion_peliculas.ui.features.film.details.DetailFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.views.EditFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.views.EjemploScreen
 import com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular.MostPopularScreen
@@ -24,8 +25,6 @@ import com.example.proyecto_gestion_peliculas.ui.features.signup.SignUpScreen
 fun Navigation() {
     val backStack = rememberNavBackStack(LoginScreenKey)
     val navigator: Navigator = NavigatorImpl(backStack)
-    val selectedFilm = remember { mutableStateOf<Film?>(null) }
-
 
     NavDisplay(
         backStack = backStack,
@@ -44,9 +43,8 @@ fun Navigation() {
                     back = { backStack.remove(backStack.last()) },
                     toAddFilm = { backStack.add(AddFilmScreen) },
                     toEditScreen = { backStack.add(EditFilmScreen) }
-                ) { pelicula ->
-                    selectedFilm.value = pelicula
-                    backStack.add(DetailFilmScreen)
+                ) { film ->
+                    backStack.add(DetailFilmScreen(film.id))
                 }
             }
             entry<AddFilmScreen> {
@@ -59,8 +57,9 @@ fun Navigation() {
                     back = { backStack.remove(backStack.last()) }
                 )
             }
-            entry<DetailFilmScreen> {
-                DetailFilmScreen(film = selectedFilm.value) {
+            entry<DetailFilmScreen> { key ->
+                println("ID recibido en navigation: ${key.id}")
+                DetailFilmScreen(id = key.id) {
                     backStack.remove(backStack.last())
                 }
             }

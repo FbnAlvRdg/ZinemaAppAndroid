@@ -1,4 +1,4 @@
-package com.zinemaapp.zinemaapp.dto;
+package com.zinemaapp.zinemaapp.dto.internal;
 
 
 import java.time.LocalDate;
@@ -12,9 +12,9 @@ public class FilmDTO {
     private String synopsis;
     private String poster;
     private double rating;
-    private List<CastDTO> actors;
+    private List<ActorDTO> actors;
     private String director;
-    private List<GenresDTO> genres;
+    private List<GenreDTO> genres;
 
     public FilmDTO() {
     }
@@ -29,7 +29,7 @@ public class FilmDTO {
         this.rating = rating;
     }
 
-    public FilmDTO(int id, String title, String originalTitle, LocalDate releaseDate, String synopsis, String poster, double rating, List<CastDTO> actors, String director, List<GenresDTO> genres) {
+    public FilmDTO(int id, String title, String originalTitle, LocalDate releaseDate, String synopsis, String poster, double rating, List<ActorDTO> actors, String director, List<GenreDTO> genres) {
         this.id = id;
         this.title = title;
         this.originalTitle = originalTitle;
@@ -98,11 +98,11 @@ public class FilmDTO {
         this.rating = rating;
     }
 
-    public List<CastDTO> getActors() {
+    public List<ActorDTO> getActors() {
         return actors;
     }
 
-    public void setActors(List<CastDTO> actors) {
+    public void setActors(List<ActorDTO> actors) {
         this.actors = actors;
     }
 
@@ -114,11 +114,11 @@ public class FilmDTO {
         this.director = director;
     }
 
-    public List<GenresDTO> getGenres() {
+    public List<GenreDTO> getGenres() {
         return genres;
     }
 
-    public void setGenres(List<GenresDTO> genres) {
+    public void setGenres(List<GenreDTO> genres) {
         this.genres = genres;
     }
 }

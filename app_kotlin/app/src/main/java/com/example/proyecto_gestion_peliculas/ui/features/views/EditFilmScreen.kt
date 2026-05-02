@@ -32,8 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.proyecto_gestion_peliculas.data.listarActores
-import com.example.proyecto_gestion_peliculas.data.listarGeneros
+
 import com.example.proyecto_gestion_peliculas.ui.components.MyExposedDropDownActores
 import com.example.proyecto_gestion_peliculas.ui.components.MyExposedDropDownGeneros
 import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
@@ -43,9 +42,9 @@ import kotlinx.coroutines.launch
 fun EditFilmScreen(back: () -> Unit) {
     var header = "Editar película"
     var titulo by remember { mutableStateOf("") }
-    var listaGeneros: List<String> = listarGeneros()
+
     var director by remember { mutableStateOf("") }
-    var listaActores: List<String> = listarActores()
+
     var anho by remember { mutableStateOf("") }
     var valoracion by remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -90,7 +89,7 @@ fun EditFilmScreen(back: () -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            MyExposedDropDownGeneros(listaGeneros)
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -113,7 +112,7 @@ fun EditFilmScreen(back: () -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            MyExposedDropDownActores(listaActores)
+
 
             Spacer(modifier = Modifier.height(16.dp))
 
