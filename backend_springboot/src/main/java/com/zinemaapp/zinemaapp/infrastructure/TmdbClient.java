@@ -23,9 +23,9 @@ public class TmdbClient {
         this.objectMapper = objectMapper;
     }
 
-    public TmdbPopularResponse getPopularFilms() {
+    public TmdbPopularResponse getPopularFilms(int page) {
         try {
-            String url = buildUrl("/movie/popular");
+            String url = buildUrl("/movie/popular") + "&page=" + page;
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))

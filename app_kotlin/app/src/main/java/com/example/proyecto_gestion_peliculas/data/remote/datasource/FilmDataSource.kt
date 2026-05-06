@@ -4,6 +4,6 @@ import com.example.proyecto_gestion_peliculas.data.remote.dto.film.DetailsFilmDT
 import com.example.proyecto_gestion_peliculas.data.remote.dto.film.PopularFilmsDTO
 
 interface FilmDataSource {
-    suspend fun getPopularFilms() : List<PopularFilmsDTO>
+    suspend fun getPopularFilms(page : Int) : List<PopularFilmsDTO>
     suspend fun getFilmById(id :Int) : DetailsFilmDTO
 }

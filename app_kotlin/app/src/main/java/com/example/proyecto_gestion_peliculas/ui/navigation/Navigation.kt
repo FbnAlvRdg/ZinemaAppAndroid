@@ -1,21 +1,16 @@
 package com.example.proyecto_gestion_peliculas.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.NavigatorImpl
 import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreenViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.views.AddFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.film.details.DetailFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.views.EditFilmScreen
-import com.example.proyecto_gestion_peliculas.ui.features.views.EjemploScreen
 import com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular.MostPopularScreen
 import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreen
 import com.example.proyecto_gestion_peliculas.ui.features.signup.SignUpScreen
@@ -62,9 +57,6 @@ fun Navigation() {
                 DetailFilmScreen(id = key.id) {
                     backStack.remove(backStack.last())
                 }
-            }
-            entry<EjemploApiScreenKey> {
-                EjemploScreen()
             }
         }
     )

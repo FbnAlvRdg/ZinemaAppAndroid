@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class TmdbPopularResponse {
-    @JsonProperty("pages")
+    @JsonProperty("page")
     private int pages;
     @JsonProperty("results")
     private List<TmdbFilmResponse> results;

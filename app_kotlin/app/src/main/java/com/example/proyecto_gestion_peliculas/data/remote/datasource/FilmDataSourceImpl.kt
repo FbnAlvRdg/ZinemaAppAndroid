@@ -6,8 +6,8 @@ import com.example.proyecto_gestion_peliculas.data.remote.dto.film.PopularFilmsD
 import javax.inject.Inject
 
 class FilmDataSourceImpl @Inject constructor(private val api: FilmApi) : FilmDataSource {
-    override suspend fun getPopularFilms(): List<PopularFilmsDTO> {
-        return api.getPopularFilms()
+    override suspend fun getPopularFilms(page : Int): List<PopularFilmsDTO> {
+        return api.getPopularFilms(page)
     }
 
     override suspend fun getFilmById(id: Int): DetailsFilmDTO {

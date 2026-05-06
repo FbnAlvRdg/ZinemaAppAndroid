@@ -21,9 +21,9 @@ public class FilmService {
         this.filmMapper = filmMapper;
     }
 
-    public List<FilmDTO> getPopularFilms() {
+    public List<FilmDTO> getPopularFilms(int page) {
         try {
-            TmdbPopularResponse tmdbPopularResponse = tmdbClient.getPopularFilms();
+            TmdbPopularResponse tmdbPopularResponse = tmdbClient.getPopularFilms(page);
 
             List<FilmDTO> films = new ArrayList<>();
 
