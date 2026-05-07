@@ -38,9 +38,9 @@ import androidx.compose.ui.unit.dp
 import com.example.proyecto_gestion_peliculas.R
 import com.example.proyecto_gestion_peliculas.data.saveEmail
 import com.example.proyecto_gestion_peliculas.ui.theme.PureWhite
-import com.example.proyecto_gestion_peliculas.core.checkEmail
-import com.example.proyecto_gestion_peliculas.core.checkEqualPassword
-import com.example.proyecto_gestion_peliculas.core.checkPassword
+import com.example.proyecto_gestion_peliculas.core.utils.checkEmail
+import com.example.proyecto_gestion_peliculas.core.utils.checkEqualPassword
+import com.example.proyecto_gestion_peliculas.core.utils.checkPassword
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

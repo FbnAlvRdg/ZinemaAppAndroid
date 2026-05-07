@@ -35,7 +35,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun DetailFilmScreen(id: Int, back: () -> Unit) {
-    val header = "Zinema"
+    val header = "Detalles"
     val scroll = rememberScrollState()
     val viewModel: DetailsFilmViewModel = hiltViewModel()
 
@@ -46,10 +46,8 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
 
     val film = viewModel.film ?: return
 
-
-
     Scaffold(
-        topBar = { MyTopBar(header) }
+        topBar = { MyTopBar(header = header) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -70,12 +68,18 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = film.title,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = film.title,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -92,7 +96,7 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
                 )
 
                 Text(
-                    text = film.genres.joinToString(",") { it.name },
+                    text = film.genres.joinToString(", ") { it.name },
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)
@@ -128,6 +132,7 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
             ) {
                 Text(
                     text = "Actores: ",
+                    textAlign = TextAlign.Justify,
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -135,7 +140,7 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
                 )
 
                 Text(
-                    text = film.actors.joinToString(",") { it.name },
+                    text = film.actors.joinToString(", ") { it.name },
                     modifier = Modifier.weight(0.7f),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -150,7 +155,7 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
                 verticalAlignment = Alignment.Top
             ) {
                 Text(
-                    text = "Año: ",
+                    text = "Lanzamiento: ",
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,

@@ -1,5 +1,6 @@
 package com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular
 
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -38,6 +39,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -57,7 +59,6 @@ fun MostPopularScreen(
     toDetailFilmScreen: (Film) -> Unit
 ) {
     val viewModel: MostPopularFilmsViewModel = hiltViewModel()
-    val films = viewModel.films
     val lazyListState = rememberLazyListState()
     val header = "Populares"
     val deleteShowDialog = remember { mutableStateOf(false) }
@@ -74,7 +75,7 @@ fun MostPopularScreen(
                 .background(MaterialTheme.colorScheme.background),
             state = lazyListState
         ) {
-            items(films) { film ->
+            items(viewModel.films) { film ->
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -117,9 +118,12 @@ fun MostPopularScreen(
                                 .aspectRatio(2f / 3f),
                             contentScale = ContentScale.Crop
                         )
+
                         Spacer(modifier = Modifier.width(20.dp))
 
-                        Column(modifier = Modifier.weight(0.5f)) {
+                        Column(
+                            modifier = Modifier.weight(0.5f),
+                        ) {
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -132,52 +136,61 @@ fun MostPopularScreen(
                                 )
                             }
 
-                            Text(
-                                text = "Género: "
-                            )
-                            Text(
-                                text = "Director: "
-                            )
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                Text(
+                                    text = "Titulo Original: ",
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                            }
 
-                            Text(
-                                text = "Fecha: ${
-                                    film.releaseDate?.format(
+                            Row(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = film.originalTitle
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                Text(
+                                    text = "Fecha: ",
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = film.releaseDate?.format(
                                         DateTimeFormatter.ofPattern(
                                             "dd/MM/yyyy"
                                         )
-                                    ) ?: ""
-                                }"
-                            )
+                                    ) ?: "",
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
 
                             Spacer(modifier = Modifier.height(8.dp))
 
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Start,
-                                verticalAlignment = Alignment.CenterVertically
+                                modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                    text = "Valoración: " + film.rating
+                                    text = "Valoración: ",
+                                    fontWeight = FontWeight.SemiBold
                                 )
+                            }
 
-                                Spacer(modifier = Modifier.width(6.dp))
-
-                                Image(
-                                    contentDescription = "star",
-                                    painter = painterResource(R.drawable.star)
+                            Row(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = film.rating.toString()
                                 )
-
-                                Spacer(modifier = Modifier.width(10.dp))
-
-                                IconButton(
-                                    onClick = { toEditScreen() },
-                                ) {
-                                    Image(
-                                        contentDescription = "Edición",
-                                        painter = painterResource(R.drawable.icono_edit),
-                                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
-                                    )
-                                }
                             }
                         }
                     }

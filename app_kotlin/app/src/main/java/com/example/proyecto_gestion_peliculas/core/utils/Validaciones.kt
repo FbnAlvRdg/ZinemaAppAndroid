@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.core
+package com.example.proyecto_gestion_peliculas.core.utils
 
 import android.util.Patterns
 
