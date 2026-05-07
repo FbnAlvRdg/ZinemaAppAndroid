@@ -1,5 +1,6 @@
 package com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,6 +17,10 @@ class MostPopularFilmsViewModel @Inject constructor(private val getPopularFilmsU
     ViewModel() {
 
     var films by mutableStateOf<List<Film>>(emptyList())
+        private set
+
+    var page: Int = 1
+        private set
 
     init {
         loadFilms()
@@ -23,7 +28,9 @@ class MostPopularFilmsViewModel @Inject constructor(private val getPopularFilmsU
 
     fun loadFilms() {
         viewModelScope.launch {
-            films = getPopularFilmsUseCase.invoke()
+            val newFilms = getPopularFilmsUseCase.invoke(page)
+            films = (films + newFilms).distinctBy { film -> film.id }
+            page++
         }
     }
 }

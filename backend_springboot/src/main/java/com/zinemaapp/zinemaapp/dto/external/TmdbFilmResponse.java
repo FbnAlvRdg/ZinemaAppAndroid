@@ -1,30 +1,27 @@
-package com.zinemaapp.zinemaapp.dto;
+package com.zinemaapp.zinemaapp.dto.external;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.LocalDate;
+import java.util.List;
 
-public class FilmDTO {
+public class TmdbFilmResponse {
+    @JsonProperty("id")
     private int id;
+    @JsonProperty("title")
     private String title;
+    @JsonProperty("original_title")
     private String originalTitle;
-    private LocalDate releaseDate;
+    @JsonProperty("release_date")
+    private String releaseDate;
+    @JsonProperty("overview")
     private String synopsis;
+    @JsonProperty("poster_path")
     private String poster;
+    @JsonProperty("vote_average")
     private double rating;
+    private List<TmdbGenre> genres;
+    private TmdbCredits credits;
 
-    public FilmDTO() {
-    }
-
-    public FilmDTO(int id, String title, String originalTitle, LocalDate releaseDate, String synopsis, String poster, double rating) {
-        this.id = id;
-        this.title = title;
-        this.originalTitle = originalTitle;
-        this.releaseDate = releaseDate;
-        this.synopsis = synopsis;
-        this.poster = poster;
-        this.rating = rating;
-    }
 
     public int getId() {
         return id;
@@ -50,11 +47,11 @@ public class FilmDTO {
         this.originalTitle = originalTitle;
     }
 
-    public LocalDate getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(LocalDate releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -80,5 +77,21 @@ public class FilmDTO {
 
     public void setRating(double rating) {
         this.rating = rating;
+    }
+
+    public List<TmdbGenre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<TmdbGenre> genres) {
+        this.genres = genres;
+    }
+
+    public TmdbCredits getCredits() {
+        return credits;
+    }
+
+    public void setCredits(TmdbCredits credits) {
+        this.credits = credits;
     }
 }

@@ -1,6 +1,11 @@
 package com.example.proyecto_gestion_peliculas.data.di
 
 import com.example.proyecto_gestion_peliculas.data.remote.api.FilmApi
+import com.example.proyecto_gestion_peliculas.data.remote.datasource.FilmDataSource
+import com.example.proyecto_gestion_peliculas.data.remote.datasource.FilmDataSourceImpl
+import com.example.proyecto_gestion_peliculas.data.repository.FilmRepositoryImpl
+import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,6 +30,20 @@ object NetworkModule {
     @Singleton
     fun providesFilmApi(retrofit: Retrofit): FilmApi {
         return retrofit.create(FilmApi::class.java)
+    }
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    abstract class RepositoryModule {
+        @Binds
+        abstract fun bindFilmRepository(impl: FilmRepositoryImpl): FilmRepository
+    }
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    abstract class DataSourceModule {
+        @Binds
+        abstract fun bindDataSoruceImpl(impl: FilmDataSourceImpl): FilmDataSource
     }
 
 }

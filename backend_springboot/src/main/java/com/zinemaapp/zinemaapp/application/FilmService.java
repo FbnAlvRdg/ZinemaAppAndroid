@@ -1,17 +1,13 @@
 package com.zinemaapp.zinemaapp.application;
 
-import com.zinemaapp.zinemaapp.dto.FilmDTO;
+import com.zinemaapp.zinemaapp.dto.external.TmdbPopularResponse;
+import com.zinemaapp.zinemaapp.dto.internal.FilmDTO;
+import com.zinemaapp.zinemaapp.dto.external.TmdbFilmResponse;
 import com.zinemaapp.zinemaapp.infrastructure.TmdbClient;
 import com.zinemaapp.zinemaapp.mapper.FilmMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,24 +15,20 @@ import java.util.List;
 public class FilmService {
     private final TmdbClient tmdbClient;
     private final FilmMapper filmMapper;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public FilmService(TmdbClient tmdbClient, FilmMapper filmMapper) {
         this.tmdbClient = tmdbClient;
         this.filmMapper = filmMapper;
     }
 
-    public List<FilmDTO> getPopularFilms() {
+    public List<FilmDTO> getPopularFilms(int page) {
         try {
-            String json = tmdbClient.getPopularFilms();
-
-            JsonNode root = objectMapper.readTree(json);
-            JsonNode results = root.path("results");
+            TmdbPopularResponse tmdbPopularResponse = tmdbClient.getPopularFilms(page);
 
             List<FilmDTO> films = new ArrayList<>();
 
-            for (JsonNode jsonNode : results) {
-                films.add(filmMapper.fromJson(jsonNode));
+            for (TmdbFilmResponse tmdbFilm : tmdbPopularResponse.getResults()) {
+                films.add(filmMapper.toFilmDTO(tmdbFilm));
             }
 
             return films;
@@ -45,5 +37,8 @@ public class FilmService {
         }
     }
 
-
+    public FilmDTO getFilmById(int id) {
+        TmdbFilmResponse tmdbFilmResponse = tmdbClient.getFilmById(id);
+        return filmMapper.toFilmDTO(tmdbFilmResponse);
+    }
 }

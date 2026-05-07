@@ -1,6 +1,5 @@
-package com.example.proyecto_gestion_peliculas.ui.features.views
+package com.example.proyecto_gestion_peliculas.ui.features.film.details
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,14 +18,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
@@ -34,13 +34,19 @@ import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun DetailFilmScreen(film: Film?, back: () -> Unit) {
+fun DetailFilmScreen(id: Int, back: () -> Unit) {
     val header = "Zinema"
     val scroll = rememberScrollState()
+    val viewModel: DetailsFilmViewModel = hiltViewModel()
 
-    if (film == null) {
-        return
+    LaunchedEffect(id) {
+        println("Cargando film con id: $id")
+        viewModel.loadFilm(id)
     }
+
+    val film = viewModel.film ?: return
+
+
 
     Scaffold(
         topBar = { MyTopBar(header) }
@@ -58,7 +64,7 @@ fun DetailFilmScreen(film: Film?, back: () -> Unit) {
                 contentDescription = "Portada",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(2f/3f),
+                    .aspectRatio(2f / 3f),
                 contentScale = ContentScale.Crop
             )
 
@@ -86,7 +92,7 @@ fun DetailFilmScreen(film: Film?, back: () -> Unit) {
                 )
 
                 Text(
-                    text = "",
+                    text = film.genres.joinToString(",") { it.name },
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)
@@ -108,7 +114,7 @@ fun DetailFilmScreen(film: Film?, back: () -> Unit) {
                 )
 
                 Text(
-                    text = "",
+                    text = film.director ?: "",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)
@@ -129,12 +135,12 @@ fun DetailFilmScreen(film: Film?, back: () -> Unit) {
                 )
 
                 Text(
-                    text = "",
+                    text = film.actors.joinToString(",") { it.name },
                     modifier = Modifier.weight(0.7f),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
 
-                )
+                    )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -152,7 +158,8 @@ fun DetailFilmScreen(film: Film?, back: () -> Unit) {
                 )
 
                 Text(
-                    text = film.releaseDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: "",
+                    text = film.releaseDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                        ?: "",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)

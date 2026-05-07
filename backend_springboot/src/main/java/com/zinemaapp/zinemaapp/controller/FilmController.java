@@ -1,10 +1,9 @@
 package com.zinemaapp.zinemaapp.controller;
 
-import com.zinemaapp.zinemaapp.dto.FilmDTO;
+import com.zinemaapp.zinemaapp.dto.internal.FilmDTO;
 import com.zinemaapp.zinemaapp.application.FilmService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,7 +16,13 @@ public class FilmController {
         this.filmService = filmService;
     }
     @GetMapping("/popular")
-    public List<FilmDTO> getPopularFilms(){
-        return filmService.getPopularFilms();
+    public ResponseEntity<List<FilmDTO>>getPopularFilms(@RequestParam int page){
+        System.out.println("PAGE RECIBIDA EN CONTROLLER: " + page);
+        return ResponseEntity.ok(filmService.getPopularFilms(page));
+    }
+
+    @GetMapping("/{id}")
+    public FilmDTO getFilmById(@PathVariable int id){
+        return filmService.getFilmById(id);
     }
 }

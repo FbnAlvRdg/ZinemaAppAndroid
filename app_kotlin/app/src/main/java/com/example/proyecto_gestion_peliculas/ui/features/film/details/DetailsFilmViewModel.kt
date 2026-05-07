@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.features.viewmodels
+package com.example.proyecto_gestion_peliculas.ui.features.film.details
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,24 +6,25 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_gestion_peliculas.domain.model.Film
-import com.example.proyecto_gestion_peliculas.domain.usecase.GetPopularFilmsUseCase
+import com.example.proyecto_gestion_peliculas.domain.usecase.GetDetailsFilmUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EjemploViewModel @Inject constructor(private val getPopularFilmsUseCase: GetPopularFilmsUseCase) :
+class DetailsFilmViewModel @Inject constructor(private val getDetailsFilmUseCase: GetDetailsFilmUseCase) :
     ViewModel() {
-    var films by mutableStateOf<List<Film>>(emptyList())
+
+    var film by mutableStateOf<Film?>(null)
         private set
 
-    init {
-        loadFilms()
+    fun loadFilm(id: Int) {
+        viewModelScope.launch {
+            film = getDetailsFilmUseCase.invoke(id)
+            println("FILM RECIBIDO: $film")
+        }
+
     }
 
-    fun loadFilms() {
-        viewModelScope.launch {
-            films = getPopularFilmsUseCase.invoke()
-        }
-    }
+
 }
