@@ -21,10 +21,6 @@ class DetailsFilmViewModel @Inject constructor(private val getDetailsFilmUseCase
     fun loadFilm(id: Int) {
         viewModelScope.launch {
             film = getDetailsFilmUseCase.invoke(id)
-            println("FILM RECIBIDO: $film")
         }
-
     }
-
-
 }
