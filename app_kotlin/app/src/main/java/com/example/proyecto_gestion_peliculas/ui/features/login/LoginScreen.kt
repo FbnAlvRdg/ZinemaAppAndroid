@@ -172,7 +172,7 @@ fun LoginScreen(navigator: Navigator, loginScreenViewModel: LoginScreenViewModel
                         if (loginScreenViewModel.email.isBlank() || loginScreenViewModel.password.isBlank()) {
                             alertDialogLogIn.value = true
                         } else {
-                            navigator.toFilmList()
+                            navigator.navigateToTopRated()
                         }
                     },
 

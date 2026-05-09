@@ -1,12 +1,11 @@
 package com.zinemaapp.zinemaapp.application;
 
-import com.zinemaapp.zinemaapp.dto.external.TmdbPopularResponse;
+import com.zinemaapp.zinemaapp.dto.external.film.TmdbFilmsResponse;
 import com.zinemaapp.zinemaapp.dto.internal.FilmDTO;
-import com.zinemaapp.zinemaapp.dto.external.TmdbFilmResponse;
+import com.zinemaapp.zinemaapp.dto.external.film.TmdbFilmResponse;
 import com.zinemaapp.zinemaapp.infrastructure.TmdbClient;
 import com.zinemaapp.zinemaapp.mapper.FilmMapper;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class FilmService {
 
     public List<FilmDTO> getPopularFilms(int page) {
         try {
-            TmdbPopularResponse tmdbPopularResponse = tmdbClient.getPopularFilms(page);
+            TmdbFilmsResponse tmdbPopularResponse = tmdbClient.getPopularFilms(page);
 
             List<FilmDTO> films = new ArrayList<>();
 
@@ -35,6 +34,18 @@ public class FilmService {
         } catch (Exception e) {
             throw new RuntimeException("Error obteniendo las películas más populares", e);
         }
+    }
+
+    public List<FilmDTO> getTopRatedFilms(int page) {
+        TmdbFilmsResponse tmdbTopRatedResponse = tmdbClient.getTopRatedFilms(page);
+
+        List<FilmDTO> films = new ArrayList<>();
+
+        for (TmdbFilmResponse tmdbFilm : tmdbTopRatedResponse.getResults()){
+            films.add(filmMapper.toFilmDTO(tmdbFilm));
+        }
+
+        return films;
     }
 
     public FilmDTO getFilmById(int id) {

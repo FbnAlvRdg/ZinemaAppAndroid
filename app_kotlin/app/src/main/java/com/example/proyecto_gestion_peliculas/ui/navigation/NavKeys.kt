@@ -20,7 +20,8 @@ data object AddFilmScreen : NavKey
 data object EditFilmScreen : NavKey
 
 @Serializable
-data class DetailFilmScreen( val id : Int) : NavKey
+data class DetailFilmScreen(val id: Int) : NavKey
 
 @Serializable
-data object EjemploApiScreenKey : NavKey
+data object TopRatedScreenKey : NavKey
+

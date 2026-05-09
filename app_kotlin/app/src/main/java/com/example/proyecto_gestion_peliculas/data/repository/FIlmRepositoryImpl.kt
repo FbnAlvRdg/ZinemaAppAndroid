@@ -7,11 +7,20 @@ import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
 import javax.inject.Inject
 
 
-class FilmRepositoryImpl @Inject constructor(private val dataSource: FilmDataSource) : FilmRepository {
-    override suspend fun getPopularFilms(page : Int): List<Film> {
-        return dataSource.getPopularFilms(page).map { film ->
-            film.toDomain()
-        }
+class FilmRepositoryImpl @Inject constructor(private val dataSource: FilmDataSource) :
+    FilmRepository {
+    override suspend fun getPopularFilms(page: Int): List<Film> {
+        return dataSource.getPopularFilms(page)
+            .map { film ->
+                film.toDomain()
+            }
+    }
+
+    override suspend fun getTopRated(page: Int): List<Film> {
+        return dataSource.getTopRated(page)
+            .map { film ->
+                film.toDomain()
+            }
     }
 
     override suspend fun getFilmById(id: Int): Film {

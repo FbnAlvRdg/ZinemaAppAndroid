@@ -6,8 +6,6 @@ interface Navigator {
     fun back()
     fun toLogIn()
     fun toSignUp()
-
     fun toFilmList()
-
-    fun toEjemplo()
+    fun navigateToTopRated()
 }

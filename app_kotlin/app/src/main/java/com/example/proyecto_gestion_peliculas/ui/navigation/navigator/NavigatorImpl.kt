@@ -2,10 +2,10 @@ package com.example.proyecto_gestion_peliculas.ui.navigation.navigator
 
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import com.example.proyecto_gestion_peliculas.ui.navigation.EjemploApiScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.FilmListScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.LoginScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.SignUpScreenKey
+import com.example.proyecto_gestion_peliculas.ui.navigation.TopRatedScreenKey
 
 
 class NavigatorImpl(private val backStack: NavBackStack<NavKey>) : Navigator {
@@ -25,8 +25,7 @@ class NavigatorImpl(private val backStack: NavBackStack<NavKey>) : Navigator {
         backStack.add(FilmListScreenKey)
     }
 
-    override fun toEjemplo() {
-        backStack.add(EjemploApiScreenKey)
+    override fun navigateToTopRated() {
+        backStack.add(TopRatedScreenKey)
     }
-
 }

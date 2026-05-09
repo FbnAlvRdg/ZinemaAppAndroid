@@ -12,6 +12,7 @@ import com.example.proyecto_gestion_peliculas.ui.features.views.AddFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.film.details.DetailFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.views.EditFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular.MostPopularScreen
+import com.example.proyecto_gestion_peliculas.ui.features.film.toprated.TopRatedScreen
 import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreen
 import com.example.proyecto_gestion_peliculas.ui.features.signup.SignUpScreen
 
@@ -53,10 +54,12 @@ fun Navigation() {
                 )
             }
             entry<DetailFilmScreen> { key ->
-                println("ID recibido en navigation: ${key.id}")
                 DetailFilmScreen(id = key.id) {
                     backStack.remove(backStack.last())
                 }
+            }
+            entry<TopRatedScreenKey> {
+                TopRatedScreen(navigator = navigator)
             }
         }
     )

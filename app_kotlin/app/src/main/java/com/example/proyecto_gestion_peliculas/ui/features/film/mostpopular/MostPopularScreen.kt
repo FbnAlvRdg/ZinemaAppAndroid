@@ -203,7 +203,7 @@ fun MostPopularScreen(
                 .collect { layoutInfo ->
                     val lastVisible = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
                     val total = layoutInfo.totalItemsCount
-                    if (total > 0 && lastVisible >= total - 5) { //cuando esta a cinco del final empieza a cargar nuevas peliculas
+                    if (total > 0 && lastVisible >= total - 5) {
                         viewModel.loadFilms()
                     }
                 }

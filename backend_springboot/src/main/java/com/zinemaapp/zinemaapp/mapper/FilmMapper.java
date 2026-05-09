@@ -2,7 +2,7 @@ package com.zinemaapp.zinemaapp.mapper;
 
 import com.zinemaapp.zinemaapp.dto.external.TmdbCast;
 import com.zinemaapp.zinemaapp.dto.external.TmdbCrew;
-import com.zinemaapp.zinemaapp.dto.external.TmdbFilmResponse;
+import com.zinemaapp.zinemaapp.dto.external.film.TmdbFilmResponse;
 import com.zinemaapp.zinemaapp.dto.external.TmdbGenre;
 import com.zinemaapp.zinemaapp.dto.internal.ActorDTO;
 import com.zinemaapp.zinemaapp.dto.internal.FilmDTO;
@@ -16,33 +16,6 @@ import java.util.List;
 
 @Component
 public class FilmMapper {
-
-    public FilmDTO fromJson(JsonNode jsonNode) {
-        FilmDTO filmDTO = new FilmDTO(
-                jsonNode.path("id").asInt(0),
-                jsonNode.path("title").asString(""),
-                jsonNode.path("original_title").asString(""),
-                parseDate(jsonNode.path("release_date").asString(null)),
-                jsonNode.path("overview").asString(""),
-                jsonNode.path("poster_path").asString(""),
-                jsonNode.path("vote_average").asDouble(0.0)
-        );
-        return filmDTO;
-    }
-
-    private LocalDate parseDate(String date) {
-
-        if (date == null || date.isEmpty()) {
-            return null;
-        }
-
-        try {
-            return LocalDate.parse(date);
-
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
     public FilmDTO toFilmDTO(TmdbFilmResponse tmdbFilmResponse) {
 
@@ -98,5 +71,19 @@ public class FilmMapper {
                 director,
                 genres
         );
+    }
+
+    private LocalDate parseDate(String date) {
+
+        if (date == null || date.isEmpty()) {
+            return null;
+        }
+
+        try {
+            return LocalDate.parse(date);
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
