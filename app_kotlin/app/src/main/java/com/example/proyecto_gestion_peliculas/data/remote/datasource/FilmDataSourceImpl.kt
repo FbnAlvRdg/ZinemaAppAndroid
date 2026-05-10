@@ -12,7 +12,7 @@ class FilmDataSourceImpl @Inject constructor(private val api: FilmApi) : FilmDat
     }
 
     override suspend fun getTopRated(page: Int): List<FilmsDTO> {
-        return api.getTopRated(page)
+        return api.getTopRatedFilms(page)
     }
 
     override suspend fun getFilmById(id: Int): DetailsFilmDTO {

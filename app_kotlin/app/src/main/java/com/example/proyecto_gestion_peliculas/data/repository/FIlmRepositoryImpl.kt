@@ -16,7 +16,7 @@ class FilmRepositoryImpl @Inject constructor(private val dataSource: FilmDataSou
             }
     }
 
-    override suspend fun getTopRated(page: Int): List<Film> {
+    override suspend fun getTopRatedFilms(page: Int): List<Film> {
         return dataSource.getTopRated(page)
             .map { film ->
                 film.toDomain()

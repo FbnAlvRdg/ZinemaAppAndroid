@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_gestion_peliculas.domain.model.Film
-import com.example.proyecto_gestion_peliculas.domain.usecase.GetPopularFilmsUseCase
+import com.example.proyecto_gestion_peliculas.domain.usecase.film.GetPopularFilmsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

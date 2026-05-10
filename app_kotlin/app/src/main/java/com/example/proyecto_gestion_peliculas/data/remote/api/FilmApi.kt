@@ -11,7 +11,7 @@ interface FilmApi {
     suspend fun getPopularFilms(@Query("page") page : Int ): List<FilmsDTO>
 
     @GET("movies/top_rated")
-    suspend fun getTopRated(@Query("page") page: Int) : List<FilmsDTO>
+    suspend fun getTopRatedFilms(@Query("page") page: Int) : List<FilmsDTO>
 
     @GET("movies/{id}")
     suspend fun getFilmById(@Path("id") id: Int) : DetailsFilmDTO
