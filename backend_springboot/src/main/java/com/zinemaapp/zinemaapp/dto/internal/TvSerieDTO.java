@@ -15,7 +15,7 @@ public class TvSerieDTO {
     private Double rating;
     private LocalDate firstAireDate;
     private List<GenreDTO> genres;
-    private TmdbCredits credits;
+    private List<ActorDTO> actors;
 
     public TvSerieDTO(int id, String name, List<String> originCountry, String overview, String poster, Double rating, LocalDate firstAireDate) {
         this.id = id;
@@ -25,6 +25,18 @@ public class TvSerieDTO {
         this.poster = poster;
         this.rating = rating;
         this.firstAireDate = firstAireDate;
+    }
+
+    public TvSerieDTO(int id, String name, List<String> originCountry, String overview, String poster, Double rating, LocalDate firstAireDate, List<GenreDTO> genres, List<ActorDTO> actors) {
+        this.id = id;
+        this.name = name;
+        this.originCountry = originCountry;
+        this.overview = overview;
+        this.poster = poster;
+        this.rating = rating;
+        this.firstAireDate = firstAireDate;
+        this.genres = genres;
+        this.actors = actors;
     }
 
     public int getId() {
@@ -87,19 +99,19 @@ public class TvSerieDTO {
         this.genres = genres;
     }
 
-    public TmdbCredits getCredits() {
-        return credits;
-    }
-
-    public void setCredits(TmdbCredits credits) {
-        this.credits = credits;
-    }
-
     public Double getRating() {
         return rating;
     }
 
     public void setRating(Double rating) {
         this.rating = rating;
+    }
+
+    public List<ActorDTO> getActors() {
+        return actors;
+    }
+
+    public void setActors(List<ActorDTO> actors) {
+        this.actors = actors;
     }
 }

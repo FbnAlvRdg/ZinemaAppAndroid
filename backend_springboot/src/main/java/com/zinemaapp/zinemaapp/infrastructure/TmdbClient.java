@@ -89,8 +89,33 @@ public class TmdbClient {
             }
 
             return objectMapper.readValue(response.body(), TmdbFilmResponse.class);
+
         } catch (Exception e) {
             throw new RuntimeException("Error obteniendo la película con el id: ", e);
+        }
+    }
+
+    public TmdbTvSerieResponse getSeriesById(int id) {
+        try {
+            String url = buildUrl("/tv/" + id) + "&append_to_response=credits";
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() >= 400) {
+                throw new RuntimeException("Error: " + response.statusCode() + "body: " + response.body());
+            }
+
+            return objectMapper.readValue(response.body(), TmdbTvSerieResponse.class);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error en la conexión con TMDB: ", e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Petición interrumpida: ", e);
         }
     }
 

@@ -2,6 +2,7 @@ package com.zinemaapp.zinemaapp.dto.external.tvserie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.zinemaapp.zinemaapp.dto.external.TmdbCredits;
+import com.zinemaapp.zinemaapp.dto.external.TmdbGenre;
 import com.zinemaapp.zinemaapp.dto.internal.GenreDTO;
 
 import java.util.List;
@@ -20,7 +21,9 @@ public class TmdbTvSerieResponse {
     private Double rating;
     @JsonProperty("first_air_date")
     private String firstAireDate;
-    private List<GenreDTO> genres;
+    @JsonProperty("genres")
+    private List<TmdbGenre> genres;
+    @JsonProperty("credits")
     private TmdbCredits credits;
 
     public int getId() {
@@ -79,11 +82,11 @@ public class TmdbTvSerieResponse {
         this.firstAireDate = firstAireDate;
     }
 
-    public List<GenreDTO> getGenres() {
+    public List<TmdbGenre> getGenres() {
         return genres;
     }
 
-    public void setGenres(List<GenreDTO> genres) {
+    public void setGenres(List<TmdbGenre> genres) {
         this.genres = genres;
     }
 

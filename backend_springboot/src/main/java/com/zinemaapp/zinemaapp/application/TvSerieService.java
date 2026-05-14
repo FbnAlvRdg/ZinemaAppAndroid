@@ -20,6 +20,11 @@ public class TvSerieService {
         this.tvSerieMapper = tvSerieMapper;
     }
 
+    public TvSerieDTO getSerieById(int id){
+        TmdbTvSerieResponse tmdbTvSerieResponse = tmdbClient.getSeriesById(id);
+        return tvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse);
+    }
+
     public List<TvSerieDTO> getTopRatedSerie(int page) {
         TmdbTvSeriesResponse tmdbTvSeriesResponse = tmdbClient.getTopRatedSeries(page);
 
