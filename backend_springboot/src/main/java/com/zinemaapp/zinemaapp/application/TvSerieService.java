@@ -20,7 +20,7 @@ public class TvSerieService {
         this.tvSerieMapper = tvSerieMapper;
     }
 
-    public TvSerieDTO getSerieById(int id){
+    public TvSerieDTO getSerieById(int id) {
         TmdbTvSerieResponse tmdbTvSerieResponse = tmdbClient.getSeriesById(id);
         return tvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse);
     }
@@ -32,6 +32,18 @@ public class TvSerieService {
 
         for (TmdbTvSerieResponse tmdbTvSerieResponse : tmdbTvSeriesResponse.getResults()) {
             series.add(tvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse));
+        }
+
+        return series;
+    }
+
+    public List<TvSerieDTO> getSeriesByGenre(int idGenre) {
+        TmdbTvSeriesResponse tmdbTvSeriesResponse = tmdbClient.getSeriesByGenre(idGenre);
+
+        List<TvSerieDTO> series = new ArrayList<>();
+
+        for (TmdbTvSerieResponse tmdbTvSerie : tmdbTvSeriesResponse.getResults()) {
+            series.add(tvSerieMapper.toTvSerieDTO(tmdbTvSerie));
         }
 
         return series;

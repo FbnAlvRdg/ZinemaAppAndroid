@@ -23,7 +23,7 @@ public class TvSerieController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TvSerieDTO> getSeriesById(@PathVariable int id){
+    public ResponseEntity<TvSerieDTO> getSerieById(@PathVariable int id){
         return ResponseEntity.ok(tvSerieService.getSerieById(id));
     }
 }

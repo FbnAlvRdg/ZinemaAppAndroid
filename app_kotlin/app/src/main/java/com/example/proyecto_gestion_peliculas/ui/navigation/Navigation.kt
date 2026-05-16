@@ -28,7 +28,10 @@ fun Navigation() {
         entryProvider = entryProvider {
             entry<LoginScreenKey> {
                 val loginScreenViewModel: LoginScreenViewModel = viewModel()
-                LoginScreen(navigator = navigator, loginScreenViewModel = loginScreenViewModel)
+                LoginScreen(
+                    navigator = navigator,
+                    loginScreenViewModel = loginScreenViewModel
+                )
             }
             entry<SignUpScreenKey> {
                 SignUpScreen() {

@@ -12,8 +12,8 @@ fun TvSerieDTO.toDomain(): TvSerie {
         poster = poster,
         rating = rating,
         firstAireDate = firstAireDate,
-        genres = emptyList(),
-        actors = emptyList()
+        genres = genres.filterNotNull().map { genreDTO -> genreDTO.toDomain() },
+        actors = actors.filterNotNull().map { actorDTO -> actorDTO.toDomain() }
     )
 
 }

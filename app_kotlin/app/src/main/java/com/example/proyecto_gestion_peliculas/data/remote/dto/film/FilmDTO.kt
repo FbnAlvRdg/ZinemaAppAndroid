@@ -1,6 +1,6 @@
 package com.example.proyecto_gestion_peliculas.data.remote.dto.film
 
-data class FilmsDTO(
+data class FilmDTO(
     val id: Int,
     val title: String?,
     val originalTitle: String?,

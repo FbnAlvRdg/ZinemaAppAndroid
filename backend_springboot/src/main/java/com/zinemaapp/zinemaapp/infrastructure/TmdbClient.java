@@ -73,6 +73,29 @@ public class TmdbClient {
 
     }
 
+    public TmdbFilmsResponse getFilmsByGenre(int idGenre) {
+        String url = buildUrl("/discover/movie/") + "?with_genres=" + idGenre;
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = null;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            throw new RuntimeException("Error de conexión con TMDB: ", e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Petición interrumpida: ", e);
+        }
+
+        if (response.statusCode() >= 400) {
+            throw new RuntimeException("Error: " + response.statusCode() + " body: " + response.body());
+        }
+
+        return objectMapper.readValue(response.body(), TmdbFilmsResponse.class);
+    }
+
     public TmdbFilmResponse getFilmById(int id) {
         try {
             String url = buildUrl("/movie/" + id) + "&append_to_response=credits";
@@ -137,7 +160,32 @@ public class TmdbClient {
         }
 
         if (response.statusCode() >= 400) {
-            throw new RuntimeException("Error: " + response.statusCode() + "body: " + response.body());
+            throw new RuntimeException("Error: " + response.statusCode() + " body: " + response.body());
+        }
+
+        return objectMapper.readValue(response.body(), TmdbTvSeriesResponse.class);
+    }
+
+    public TmdbTvSeriesResponse getSeriesByGenre(int idGenre) {
+        String url = buildUrl("/discover/tv") + "?with_genres=" + idGenre;
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = null;
+
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            throw new RuntimeException("Error en la conexión con TMDB ", e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Petición interrumpida: ", e);
+        }
+
+        if (response.statusCode() >= 400){
+            throw new RuntimeException("Error: " + response.statusCode() + " body: " + response.body());
         }
 
         return objectMapper.readValue(response.body(), TmdbTvSeriesResponse.class);

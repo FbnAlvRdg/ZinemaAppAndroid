@@ -11,16 +11,21 @@ class FilmRepositoryImpl @Inject constructor(private val dataSource: FilmDataSou
     FilmRepository {
     override suspend fun getPopularFilms(page: Int): List<Film> {
         return dataSource.getPopularFilms(page)
-            .map { film ->
-                film.toDomain()
+            .map { filmDTO ->
+                filmDTO.toDomain()
             }
     }
 
     override suspend fun getTopRatedFilms(page: Int): List<Film> {
         return dataSource.getTopRated(page)
-            .map { film ->
-                film.toDomain()
+            .map { filmDTO ->
+                filmDTO.toDomain()
             }
+    }
+
+    override suspend fun getFilmsByGenre(idGenre: Int): List<Film> {
+        return dataSource.getFilmByGenre(idGenre)
+            .map { filmDTO -> filmDTO.toDomain() }
     }
 
     override suspend fun getFilmById(id: Int): Film {

@@ -41,7 +41,19 @@ public class FilmService {
 
         List<FilmDTO> films = new ArrayList<>();
 
-        for (TmdbFilmResponse tmdbFilm : tmdbTopRatedResponse.getResults()){
+        for (TmdbFilmResponse tmdbFilm : tmdbTopRatedResponse.getResults()) {
+            films.add(filmMapper.toFilmDTO(tmdbFilm));
+        }
+
+        return films;
+    }
+
+    public List<FilmDTO> getFilmsByGenre(int idGenre) {
+        TmdbFilmsResponse tmdbFilmsResponse = tmdbClient.getFilmsByGenre(idGenre);
+
+        List<FilmDTO> films = new ArrayList<>();
+
+        for (TmdbFilmResponse tmdbFilm : tmdbFilmsResponse.getResults()) {
             films.add(filmMapper.toFilmDTO(tmdbFilm));
         }
 

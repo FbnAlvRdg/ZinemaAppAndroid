@@ -8,4 +8,8 @@ class TvSerieDataSourceImpl @Inject constructor(private val api: TvSerieApi) : T
     override suspend fun getTopRated(page: Int): List<TvSerieDTO> {
         return api.getTopRatedSeries(page)
     }
+
+    override suspend fun getById(id: Int): TvSerieDTO {
+        return api.getSerieById(id)
+    }
 }

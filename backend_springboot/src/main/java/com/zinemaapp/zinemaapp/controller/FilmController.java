@@ -27,6 +27,11 @@ public class FilmController {
 
     }
 
+    @GetMapping("/discover")
+    public ResponseEntity<List<FilmDTO>> getFilmsbyGenre(@RequestParam int idGenre){
+        return ResponseEntity.ok(filmService.getFilmsByGenre(idGenre));
+    }
+
     @GetMapping("/{id}")
     public FilmDTO getFilmById(@PathVariable int id) {
         return filmService.getFilmById(id);

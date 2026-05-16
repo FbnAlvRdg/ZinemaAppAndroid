@@ -15,4 +15,7 @@ class TvSerieRepositoryImpl @Inject constructor(private val dataSource: TvSerieD
         }
     }
 
+    override suspend fun getSerieById(id: Int): TvSerie {
+        return dataSource.getById(id).toDomain()
+    }
 }
