@@ -12,8 +12,10 @@ import com.example.proyecto_gestion_peliculas.ui.features.views.AddFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.film.details.DetailFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.views.EditFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular.MostPopularScreen
+import com.example.proyecto_gestion_peliculas.ui.features.film.toprated.TopRatedScreen
 import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreen
 import com.example.proyecto_gestion_peliculas.ui.features.signup.SignUpScreen
+import com.example.proyecto_gestion_peliculas.ui.features.tvserie.toprated.TopRatedSeriesScreen
 
 
 @Composable
@@ -26,7 +28,10 @@ fun Navigation() {
         entryProvider = entryProvider {
             entry<LoginScreenKey> {
                 val loginScreenViewModel: LoginScreenViewModel = viewModel()
-                LoginScreen(navigator = navigator, loginScreenViewModel = loginScreenViewModel)
+                LoginScreen(
+                    navigator = navigator,
+                    loginScreenViewModel = loginScreenViewModel
+                )
             }
             entry<SignUpScreenKey> {
                 SignUpScreen() {
@@ -39,7 +44,7 @@ fun Navigation() {
                     toAddFilm = { backStack.add(AddFilmScreen) },
                     toEditScreen = { backStack.add(EditFilmScreen) }
                 ) { film ->
-                    backStack.add(DetailFilmScreen(film.id))
+                    backStack.add(DetailFilmScreenKey(film.id))
                 }
             }
             entry<AddFilmScreen> {
@@ -52,11 +57,17 @@ fun Navigation() {
                     back = { backStack.remove(backStack.last()) }
                 )
             }
-            entry<DetailFilmScreen> { key ->
-                println("ID recibido en navigation: ${key.id}")
+            entry<DetailFilmScreenKey> { key ->
                 DetailFilmScreen(id = key.id) {
                     backStack.remove(backStack.last())
                 }
+            }
+            entry<TopRatedFilmScreenKey> {
+                TopRatedScreen(navigator = navigator)
+            }
+
+            entry<TopRatedSeriesScreenKey> {
+                TopRatedSeriesScreen(navigator = navigator)
             }
         }
     )

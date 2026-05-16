@@ -1,10 +1,10 @@
-package com.zinemaapp.zinemaapp.dto.external;
+package com.zinemaapp.zinemaapp.dto.external.film;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class TmdbPopularResponse {
+public class TmdbFilmsResponse {
     @JsonProperty("page")
     private int pages;
     @JsonProperty("results")

@@ -15,14 +15,25 @@ public class FilmController {
     public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
+
     @GetMapping("/popular")
-    public ResponseEntity<List<FilmDTO>>getPopularFilms(@RequestParam int page){
-        System.out.println("PAGE RECIBIDA EN CONTROLLER: " + page);
+    public ResponseEntity<List<FilmDTO>> getPopularFilms(@RequestParam int page) {
         return ResponseEntity.ok(filmService.getPopularFilms(page));
     }
 
+    @GetMapping("/top_rated")
+    public ResponseEntity<List<FilmDTO>> getTopRatedFilms(@RequestParam int page) {
+        return ResponseEntity.ok(filmService.getTopRatedFilms(page));
+
+    }
+
+    @GetMapping("/discover")
+    public ResponseEntity<List<FilmDTO>> getFilmsbyGenre(@RequestParam int idGenre){
+        return ResponseEntity.ok(filmService.getFilmsByGenre(idGenre));
+    }
+
     @GetMapping("/{id}")
-    public FilmDTO getFilmById(@PathVariable int id){
+    public FilmDTO getFilmById(@PathVariable int id) {
         return filmService.getFilmById(id);
     }
 }

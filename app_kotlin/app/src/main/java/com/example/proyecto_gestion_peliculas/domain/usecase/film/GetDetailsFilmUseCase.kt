@@ -1,6 +1,5 @@
-package com.example.proyecto_gestion_peliculas.domain.usecase
+package com.example.proyecto_gestion_peliculas.domain.usecase.film
 
-import com.example.proyecto_gestion_peliculas.data.repository.FilmRepositoryImpl
 import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
 import javax.inject.Inject

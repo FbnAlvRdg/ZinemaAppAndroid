@@ -1,13 +1,13 @@
 package com.example.proyecto_gestion_peliculas.data.remote.mapper
 
 import com.example.proyecto_gestion_peliculas.data.remote.dto.film.DetailsFilmDTO
-import com.example.proyecto_gestion_peliculas.data.remote.dto.film.PopularFilmsDTO
+import com.example.proyecto_gestion_peliculas.data.remote.dto.film.FilmDTO
 import com.example.proyecto_gestion_peliculas.domain.model.Actor
 import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.domain.model.Genre
 import java.time.LocalDate
 
-fun PopularFilmsDTO.toDomain(): Film {
+fun FilmDTO.toDomain(): Film {
     return Film(
         id = id,
         title = title ?: "",

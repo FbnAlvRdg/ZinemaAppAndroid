@@ -12,5 +12,5 @@ data class Film(
     val actors: List<Actor>,
     val synopsis: String,
     val poster: String,
-    val rating: Double
+    val rating: Double,
 )
