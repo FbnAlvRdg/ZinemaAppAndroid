@@ -5,6 +5,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.example.proyecto_gestion_peliculas.ui.features.explore.ExploreScreen
+import com.example.proyecto_gestion_peliculas.ui.features.film.bygenre.FilmsByGenreScreen
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.NavigatorImpl
 import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreenViewModel
@@ -38,6 +40,9 @@ fun Navigation() {
                     backStack.remove(backStack.last())
                 }
             }
+            entry<ExploreScreenKey> {
+                ExploreScreen(navigator = navigator)
+            }
             entry<FilmListScreenKey> {
                 MostPopularScreen(
                     back = { backStack.remove(backStack.last()) },
@@ -46,6 +51,9 @@ fun Navigation() {
                 ) { film ->
                     backStack.add(DetailFilmScreenKey(film.id))
                 }
+            }
+            entry<FilmsByGenreScreenKey> {
+                FilmsByGenreScreen()
             }
             entry<AddFilmScreen> {
                 AddFilmScreen(

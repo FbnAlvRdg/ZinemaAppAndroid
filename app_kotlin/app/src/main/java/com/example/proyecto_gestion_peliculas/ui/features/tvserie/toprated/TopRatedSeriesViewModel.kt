@@ -8,8 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.proyecto_gestion_peliculas.domain.model.TvSerie
 import com.example.proyecto_gestion_peliculas.domain.usecase.tvserie.GetTopRatedTvSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class TopRatedSeriesViewModel @Inject constructor(private val getTopRatedTvSeriesUseCase: GetTopRatedTvSeriesUseCase) :

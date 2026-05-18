@@ -31,9 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.proyecto_gestion_peliculas.ui.components.MyExposedDropDownActores
-import com.example.proyecto_gestion_peliculas.ui.components.MyExposedDropDownGeneros
-import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
 import kotlinx.coroutines.launch
 
 @Composable
@@ -50,7 +48,7 @@ fun AddFilmScreen(back: () -> Unit) {
     val scroll = rememberScrollState()
 
     Scaffold(
-        topBar = { MyTopBar(header) },
+        topBar = { MainTopBar(header) },
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState

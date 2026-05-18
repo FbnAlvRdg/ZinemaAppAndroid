@@ -48,8 +48,8 @@ public class FilmService {
         return films;
     }
 
-    public List<FilmDTO> getFilmsByGenre(int idGenre) {
-        TmdbFilmsResponse tmdbFilmsResponse = tmdbClient.getFilmsByGenre(idGenre);
+    public List<FilmDTO> getFilmsByGenre(int idGenre, int page) {
+        TmdbFilmsResponse tmdbFilmsResponse = tmdbClient.getFilmsByGenre(idGenre, page);
 
         List<FilmDTO> films = new ArrayList<>();
 

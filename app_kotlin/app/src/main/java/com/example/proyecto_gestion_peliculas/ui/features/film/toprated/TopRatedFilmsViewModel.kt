@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TopRatedViewModel @Inject constructor(private val getTopRatedUseCase: GetTopRatedFilmsUseCase) : ViewModel() {
+class TopRatedFilmsViewModel @Inject constructor(private val getTopRatedUseCase: GetTopRatedFilmsUseCase) : ViewModel() {
     var films by mutableStateOf<List<Film>>(emptyList())
     var page: Int = 1
         private set

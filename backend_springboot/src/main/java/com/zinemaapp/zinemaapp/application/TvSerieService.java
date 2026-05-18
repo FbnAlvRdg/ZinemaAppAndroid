@@ -37,8 +37,8 @@ public class TvSerieService {
         return series;
     }
 
-    public List<TvSerieDTO> getSeriesByGenre(int idGenre) {
-        TmdbTvSeriesResponse tmdbTvSeriesResponse = tmdbClient.getSeriesByGenre(idGenre);
+    public List<TvSerieDTO> getSeriesByGenre(int idGenre, int page) {
+        TmdbTvSeriesResponse tmdbTvSeriesResponse = tmdbClient.getSeriesByGenre(idGenre, page);
 
         List<TvSerieDTO> series = new ArrayList<>();
 

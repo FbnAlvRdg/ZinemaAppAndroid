@@ -23,8 +23,8 @@ class FilmRepositoryImpl @Inject constructor(private val dataSource: FilmDataSou
             }
     }
 
-    override suspend fun getFilmsByGenre(idGenre: Int): List<Film> {
-        return dataSource.getFilmByGenre(idGenre)
+    override suspend fun getFilmsByGenre(idGenre: Int, page: Int): List<Film> {
+        return dataSource.getFilmByGenre(idGenre, page)
             .map { filmDTO -> filmDTO.toDomain() }
     }
 

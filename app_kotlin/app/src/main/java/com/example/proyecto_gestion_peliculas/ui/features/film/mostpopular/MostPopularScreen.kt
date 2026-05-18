@@ -1,7 +1,5 @@
 package com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular
 
-import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
@@ -17,13 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,19 +31,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.example.proyecto_gestion_peliculas.R
 import com.example.proyecto_gestion_peliculas.domain.model.Film
 
 import com.example.proyecto_gestion_peliculas.ui.components.MyBottomBar
-import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
 import java.time.format.DateTimeFormatter
 
 
@@ -65,7 +57,7 @@ fun MostPopularScreen(
     val selectedFilm = remember { mutableStateOf<Film?>(null) }
 
     Scaffold(
-        topBar = { MyTopBar(header) },
+        topBar = { MainTopBar(header) },
         bottomBar = { MyBottomBar(back, toAddFilm) }
     ) { innerPadding ->
         LazyColumn(

@@ -28,8 +28,8 @@ public class FilmController {
     }
 
     @GetMapping("/discover")
-    public ResponseEntity<List<FilmDTO>> getFilmsbyGenre(@RequestParam int idGenre){
-        return ResponseEntity.ok(filmService.getFilmsByGenre(idGenre));
+    public ResponseEntity<List<FilmDTO>> getFilmsbyGenre(@RequestParam int idGenre, @RequestParam int page){
+        return ResponseEntity.ok(filmService.getFilmsByGenre(idGenre, page));
     }
 
     @GetMapping("/{id}")

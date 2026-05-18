@@ -19,7 +19,7 @@ class FilmDataSourceImpl @Inject constructor(private val api: FilmApi) : FilmDat
         return api.getFilmById(id)
     }
 
-    override suspend fun getFilmByGenre(idGenre: Int): List<FilmDTO> {
-        return api.getFilmsByGenre(idGenre)
+    override suspend fun getFilmByGenre(idGenre: Int, page: Int): List<FilmDTO> {
+        return api.getFilmsByGenre(idGenre, page)
     }
 }
