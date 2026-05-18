@@ -12,16 +12,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
 
 @Composable
 fun TopRatedScreen(navigator: Navigator) {
-    val viewModel: TopRatedViewModel = hiltViewModel()
+    val viewModel: TopRatedFilmsViewModel = hiltViewModel()
     val lazyListState = rememberLazyListState()
     Scaffold(
-        topBar = { MyTopBar("Top Rated") }
+        topBar = { MainTopBar("Top Rated") }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier

@@ -73,8 +73,8 @@ public class TmdbClient {
 
     }
 
-    public TmdbFilmsResponse getFilmsByGenre(int idGenre) {
-        String url = buildUrl("/discover/movie/") + "?with_genres=" + idGenre;
+    public TmdbFilmsResponse getFilmsByGenre(int idGenre, int page) {
+        String url = buildUrl("/discover/movie") + "&with_genres=" + idGenre;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .GET()
@@ -166,8 +166,8 @@ public class TmdbClient {
         return objectMapper.readValue(response.body(), TmdbTvSeriesResponse.class);
     }
 
-    public TmdbTvSeriesResponse getSeriesByGenre(int idGenre) {
-        String url = buildUrl("/discover/tv") + "?with_genres=" + idGenre;
+    public TmdbTvSeriesResponse getSeriesByGenre(int idGenre, int page) {
+        String url = buildUrl("/discover/tv") + "?with_genres=" + idGenre + "&page=" + page;
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
@@ -184,7 +184,7 @@ public class TmdbClient {
             throw new RuntimeException("Petición interrumpida: ", e);
         }
 
-        if (response.statusCode() >= 400){
+        if (response.statusCode() >= 400) {
             throw new RuntimeException("Error: " + response.statusCode() + " body: " + response.body());
         }
 

@@ -28,8 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.example.proyecto_gestion_peliculas.domain.model.Film
-import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
 import java.time.format.DateTimeFormatter
 
 
@@ -47,7 +46,7 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
     val film = viewModel.film ?: return
 
     Scaffold(
-        topBar = { MyTopBar(header = header) }
+        topBar = { MainTopBar(header = header) }
     ) { innerPadding ->
         Column(
             modifier = Modifier

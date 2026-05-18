@@ -4,7 +4,9 @@ interface Navigator {
     fun back()
     fun navigateToLogIn()
     fun navigateToSignUp()
+    fun navigateToExplore()
     fun navigateToMostPopularFilms()
     fun navigateToTopRatedFilms()
+    fun navigateToFilmsByGenre()
     fun navigateToTopRatedSeries()
 }

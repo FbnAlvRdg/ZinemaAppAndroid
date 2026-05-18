@@ -41,6 +41,7 @@ fun DetailsFilmDTO.toDomain(): Film {
         director = director ?: "",
         actors = actors.take(5).map {
             Actor(
+                id = it.id,
                 name = it.name,
                 character = it.character
             )

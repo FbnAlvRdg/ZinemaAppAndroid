@@ -11,7 +11,13 @@ data object LoginScreenKey : NavKey
 data object SignUpScreenKey : NavKey
 
 @Serializable
+data object ExploreScreenKey : NavKey
+
+@Serializable
 data object FilmListScreenKey : NavKey
+
+@Serializable
+data object FilmsByGenreScreenKey : NavKey
 
 @Serializable
 data object AddFilmScreen : NavKey

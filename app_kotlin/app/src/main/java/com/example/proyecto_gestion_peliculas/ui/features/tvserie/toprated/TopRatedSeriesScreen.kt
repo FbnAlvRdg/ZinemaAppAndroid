@@ -9,14 +9,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
 @Composable
 fun TopRatedSeriesScreen(navigator: Navigator) {
     val viewModel: TopRatedSeriesViewModel = hiltViewModel()
     Scaffold(
-        topBar = { MyTopBar("Top Rated") }
+        topBar = { MainTopBar("Top Rated") }
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier

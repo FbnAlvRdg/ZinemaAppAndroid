@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_gestion_peliculas.R
 import com.example.proyecto_gestion_peliculas.data.readEmail
-import com.example.proyecto_gestion_peliculas.ui.components.MyTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
 
@@ -54,7 +54,7 @@ fun LoginScreen(navigator: Navigator, loginScreenViewModel: LoginScreenViewModel
     }
 
     Scaffold(
-        topBar = { MyTopBar(header) }
+        topBar = { MainTopBar(header) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -171,7 +171,7 @@ fun LoginScreen(navigator: Navigator, loginScreenViewModel: LoginScreenViewModel
                         if (loginScreenViewModel.email.isBlank() || loginScreenViewModel.password.isBlank()) {
                             alertDialogLogIn.value = true
                         } else {
-                            navigator.navigateToTopRatedSeries()
+                            navigator.navigateToExplore()
                         }
                     },
 
