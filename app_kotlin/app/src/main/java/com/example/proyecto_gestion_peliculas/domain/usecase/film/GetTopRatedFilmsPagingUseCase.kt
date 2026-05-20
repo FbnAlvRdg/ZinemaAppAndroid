@@ -6,8 +6,8 @@ import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetTopRatedFilmsUseCase @Inject constructor(private val repository: FilmRepository) {
-    suspend operator fun invoke(page: Int): List<Film> {
-        return repository.getTopRatedFilms(page)
+class GetTopRatedFilmsPagingUseCase @Inject constructor(private val repository: FilmRepository) {
+    operator fun invoke(): Flow<PagingData<Film>> {
+        return repository.getTopRatedFilmsPaging()
     }
 }

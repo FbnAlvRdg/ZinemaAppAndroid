@@ -69,8 +69,10 @@ fun MyBottomBar(back: () -> Unit, toAddFilm: () -> Unit) {
 
 @Composable
 fun AppBottomBar(
-    onClick1: () -> Unit,
-    onClick2: () -> Unit,
+    onHome: () -> Unit,
+    onList: () -> Unit,
+    onMostPopular: () -> Unit,
+    onTopRated: () -> Unit
 ) {
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.secondary,
@@ -81,7 +83,7 @@ fun AppBottomBar(
             onClick = {},
             icon = {
                 IconButton(
-                    onClick = { onClick1() }
+                    onClick = { onHome() }
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.home_icon),
@@ -95,7 +97,36 @@ fun AppBottomBar(
             onClick = {},
             icon = {
                 IconButton(
-                    onClick = { onClick2() }
+                    onClick = { onMostPopular() }
+                ) {
+                    Icon(
+                        painterResource(R.drawable.most_popular_icon),
+                        contentDescription = "Most Popular"
+                    )
+                }
+            }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {},
+            icon = {
+                IconButton(
+                    onClick = { onTopRated() }
+                ) {
+                    Icon(
+                        painterResource(R.drawable.top_rated_icon),
+                        contentDescription = "Top Rated"
+                    )
+                }
+            }
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = {},
+            icon = {
+                IconButton(
+                    onClick = { onList() }
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.icono_add),
@@ -104,5 +135,7 @@ fun AppBottomBar(
                 }
             }
         )
+
+
     }
 }
