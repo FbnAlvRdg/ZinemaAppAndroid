@@ -102,6 +102,7 @@ fun AppBottomBar(
                     Icon(
                         painterResource(R.drawable.most_popular_icon),
                         contentDescription = "Most Popular"
+
                     )
                 }
             }
