@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.proyecto_gestion_peliculas.R
 import com.example.proyecto_gestion_peliculas.data.saveEmail
 import com.example.proyecto_gestion_peliculas.ui.theme.PureWhite
@@ -47,13 +48,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen(back: () -> Unit) {
-    val userName = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    val passwordConfirmar = remember { mutableStateOf("") }
-    val telefono = remember { mutableStateOf("") }
-    val checkedRecuerdame = remember { mutableStateOf(false) }
-    val checkedTerms = remember { mutableStateOf(false) }
+    val viewModel: SignUpViewModel = hiltViewModel()
     val alertDialogEmail = remember { mutableStateOf(false) }
     val alertDialogPassword = remember { mutableStateOf(false) }
     val alertDialogEqualPas = remember { mutableStateOf(false) }
@@ -80,8 +75,8 @@ fun SignUpScreen(back: () -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             OutlinedTextField(
-                value = email.value,
-                onValueChange = { nuevoEmail -> email.value = nuevoEmail },
+                value = viewModel.email,
+                onValueChange = viewModel::onEmailChange,
                 label = {
                     Text(
                         text = "Email"
@@ -104,8 +99,8 @@ fun SignUpScreen(back: () -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             OutlinedTextField(
-                value = userName.value,
-                onValueChange = { nuevoUsername -> userName.value = nuevoUsername },
+                value = viewModel.username,
+                onValueChange = viewModel::onUsernameChange,
                 label = {
                     Text(
                         text = "Username"
@@ -128,8 +123,8 @@ fun SignUpScreen(back: () -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             OutlinedTextField(
-                value = password.value,
-                onValueChange = { nuevoPassword -> password.value = nuevoPassword },
+                value = viewModel.password,
+                onValueChange = viewModel::onPasswordChange,
                 label = {
                     Text(
                         text = "Contraseña"
@@ -152,10 +147,8 @@ fun SignUpScreen(back: () -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             OutlinedTextField(
-                value = passwordConfirmar.value,
-                onValueChange = { nuevoPasswordConfirmar ->
-                    passwordConfirmar.value = nuevoPasswordConfirmar
-                },
+                value = viewModel.confirmPassword,
+                onValueChange = viewModel::onConfirmPasswordChange,
                 label = {
                     Text(
                         text = "Repite la contraseña"
@@ -178,10 +171,8 @@ fun SignUpScreen(back: () -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             OutlinedTextField(
-                value = telefono.value,
-                onValueChange = { nuevoTelefono ->
-                    telefono.value = nuevoTelefono
-                },
+                value = viewModel.phone,
+                onValueChange = viewModel::onPhoneChange,
                 label = {
                     Text(
                         text = "Teléfono"
@@ -203,8 +194,8 @@ fun SignUpScreen(back: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = checkedRecuerdame.value,
-                onCheckedChange = { checkedRecuerdame.value = it },
+                checked = viewModel.checkedRememberMe,
+                onCheckedChange = { viewModel.onCheckedRememberMeChange() },
                 colors = CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colorScheme.primary,
                     uncheckedColor = MaterialTheme.colorScheme.primary,
@@ -223,8 +214,8 @@ fun SignUpScreen(back: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(
-                checked = checkedTerms.value,
-                onCheckedChange = { checkedTerms.value = it },
+                checked = viewModel.checkedTerms,
+                onCheckedChange = { viewModel.onCheckedTermsChange() },
                 colors = CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colorScheme.primary,
                     uncheckedColor = MaterialTheme.colorScheme.primary,
@@ -334,25 +325,27 @@ fun SignUpScreen(back: () -> Unit) {
         ) {
             Button(
                 onClick = {
-                    if (!checkEmail(email.value)) {
+                    if (!checkEmail(viewModel.email)) {
                         alertDialogEmail.value = true
                         return@Button
                     }
 
-                    if (!checkPassword(password.value)) {
+                    if (!checkPassword(viewModel.password)) {
                         alertDialogPassword.value = true
 
                         return@Button
                     }
 
-                    if (!checkEqualPassword(password.value, passwordConfirmar.value)) {
+                    if (!checkEqualPassword(viewModel.password, viewModel.confirmPassword)) {
                         alertDialogEqualPas.value = true
                         return@Button
                     }
 
                     CoroutineScope(Dispatchers.IO).launch {
-                        saveEmail(context, email.value)
+                        saveEmail(context, viewModel.email)
                     }
+
+                    viewModel.register()
 
                     back()
                 },

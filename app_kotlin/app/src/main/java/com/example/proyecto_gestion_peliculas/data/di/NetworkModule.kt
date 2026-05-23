@@ -1,13 +1,18 @@
 package com.example.proyecto_gestion_peliculas.data.di
 
+import com.example.proyecto_gestion_peliculas.data.remote.api.AuthApi
 import com.example.proyecto_gestion_peliculas.data.remote.api.FilmApi
 import com.example.proyecto_gestion_peliculas.data.remote.api.TvSerieApi
+import com.example.proyecto_gestion_peliculas.data.remote.datasource.AuthDataSource
+import com.example.proyecto_gestion_peliculas.data.remote.datasource.AuthDataSourceImpl
 import com.example.proyecto_gestion_peliculas.data.remote.datasource.FilmDataSource
 import com.example.proyecto_gestion_peliculas.data.remote.datasource.FilmDataSourceImpl
 import com.example.proyecto_gestion_peliculas.data.remote.datasource.TvSerieDataSource
 import com.example.proyecto_gestion_peliculas.data.remote.datasource.TvSerieDataSourceImpl
+import com.example.proyecto_gestion_peliculas.data.repository.AuthRepositoryImpl
 import com.example.proyecto_gestion_peliculas.data.repository.FilmRepositoryImpl
 import com.example.proyecto_gestion_peliculas.data.repository.TvSerieRepositoryImpl
+import com.example.proyecto_gestion_peliculas.domain.repository.AuthRepository
 import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
 import com.example.proyecto_gestion_peliculas.domain.repository.TvSerieRepository
 import dagger.Binds
@@ -43,6 +48,12 @@ object NetworkModule {
         return retrofit.create(TvSerieApi::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun providesAuthApi(retrofit: Retrofit): AuthApi {
+        return retrofit.create(AuthApi::class.java)
+    }
+
     @Module
     @InstallIn(SingletonComponent::class)
     abstract class RepositoryModule {
@@ -50,7 +61,11 @@ object NetworkModule {
         abstract fun bindFilmRepository(impl: FilmRepositoryImpl): FilmRepository
 
         @Binds
-        abstract fun bindTvSerieRepository(impl: TvSerieRepositoryImpl) : TvSerieRepository
+        abstract fun bindTvSerieRepository(impl: TvSerieRepositoryImpl): TvSerieRepository
+
+        @Binds
+        abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+
     }
 
     @Module
@@ -60,7 +75,9 @@ object NetworkModule {
         abstract fun bindDataSourceFilmImpl(impl: FilmDataSourceImpl): FilmDataSource
 
         @Binds
-        abstract fun bindDataSourceTvSerieImpl(impl: TvSerieDataSourceImpl) : TvSerieDataSource
-    }
+        abstract fun bindDataSourceTvSerieImpl(impl: TvSerieDataSourceImpl): TvSerieDataSource
 
+        @Binds
+        abstract fun bindDataSourceAuthImpl(impl: AuthDataSourceImpl): AuthDataSource
+    }
 }
