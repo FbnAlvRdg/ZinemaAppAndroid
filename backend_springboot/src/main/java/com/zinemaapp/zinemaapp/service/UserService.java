@@ -25,6 +25,10 @@ public class UserService {
             throw new RuntimeException("El email ya se encuentra registrado");
         }
 
+        if (userRepository.existsByUsername(registerRequestDTO.getUsername())){
+            throw new RuntimeException("El nombre de usuario  ya se encuentra registrado");
+        }
+
         User user = new User();
         user.setEmail(registerRequestDTO.getEmail());
         user.setUsername(registerRequestDTO.getUsername());
