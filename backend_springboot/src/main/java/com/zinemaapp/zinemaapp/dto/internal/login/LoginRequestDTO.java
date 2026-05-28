@@ -1,4 +1,4 @@
-package com.zinemaapp.zinemaapp.dto.internal;
+package com.zinemaapp.zinemaapp.dto.internal.login;
 
 public class LoginRequestDTO {
     private String email;

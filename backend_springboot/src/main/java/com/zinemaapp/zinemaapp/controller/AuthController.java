@@ -1,13 +1,13 @@
 package com.zinemaapp.zinemaapp.controller;
 
-import com.zinemaapp.zinemaapp.dto.internal.LoginRequestDTO;
+import com.zinemaapp.zinemaapp.dto.internal.login.LoginRequestDTO;
 import com.zinemaapp.zinemaapp.dto.internal.RegisterRequestDTO;
 import com.zinemaapp.zinemaapp.dto.internal.UserResponseDTO;
+import com.zinemaapp.zinemaapp.dto.internal.login.LoginResponseDTO;
 import com.zinemaapp.zinemaapp.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,7 +24,18 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public UserResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO){
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO){
         return userService.login(loginRequestDTO);
     }
+
+    @GetMapping("/test")
+    public String test() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return "NO Auth";
+        }
+
+        return authentication.getName();
+    }
+
 }
