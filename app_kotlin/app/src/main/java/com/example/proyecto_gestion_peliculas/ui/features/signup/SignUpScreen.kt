@@ -37,7 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.proyecto_gestion_peliculas.R
-import com.example.proyecto_gestion_peliculas.data.saveEmail
+import com.example.proyecto_gestion_peliculas.data.datastore.saveEmail
 import com.example.proyecto_gestion_peliculas.ui.theme.PureWhite
 import com.example.proyecto_gestion_peliculas.core.utils.checkEmail
 import com.example.proyecto_gestion_peliculas.core.utils.checkEqualPassword

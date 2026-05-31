@@ -1,5 +1,6 @@
 package com.example.proyecto_gestion_peliculas.data.di
 
+import android.content.Context
 import com.example.proyecto_gestion_peliculas.data.remote.api.AuthApi
 import com.example.proyecto_gestion_peliculas.data.remote.api.FilmApi
 import com.example.proyecto_gestion_peliculas.data.remote.api.TvSerieApi
@@ -9,6 +10,7 @@ import com.example.proyecto_gestion_peliculas.data.remote.datasource.FilmDataSou
 import com.example.proyecto_gestion_peliculas.data.remote.datasource.FilmDataSourceImpl
 import com.example.proyecto_gestion_peliculas.data.remote.datasource.TvSerieDataSource
 import com.example.proyecto_gestion_peliculas.data.remote.datasource.TvSerieDataSourceImpl
+import com.example.proyecto_gestion_peliculas.data.remote.interceptor.AuthInterceptor
 import com.example.proyecto_gestion_peliculas.data.repository.AuthRepositoryImpl
 import com.example.proyecto_gestion_peliculas.data.repository.FilmRepositoryImpl
 import com.example.proyecto_gestion_peliculas.data.repository.TvSerieRepositoryImpl
@@ -19,7 +21,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -31,9 +35,15 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesRetrofit(): Retrofit {
-        return Retrofit.Builder().baseUrl(BASE_URL)
+    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder().baseUrl(BASE_URL).client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create()).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideOKHttpClient(@ApplicationContext context: Context): OkHttpClient {
+        return OkHttpClient.Builder().addInterceptor(AuthInterceptor(context)).build()
     }
 
     @Provides

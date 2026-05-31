@@ -28,14 +28,14 @@ public class AuthController {
         return userService.login(loginRequestDTO);
     }
 
-    @GetMapping("/test")
-    public String test() {
+    @GetMapping("/me")
+    public UserResponseDTO me(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            return "NO Auth";
+        String email = null;
+        if (authentication != null){
+            email = authentication.getName();
         }
 
-        return authentication.getName();
+        return userService.getCurrentUser(email);
     }
-
 }

@@ -70,4 +70,21 @@ public class UserService {
 
         return new LoginResponseDTO(token, userResponseDTO);
     }
+
+    public UserResponseDTO getCurrentUser(String email){
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()){
+            throw new RuntimeException("El email no se ha encontrado");
+        }
+
+        User user = userOptional.get();
+
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setId(user.getId());
+        userResponseDTO.setEmail(user.getEmail());
+        userResponseDTO.setUsername(user.getUsername());
+
+        return userResponseDTO;
+    }
 }
