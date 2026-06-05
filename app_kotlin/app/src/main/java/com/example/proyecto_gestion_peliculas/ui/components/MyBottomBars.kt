@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_gestion_peliculas.R
+import com.example.proyecto_gestion_peliculas.data.datastore.clearJwt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,8 +70,11 @@ fun MyBottomBar(back: () -> Unit, toAddFilm: () -> Unit) {
 
 @Composable
 fun AppBottomBar(
-    onClick1: () -> Unit,
-    onClick2: () -> Unit,
+    onHome: () -> Unit,
+    onList: () -> Unit,
+    onMostPopular: () -> Unit,
+    onTopRated: () -> Unit,
+    onLogOut: () -> Unit
 ) {
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.secondary,
@@ -81,7 +85,7 @@ fun AppBottomBar(
             onClick = {},
             icon = {
                 IconButton(
-                    onClick = { onClick1() }
+                    onClick = { onHome() }
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.home_icon),
@@ -95,7 +99,37 @@ fun AppBottomBar(
             onClick = {},
             icon = {
                 IconButton(
-                    onClick = { onClick2() }
+                    onClick = { onMostPopular() }
+                ) {
+                    Icon(
+                        painterResource(R.drawable.most_popular_icon),
+                        contentDescription = "Most Popular"
+
+                    )
+                }
+            }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {},
+            icon = {
+                IconButton(
+                    onClick = { onTopRated() }
+                ) {
+                    Icon(
+                        painterResource(R.drawable.top_rated_icon),
+                        contentDescription = "Top Rated"
+                    )
+                }
+            }
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = {},
+            icon = {
+                IconButton(
+                    onClick = { onList() }
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.icono_add),
@@ -104,5 +138,22 @@ fun AppBottomBar(
                 }
             }
         )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = {},
+            icon = {
+                IconButton(
+                    onClick = { onLogOut() }
+                ) {
+                    Icon(
+                        painterResource(R.drawable.log_out_icon),
+                        contentDescription = "Log out"
+                    )
+                }
+            }
+        )
+
+
     }
 }

@@ -37,20 +37,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_gestion_peliculas.R
-import com.example.proyecto_gestion_peliculas.data.readEmail
+import com.example.proyecto_gestion_peliculas.data.datastore.readEmail
 import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
 
 @Composable
-fun LoginScreen(navigator: Navigator, loginScreenViewModel: LoginScreenViewModel) {
+fun LoginScreen(navigator: Navigator, viewModel: LoginScreenViewModel) {
     val context = LocalContext.current
     val alertDialogLogIn = remember { mutableStateOf(false) }
     val header = "Zinema"
 
     LaunchedEffect(Unit) {
         val savedEmail = readEmail(context)
-        loginScreenViewModel.enterEmail(savedEmail)
+        viewModel.enterEmail(savedEmail)
+    }
+
+    LaunchedEffect(viewModel.loginSuccess) {
+        if (viewModel.loginSuccess) {
+            navigator.navigateToExplore()
+            viewModel.loginSuccess = false
+        }
     }
 
     Scaffold(
@@ -101,8 +108,8 @@ fun LoginScreen(navigator: Navigator, loginScreenViewModel: LoginScreenViewModel
                 horizontalArrangement = Arrangement.Center
             ) {
                 OutlinedTextField(
-                    value = loginScreenViewModel.email,
-                    onValueChange = { enteredEmail -> loginScreenViewModel.enterEmail(enteredEmail = enteredEmail) },
+                    value = viewModel.email,
+                    onValueChange = { enteredEmail -> viewModel.enterEmail(enteredEmail = enteredEmail) },
                     label = {
                         Text(
                             text = "Email"
@@ -135,9 +142,9 @@ fun LoginScreen(navigator: Navigator, loginScreenViewModel: LoginScreenViewModel
                 horizontalArrangement = Arrangement.Center
             ) {
                 OutlinedTextField(
-                    value = loginScreenViewModel.password,
+                    value = viewModel.password,
                     onValueChange = { enteredPassword ->
-                        loginScreenViewModel.enterPassword(
+                        viewModel.enterPassword(
                             enteredPassword
                         )
                     },
@@ -168,10 +175,10 @@ fun LoginScreen(navigator: Navigator, loginScreenViewModel: LoginScreenViewModel
             ) {
                 Button(
                     onClick = {
-                        if (loginScreenViewModel.email.isBlank() || loginScreenViewModel.password.isBlank()) {
+                        if (viewModel.email.isBlank() || viewModel.password.isBlank()) {
                             alertDialogLogIn.value = true
                         } else {
-                            navigator.navigateToExplore()
+                            viewModel.login()
                         }
                     },
 

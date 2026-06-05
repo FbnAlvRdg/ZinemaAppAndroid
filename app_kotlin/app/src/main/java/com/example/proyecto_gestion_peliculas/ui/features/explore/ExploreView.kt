@@ -13,15 +13,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.proyecto_gestion_peliculas.data.datastore.clearJwt
 import com.example.proyecto_gestion_peliculas.ui.components.AppBottomBar
 import com.example.proyecto_gestion_peliculas.ui.components.AppTopBar
-import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
 import com.example.proyecto_gestion_peliculas.ui.features.film.toprated.TopRatedFilmsViewModel
-import com.example.proyecto_gestion_peliculas.ui.features.film.toprated.TopRatedScreen
-import com.example.proyecto_gestion_peliculas.ui.features.tvserie.toprated.TopRatedSeriesScreen
 import com.example.proyecto_gestion_peliculas.ui.features.tvserie.toprated.TopRatedSeriesViewModel
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
@@ -31,6 +31,7 @@ fun ExploreScreen(navigator: Navigator) {
     val topRatedFilmsViewModel: TopRatedFilmsViewModel = hiltViewModel()
     val topRatedSeriesViewModel: TopRatedSeriesViewModel = hiltViewModel()
     val selectedTab = viewModel.selectedTab
+    val films = viewModel.films.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = {
@@ -41,8 +42,15 @@ fun ExploreScreen(navigator: Navigator) {
         },
         bottomBar = {
             AppBottomBar(
-                onClick1 = { navigator.navigateToExplore() },
-                onClick2 = {}
+                onHome = { navigator.navigateToExplore() },
+                onMostPopular = { navigator.navigateToMostPopularFilms() },
+                onTopRated = { navigator.navigateToTopRatedFilms() },
+                onList = {},
+                onLogOut = {
+                    viewModel.logout {
+                        navigator.navigateToLoginClearBackStack()
+                    }
+                }
             )
         }
 
@@ -73,16 +81,20 @@ fun ExploreScreen(navigator: Navigator) {
             when (selectedTab) {
                 0 -> {
                     LazyColumn {
-                        items(topRatedFilmsViewModel.films) { film ->
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            ) {
-                                Text(
-                                    text = film.title
-                                )
+                        items(films.itemCount) { index ->
+                            val film = films[index]
+                            film?.let {
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp)
+                                ) {
+                                    Text(
+                                        text = film.title
+                                    )
+                                }
                             }
+
                         }
                     }
                 }

@@ -32,7 +32,7 @@ fun Navigation() {
                 val loginScreenViewModel: LoginScreenViewModel = viewModel()
                 LoginScreen(
                     navigator = navigator,
-                    loginScreenViewModel = loginScreenViewModel
+                    viewModel = loginScreenViewModel
                 )
             }
             entry<SignUpScreenKey> {

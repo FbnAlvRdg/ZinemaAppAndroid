@@ -9,4 +9,5 @@ interface Navigator {
     fun navigateToTopRatedFilms()
     fun navigateToFilmsByGenre()
     fun navigateToTopRatedSeries()
+    fun navigateToLoginClearBackStack()
 }

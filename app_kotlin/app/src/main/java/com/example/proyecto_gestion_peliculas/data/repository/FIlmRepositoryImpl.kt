@@ -1,9 +1,14 @@
 package com.example.proyecto_gestion_peliculas.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.proyecto_gestion_peliculas.data.remote.datasource.FilmDataSource
 import com.example.proyecto_gestion_peliculas.data.remote.mapper.toDomain
+import com.example.proyecto_gestion_peliculas.data.remote.paging.TopRatedFilmPagingSource
 import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
@@ -21,6 +26,13 @@ class FilmRepositoryImpl @Inject constructor(private val dataSource: FilmDataSou
             .map { filmDTO ->
                 filmDTO.toDomain()
             }
+    }
+
+    override fun getTopRatedFilmsPaging(): Flow<PagingData<Film>> {
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = { TopRatedFilmPagingSource(dataSource) }
+        ).flow
     }
 
     override suspend fun getFilmsByGenre(idGenre: Int, page: Int): List<Film> {
