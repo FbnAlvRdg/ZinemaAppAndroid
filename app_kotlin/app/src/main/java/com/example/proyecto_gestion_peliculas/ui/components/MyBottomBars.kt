@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_gestion_peliculas.R
+import com.example.proyecto_gestion_peliculas.data.datastore.clearJwt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,7 +73,8 @@ fun AppBottomBar(
     onHome: () -> Unit,
     onList: () -> Unit,
     onMostPopular: () -> Unit,
-    onTopRated: () -> Unit
+    onTopRated: () -> Unit,
+    onLogOut: () -> Unit
 ) {
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.secondary,
@@ -132,6 +134,21 @@ fun AppBottomBar(
                     Icon(
                         painter = painterResource(R.drawable.icono_add),
                         contentDescription = "Add to List"
+                    )
+                }
+            }
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = {},
+            icon = {
+                IconButton(
+                    onClick = { onLogOut() }
+                ) {
+                    Icon(
+                        painterResource(R.drawable.log_out_icon),
+                        contentDescription = "Log out"
                     )
                 }
             }

@@ -36,13 +36,13 @@ class LoginScreenViewModel @Inject constructor(
 
     fun login() {
         viewModelScope.launch {
-
             try {
                 val result = loginUseCase(email, password)
                 saveJwt(context, result.token)
                 loginSuccess = true
             } catch (e: Exception) {
                 loginSuccess = false
+                e.printStackTrace()
             }
         }
     }

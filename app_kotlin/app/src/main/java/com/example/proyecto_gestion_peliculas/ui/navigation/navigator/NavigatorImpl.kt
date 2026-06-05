@@ -45,4 +45,9 @@ class NavigatorImpl(private val backStack: NavBackStack<NavKey>) : Navigator {
     override fun navigateToTopRatedSeries() {
         backStack.add(TopRatedSeriesScreenKey)
     }
+
+    override fun navigateToLoginClearBackStack() {
+        backStack.clear()
+        backStack.add(LoginScreenKey)
+    }
 }

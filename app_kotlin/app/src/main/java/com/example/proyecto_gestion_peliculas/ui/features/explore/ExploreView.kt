@@ -13,10 +13,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.proyecto_gestion_peliculas.data.datastore.clearJwt
 import com.example.proyecto_gestion_peliculas.ui.components.AppBottomBar
 import com.example.proyecto_gestion_peliculas.ui.components.AppTopBar
 import com.example.proyecto_gestion_peliculas.ui.features.film.toprated.TopRatedFilmsViewModel
@@ -43,7 +45,12 @@ fun ExploreScreen(navigator: Navigator) {
                 onHome = { navigator.navigateToExplore() },
                 onMostPopular = { navigator.navigateToMostPopularFilms() },
                 onTopRated = { navigator.navigateToTopRatedFilms() },
-                onList = {}
+                onList = {},
+                onLogOut = {
+                    viewModel.logout {
+                        navigator.navigateToLoginClearBackStack()
+                    }
+                }
             )
         }
 

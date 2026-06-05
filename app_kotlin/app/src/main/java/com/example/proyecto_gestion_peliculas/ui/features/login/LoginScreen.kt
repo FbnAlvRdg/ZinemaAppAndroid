@@ -53,6 +53,13 @@ fun LoginScreen(navigator: Navigator, viewModel: LoginScreenViewModel) {
         viewModel.enterEmail(savedEmail)
     }
 
+    LaunchedEffect(viewModel.loginSuccess) {
+        if (viewModel.loginSuccess) {
+            navigator.navigateToExplore()
+            viewModel.loginSuccess = false
+        }
+    }
+
     Scaffold(
         topBar = { MainTopBar(header) }
     ) { innerPadding ->
@@ -172,7 +179,6 @@ fun LoginScreen(navigator: Navigator, viewModel: LoginScreenViewModel) {
                             alertDialogLogIn.value = true
                         } else {
                             viewModel.login()
-                            navigator.navigateToExplore()
                         }
                     },
 
