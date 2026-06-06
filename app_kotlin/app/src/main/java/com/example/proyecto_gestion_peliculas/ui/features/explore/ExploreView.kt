@@ -6,21 +6,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.proyecto_gestion_peliculas.data.datastore.clearJwt
-import com.example.proyecto_gestion_peliculas.ui.components.AppBottomBar
-import com.example.proyecto_gestion_peliculas.ui.components.AppTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.bottombar.AppBottomBar
+import com.example.proyecto_gestion_peliculas.ui.components.cards.FilmCard
+import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.cards.TvSerieCard
 import com.example.proyecto_gestion_peliculas.ui.features.film.toprated.TopRatedFilmsViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.tvserie.toprated.TopRatedSeriesViewModel
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
@@ -32,6 +31,7 @@ fun ExploreScreen(navigator: Navigator) {
     val topRatedSeriesViewModel: TopRatedSeriesViewModel = hiltViewModel()
     val selectedTab = viewModel.selectedTab
     val films = viewModel.films.collectAsLazyPagingItems()
+    val series = viewModel.series.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = {
@@ -84,34 +84,19 @@ fun ExploreScreen(navigator: Navigator) {
                         items(films.itemCount) { index ->
                             val film = films[index]
                             film?.let {
-                                Card(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp)
-                                ) {
-                                    Text(
-                                        text = film.title
-                                    )
-                                }
+                                FilmCard(film, onDetail = {navigator.navigateToDetailsFilm(film.id)}, onList = {})
                             }
-
                         }
                     }
                 }
 
                 1 -> {
                     LazyColumn {
-                        items(topRatedSeriesViewModel.tvSeries) { tvSerie ->
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            ) {
-                                Text(
-                                    text = tvSerie.name ?: "No existe titulo"
-                                )
+                        items(series.itemCount) { index ->
+                            val tvSerie = series[index]
+                            tvSerie?.let {
+                                TvSerieCard(tvSerie, onDetail = {navigator.navigateToDetailsSerie(tvSerie.id)}, onList = {})
                             }
-
                         }
                     }
                 }

@@ -10,4 +10,6 @@ interface Navigator {
     fun navigateToFilmsByGenre()
     fun navigateToTopRatedSeries()
     fun navigateToLoginClearBackStack()
+    fun navigateToDetailsFilm(id : Int)
+    fun navigateToDetailsSerie(id: Int)
 }

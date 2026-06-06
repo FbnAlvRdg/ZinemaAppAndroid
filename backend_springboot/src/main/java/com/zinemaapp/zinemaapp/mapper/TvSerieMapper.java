@@ -36,7 +36,7 @@ public class TvSerieMapper {
         List<GenreDTO> genres = new ArrayList<>();
         if (tmdbTvSerieResponse.getGenres() != null) {
             for (TmdbGenre genre : tmdbTvSerieResponse.getGenres()) {
-                 genres.add(new GenreDTO(
+                genres.add(new GenreDTO(
                         genre.getId(),
                         genre.getName()
                 ));
@@ -48,7 +48,7 @@ public class TvSerieMapper {
                 tmdbTvSerieResponse.getName(),
                 tmdbTvSerieResponse.getOriginCountry(),
                 tmdbTvSerieResponse.getOverview(),
-                tmdbTvSerieResponse.getPoster(),
+                "https://image.tmdb.org/t/p/w500" + tmdbTvSerieResponse.getPoster(),
                 tmdbTvSerieResponse.getRating(),
                 parseDate(tmdbTvSerieResponse.getFirstAireDate()),
                 genres,

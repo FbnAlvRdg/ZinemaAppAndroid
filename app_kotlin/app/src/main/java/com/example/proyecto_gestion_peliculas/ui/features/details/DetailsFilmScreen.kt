@@ -1,6 +1,5 @@
-package com.example.proyecto_gestion_peliculas.ui.features.film.details
+package com.example.proyecto_gestion_peliculas.ui.features.details
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,33 +25,37 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
+import com.example.proyecto_gestion_peliculas.ui.features.film.details.DetailsFilmViewModel
+import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun DetailFilmScreen(id: Int, back: () -> Unit) {
-    val header = "Detalles"
+fun DetailFilmScreen(id: Int, navigator: Navigator) {
     val scroll = rememberScrollState()
     val viewModel: DetailsFilmViewModel = hiltViewModel()
 
     LaunchedEffect(id) {
-        println("Cargando film con id: $id")
         viewModel.loadFilm(id)
     }
 
     val film = viewModel.film ?: return
 
     Scaffold(
-        topBar = { MainTopBar(header = header) }
+        topBar = {
+            AppTopBar(
+                title = viewModel.header,
+                back = { navigator.back() }
+            )
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(20.dp)
+                .padding(16.dp)
                 .verticalScroll(scroll)
-                .background(MaterialTheme.colorScheme.background)
         ) {
             AsyncImage(
                 model = film.poster,
@@ -76,7 +77,6 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
 
@@ -112,14 +112,12 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
                     text = "Director: ",
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.3f)
                 )
 
                 Text(
                     text = film.director ?: "",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)
                 )
             }
@@ -134,7 +132,6 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
                     textAlign = TextAlign.Justify,
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.3f)
                 )
 
@@ -142,8 +139,6 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
                     text = film.actors.joinToString(", ") { it.name },
                     modifier = Modifier.weight(0.7f),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-
                     )
             }
 
@@ -157,7 +152,6 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
                     text = "Lanzamiento: ",
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.3f)
                 )
 
@@ -165,7 +159,6 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
                     text = film.releaseDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                         ?: "",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)
                 )
             }
@@ -180,14 +173,12 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
                     text = "Valoración: ",
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.3f)
                 )
 
                 Text(
                     text = film.rating.toString(),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)
                 )
             }
@@ -207,27 +198,6 @@ fun DetailFilmScreen(id: Int, back: () -> Unit) {
                 textAlign = TextAlign.Justify,
                 fontSize = 16.sp
             )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { back() },
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = MaterialTheme.colorScheme.onPrimary,
-                        containerColor = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    Text(
-                        text = "Atrás",
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
         }
     }
 }

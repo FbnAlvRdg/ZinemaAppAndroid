@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular
+package com.example.proyecto_gestion_peliculas.ui.features.mostpopular
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -38,19 +38,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.proyecto_gestion_peliculas.domain.model.Film
 
-import com.example.proyecto_gestion_peliculas.ui.components.MyBottomBar
-import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.topbar.MainTopBar
+import com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular.MostPopularFilmsViewModel
+import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import java.time.format.DateTimeFormatter
 
 
 @Composable
 fun MostPopularScreen(
-    back: () -> Unit,
-    toAddFilm: () -> Unit,
-    toEditScreen: () -> Unit,
-    toDetailFilmScreen: (Film) -> Unit
+    navigator: Navigator
 ) {
-    val viewModel: MostPopularFilmsViewModel = hiltViewModel()
+    val filmsViewModel: MostPopularFilmsViewModel = hiltViewModel()
     val lazyListState = rememberLazyListState()
     val header = "Populares"
     val deleteShowDialog = remember { mutableStateOf(false) }
@@ -58,7 +56,6 @@ fun MostPopularScreen(
 
     Scaffold(
         topBar = { MainTopBar(header) },
-        bottomBar = { MyBottomBar(back, toAddFilm) }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -67,7 +64,7 @@ fun MostPopularScreen(
                 .background(MaterialTheme.colorScheme.background),
             state = lazyListState
         ) {
-            items(viewModel.films) { film ->
+            items(filmsViewModel.films) { film ->
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -84,7 +81,7 @@ fun MostPopularScreen(
                             onClick = {},
                             onLongClick = {
                                 selectedFilm.value = film
-                                toDetailFilmScreen(film)
+
                             },
                         ),
                     colors = CardDefaults.cardColors(
@@ -196,7 +193,7 @@ fun MostPopularScreen(
                     val lastVisible = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
                     val total = layoutInfo.totalItemsCount
                     if (total > 0 && lastVisible >= total - 5) {
-                        viewModel.loadFilms()
+                        filmsViewModel.loadFilms()
                     }
                 }
         }

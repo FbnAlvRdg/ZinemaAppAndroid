@@ -2,8 +2,9 @@ package com.example.proyecto_gestion_peliculas.ui.navigation.navigator
 
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import com.example.proyecto_gestion_peliculas.ui.features.explore.ExploreScreen
-import com.example.proyecto_gestion_peliculas.ui.features.tvserie.toprated.TopRatedSeriesScreen
+import com.example.proyecto_gestion_peliculas.ui.features.details.DetailsSerieScreen
+import com.example.proyecto_gestion_peliculas.ui.navigation.DetailFilmScreenKey
+import com.example.proyecto_gestion_peliculas.ui.navigation.DetailSerieScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.ExploreScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.FilmListScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.FilmsByGenreScreenKey
@@ -49,5 +50,13 @@ class NavigatorImpl(private val backStack: NavBackStack<NavKey>) : Navigator {
     override fun navigateToLoginClearBackStack() {
         backStack.clear()
         backStack.add(LoginScreenKey)
+    }
+
+    override fun navigateToDetailsFilm(id : Int) {
+        backStack.add(DetailFilmScreenKey(id))
+    }
+
+    override fun navigateToDetailsSerie(id: Int) {
+        backStack.add(DetailSerieScreenKey(id))
     }
 }

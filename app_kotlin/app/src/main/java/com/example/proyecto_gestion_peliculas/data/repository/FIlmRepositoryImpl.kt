@@ -5,7 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.proyecto_gestion_peliculas.data.remote.datasource.FilmDataSource
 import com.example.proyecto_gestion_peliculas.data.remote.mapper.toDomain
-import com.example.proyecto_gestion_peliculas.data.remote.paging.TopRatedFilmPagingSource
+import com.example.proyecto_gestion_peliculas.data.remote.paging.topRated.TopRatedFilmPagingSource
 import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
 import kotlinx.coroutines.flow.Flow

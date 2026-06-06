@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.components
+package com.example.proyecto_gestion_peliculas.ui.components.dropdownmenu
 
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api

@@ -1,5 +1,7 @@
 package com.example.proyecto_gestion_peliculas.domain.model
 
+import java.time.LocalDate
+
 data class TvSerie(
     val id: Int,
     val name : String?,
@@ -8,6 +10,6 @@ data class TvSerie(
     val poster: String?,
     val rating: Double?,
     val firstAireDate: String?,
-    val genres: List<Genre>,
-    val actors: List<Actor>
+    val genres: List<Genre?>,
+    val actors: List<Actor?>
 )

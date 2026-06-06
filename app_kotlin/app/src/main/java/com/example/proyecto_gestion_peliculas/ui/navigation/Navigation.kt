@@ -11,9 +11,10 @@ import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.NavigatorImpl
 import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreenViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.views.AddFilmScreen
-import com.example.proyecto_gestion_peliculas.ui.features.film.details.DetailFilmScreen
+import com.example.proyecto_gestion_peliculas.ui.features.details.DetailFilmScreen
+import com.example.proyecto_gestion_peliculas.ui.features.details.DetailsSerieScreen
 import com.example.proyecto_gestion_peliculas.ui.features.views.EditFilmScreen
-import com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular.MostPopularScreen
+import com.example.proyecto_gestion_peliculas.ui.features.mostpopular.MostPopularScreen
 import com.example.proyecto_gestion_peliculas.ui.features.film.toprated.TopRatedScreen
 import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreen
 import com.example.proyecto_gestion_peliculas.ui.features.signup.SignUpScreen
@@ -32,44 +33,47 @@ fun Navigation() {
                 val loginScreenViewModel: LoginScreenViewModel = viewModel()
                 LoginScreen(
                     navigator = navigator,
-                    viewModel = loginScreenViewModel
                 )
             }
+
             entry<SignUpScreenKey> {
-                SignUpScreen() {
-                    backStack.remove(backStack.last())
-                }
+                SignUpScreen(
+                    navigator = navigator
+                )
             }
+
             entry<ExploreScreenKey> {
                 ExploreScreen(navigator = navigator)
             }
+
             entry<FilmListScreenKey> {
-                MostPopularScreen(
-                    back = { backStack.remove(backStack.last()) },
-                    toAddFilm = { backStack.add(AddFilmScreen) },
-                    toEditScreen = { backStack.add(EditFilmScreen) }
-                ) { film ->
-                    backStack.add(DetailFilmScreenKey(film.id))
-                }
+                MostPopularScreen(navigator = navigator)
             }
+
             entry<FilmsByGenreScreenKey> {
                 FilmsByGenreScreen()
             }
+
             entry<AddFilmScreen> {
                 AddFilmScreen(
                     back = { backStack.remove(backStack.last()) }
                 )
             }
+
             entry<EditFilmScreen> {
                 EditFilmScreen(
                     back = { backStack.remove(backStack.last()) }
                 )
             }
+
             entry<DetailFilmScreenKey> { key ->
-                DetailFilmScreen(id = key.id) {
-                    backStack.remove(backStack.last())
-                }
+                DetailFilmScreen(id = key.id, navigator = navigator)
             }
+
+            entry<DetailSerieScreenKey> { key ->
+                DetailsSerieScreen(id = key.id, navigator = navigator)
+            }
+
             entry<TopRatedFilmScreenKey> {
                 TopRatedScreen(navigator = navigator)
             }

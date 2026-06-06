@@ -1,0 +1,192 @@
+package com.example.proyecto_gestion_peliculas.ui.features.details
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
+import com.example.proyecto_gestion_peliculas.ui.features.tvserie.details.DetailsTvSerieViewModel
+import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+@Composable
+fun DetailsSerieScreen(id: Int, navigator: Navigator) {
+    val scroll = rememberScrollState()
+    val viewModel : DetailsTvSerieViewModel = hiltViewModel()
+    val serie = viewModel.serie
+
+    LaunchedEffect(id) {
+        viewModel.loadSerie(id)
+    }
+
+    Scaffold(
+        topBar = {
+            AppTopBar(
+                title = viewModel.header,
+                back = { navigator.back() }
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
+                .verticalScroll(scroll)
+        ) {
+            AsyncImage(
+                model = serie?.poster,
+                contentDescription = "Portada",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(2f / 3f),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                serie?.name?.let {
+                    Text(
+                        text = it,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.headlineMedium,
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ) {
+                Text(
+                    text = "Género: ",
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.weight(0.3f)
+                )
+
+                serie?.genres?.joinToString(", ") { it?.name.toString() }?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.weight(0.7f)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Actores: ",
+                    textAlign = TextAlign.Justify,
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.weight(0.3f)
+                )
+
+                serie?.actors?.joinToString(", ") { it?.name.toString() }?.let {
+                    Text(
+                        text = it,
+                        modifier = Modifier.weight(0.7f),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ) {
+                Text(
+                    text = "Lanzamiento: ",
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.weight(0.3f)
+                )
+
+                Text(
+                    text = serie?.firstAireDate?.let {
+                        LocalDate.parse(it).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                    } ?: "Fecha desconocida",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.weight(0.7f)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ) {
+                Text(
+                    text = "Valoración: ",
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.weight(0.3f)
+                )
+
+                Text(
+                    text = serie?.rating.toString(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.weight(0.7f)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Sinopsis",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            serie?.overview?.let {
+                Text(
+                    text = it,
+                    textAlign = TextAlign.Justify,
+                    fontSize = 16.sp
+                )
+            }
+        }
+    }
+
+}

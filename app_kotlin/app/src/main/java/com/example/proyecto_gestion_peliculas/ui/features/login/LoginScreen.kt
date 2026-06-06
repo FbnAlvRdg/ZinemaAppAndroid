@@ -36,14 +36,16 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.proyecto_gestion_peliculas.R
 import com.example.proyecto_gestion_peliculas.data.datastore.readEmail
-import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.topbar.MainTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
 
 @Composable
-fun LoginScreen(navigator: Navigator, viewModel: LoginScreenViewModel) {
+fun LoginScreen(navigator: Navigator) {
+    val viewModel: LoginScreenViewModel = hiltViewModel()
     val context = LocalContext.current
     val alertDialogLogIn = remember { mutableStateOf(false) }
     val header = "Zinema"

@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.components
+package com.example.proyecto_gestion_peliculas.ui.components.bottombar
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_gestion_peliculas.R
-import com.example.proyecto_gestion_peliculas.data.datastore.clearJwt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -119,21 +118,6 @@ fun AppBottomBar(
                     Icon(
                         painterResource(R.drawable.top_rated_icon),
                         contentDescription = "Top Rated"
-                    )
-                }
-            }
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = {},
-            icon = {
-                IconButton(
-                    onClick = { onList() }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.icono_add),
-                        contentDescription = "Add to List"
                     )
                 }
             }
