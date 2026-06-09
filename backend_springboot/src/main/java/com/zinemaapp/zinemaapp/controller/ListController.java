@@ -1,8 +1,10 @@
 package com.zinemaapp.zinemaapp.controller;
 
+import com.zinemaapp.zinemaapp.domain.ListItem;
 import com.zinemaapp.zinemaapp.domain.ListUser;
 import com.zinemaapp.zinemaapp.domain.User;
 import com.zinemaapp.zinemaapp.dto.internal.items.AddItemRequest;
+import com.zinemaapp.zinemaapp.dto.internal.items.ListItemResponseDTO;
 import com.zinemaapp.zinemaapp.dto.internal.lists.CreateListRequest;
 import com.zinemaapp.zinemaapp.dto.internal.lists.ListResponseDTO;
 import com.zinemaapp.zinemaapp.repository.UserRepository;
@@ -83,5 +85,20 @@ public class ListController {
     ) {
         listItemService.addItem(principal.getName(), listId, request.getTmdbId(), request.getType());
         return ResponseEntity.ok(true);
+    }
+
+    @GetMapping("/{listId}/items")
+    public ResponseEntity<List<ListItemResponseDTO>> getItems(@PathVariable Long listId, Principal principal) {
+        return ResponseEntity.ok(listItemService.getItems(principal.getName(), listId));
+    }
+
+    @DeleteMapping("/{listId}/items/{itemId}")
+    public ResponseEntity<Boolean> deleteItem(@PathVariable Long listId, @PathVariable Long itemId, Principal principal) {
+        return ResponseEntity.ok(listItemService.deleteItem(principal.getName(), listId, itemId));
+    }
+
+    @DeleteMapping("/{listId}")
+    public ResponseEntity<Boolean> deleteList(@PathVariable Long listId, Principal principal) {
+        return ResponseEntity.ok(listUserService.deleteList(principal.getName(), listId));
     }
 }

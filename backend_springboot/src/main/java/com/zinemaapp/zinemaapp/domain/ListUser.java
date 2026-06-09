@@ -2,6 +2,8 @@ package com.zinemaapp.zinemaapp.domain;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "lists")
 public class ListUser {
@@ -17,6 +19,9 @@ public class ListUser {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ListItem> items;
+
     public ListUser() {
     }
 
@@ -24,6 +29,13 @@ public class ListUser {
         this.id = id;
         this.name = name;
         this.user = user;
+    }
+
+    public ListUser(int id, String name, User user, List<ListItem> items) {
+        this.id = id;
+        this.name = name;
+        this.user = user;
+        this.items = items;
     }
 
     public int getId() {
@@ -48,5 +60,13 @@ public class ListUser {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<ListItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ListItem> items) {
+        this.items = items;
     }
 }
