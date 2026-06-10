@@ -1,9 +1,8 @@
 package com.zinemaapp.zinemaapp.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class User {
@@ -13,15 +12,18 @@ public class User {
     private String email;
     private String username;
     private String password;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ListUser> lists;
 
     public User() {
     }
 
-    public User(Long id, String email, String username, String password) {
+    public User(Long id, String email, String username, String password, List<ListUser> lists) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.lists = lists;
     }
 
     public Long getId() {
@@ -54,5 +56,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<ListUser> getLists() {
+        return lists;
+    }
+
+    public void setLists(List<ListUser> lists) {
+        this.lists = lists;
     }
 }
