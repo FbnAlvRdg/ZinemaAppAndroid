@@ -15,12 +15,13 @@ import javax.inject.Inject
 class DetailsFilmViewModel @Inject constructor(private val getDetailsFilmUseCase: GetDetailsFilmUseCase) :
     ViewModel() {
 
+    var header = "Detalles"
     var film by mutableStateOf<Film?>(null)
         private set
 
     fun loadFilm(id: Int) {
         viewModelScope.launch {
-            film = getDetailsFilmUseCase.invoke(id)
+            film = getDetailsFilmUseCase(id)
         }
     }
 }

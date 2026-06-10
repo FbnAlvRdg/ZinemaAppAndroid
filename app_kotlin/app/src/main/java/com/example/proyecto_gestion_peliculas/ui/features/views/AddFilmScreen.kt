@@ -31,7 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.topbar.MainTopBar
 import kotlinx.coroutines.launch
 
 @Composable

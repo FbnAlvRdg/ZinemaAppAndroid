@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.example.proyecto_gestion_peliculas.data.datastore.clearJwt
 import com.example.proyecto_gestion_peliculas.domain.usecase.film.GetTopRatedFilmsPagingUseCase
+import com.example.proyecto_gestion_peliculas.domain.usecase.tvserie.GetTopRatedSeriesPagingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val getTopRatedFilmsPagingUseCase: GetTopRatedFilmsPagingUseCase
+    private val getTopRatedFilmsPagingUseCase: GetTopRatedFilmsPagingUseCase,
+    private val getTopRatedSeriesPagingUseCase: GetTopRatedSeriesPagingUseCase
 ) : ViewModel() {
     var selectedTab by mutableIntStateOf(0)
         private set
@@ -26,8 +28,8 @@ class ExploreViewModel @Inject constructor(
         selectedTab = index
     }
 
-
     val films = getTopRatedFilmsPagingUseCase().cachedIn(viewModelScope)
+    val series = getTopRatedSeriesPagingUseCase().cachedIn(viewModelScope)
 
     fun logout(onFinished: () -> Unit) {
         viewModelScope.launch {

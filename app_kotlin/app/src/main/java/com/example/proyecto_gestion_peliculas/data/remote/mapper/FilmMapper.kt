@@ -24,7 +24,6 @@ fun FilmDTO.toDomain(): Film {
 }
 
 fun DetailsFilmDTO.toDomain(): Film {
-
     return Film(
         id = id,
         title = title ?: "",

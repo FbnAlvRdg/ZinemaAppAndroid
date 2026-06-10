@@ -29,6 +29,9 @@ data object EditFilmScreen : NavKey
 data class DetailFilmScreenKey(val id: Int) : NavKey
 
 @Serializable
+data class DetailSerieScreenKey(val id: Int) : NavKey
+
+@Serializable
 data object TopRatedFilmScreenKey : NavKey
 
 @Serializable

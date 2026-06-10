@@ -17,6 +17,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -42,12 +44,13 @@ import com.example.proyecto_gestion_peliculas.ui.theme.PureWhite
 import com.example.proyecto_gestion_peliculas.core.utils.checkEmail
 import com.example.proyecto_gestion_peliculas.core.utils.checkEqualPassword
 import com.example.proyecto_gestion_peliculas.core.utils.checkPassword
+import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun SignUpScreen(back: () -> Unit) {
+fun SignUpScreen(navigator: Navigator) {
     val viewModel: SignUpViewModel = hiltViewModel()
     val alertDialogEmail = remember { mutableStateOf(false) }
     val alertDialogPassword = remember { mutableStateOf(false) }
@@ -320,10 +323,11 @@ fun SignUpScreen(back: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 32.dp),
+                .padding(16.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
+                modifier = Modifier.weight(1f),
                 onClick = {
                     if (!checkEmail(viewModel.email)) {
                         alertDialogEmail.value = true
@@ -346,13 +350,26 @@ fun SignUpScreen(back: () -> Unit) {
                     }
 
                     viewModel.register()
-
-                    back()
+                    navigator.back()
                 },
-                modifier = Modifier.width(200.dp)
             ) {
                 Text(
                     text = "Registrarse"
+                )
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Button(
+                modifier = Modifier.weight(1f),
+                onClick = { navigator.back() },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary
+                )
+            ) {
+                Text(
+                    text = "Cancelar"
                 )
             }
         }

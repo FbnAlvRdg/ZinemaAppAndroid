@@ -5,7 +5,7 @@ import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
 import javax.inject.Inject
 
 class GetDetailsFilmUseCase @Inject constructor(private val filmRepository: FilmRepository) {
-    suspend fun invoke(id: Int): Film {
+    suspend operator fun invoke(id: Int): Film {
         return filmRepository.getFilmById(id)
     }
 }

@@ -12,7 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.proyecto_gestion_peliculas.ui.components.MainTopBar
+import com.example.proyecto_gestion_peliculas.ui.components.topbar.MainTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
 
