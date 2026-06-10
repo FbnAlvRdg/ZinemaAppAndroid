@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.data.remote.datasource
+package com.example.proyecto_gestion_peliculas.data.remote.datasource.film
 
 import com.example.proyecto_gestion_peliculas.data.remote.api.FilmApi
 import com.example.proyecto_gestion_peliculas.data.remote.dto.film.DetailsFilmDTO

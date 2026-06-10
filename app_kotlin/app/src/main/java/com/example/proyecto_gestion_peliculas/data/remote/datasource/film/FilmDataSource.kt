@@ -1,8 +1,7 @@
-package com.example.proyecto_gestion_peliculas.data.remote.datasource
+package com.example.proyecto_gestion_peliculas.data.remote.datasource.film
 
 import com.example.proyecto_gestion_peliculas.data.remote.dto.film.DetailsFilmDTO
 import com.example.proyecto_gestion_peliculas.data.remote.dto.film.FilmDTO
-import com.example.proyecto_gestion_peliculas.domain.model.Film
 
 interface FilmDataSource {
     suspend fun getPopularFilms(page: Int): List<FilmDTO>

@@ -14,8 +14,7 @@ class AuthInterceptor(private val context: Context) : Interceptor {
             readJwt(context)
         }
 
-        val request =
-            originalRequest.newBuilder().addHeader("Authorization", "Bearer $token").build()
+        val request = originalRequest.newBuilder().addHeader("Authorization", "Bearer $token").build()
 
         return chain.proceed(request)
     }
