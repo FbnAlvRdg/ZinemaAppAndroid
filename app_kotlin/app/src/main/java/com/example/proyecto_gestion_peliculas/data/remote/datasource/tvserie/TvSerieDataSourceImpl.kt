@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.data.remote.datasource
+package com.example.proyecto_gestion_peliculas.data.remote.datasource.tvserie
 
 import com.example.proyecto_gestion_peliculas.data.remote.api.TvSerieApi
 import com.example.proyecto_gestion_peliculas.data.remote.dto.series.TvSerieDTO

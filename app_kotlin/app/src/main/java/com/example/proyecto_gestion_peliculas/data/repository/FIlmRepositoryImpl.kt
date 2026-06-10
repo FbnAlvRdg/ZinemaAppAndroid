@@ -3,7 +3,7 @@ package com.example.proyecto_gestion_peliculas.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.proyecto_gestion_peliculas.data.remote.datasource.FilmDataSource
+import com.example.proyecto_gestion_peliculas.data.remote.datasource.film.FilmDataSource
 import com.example.proyecto_gestion_peliculas.data.remote.mapper.toDomain
 import com.example.proyecto_gestion_peliculas.data.remote.paging.topRated.TopRatedFilmPagingSource
 import com.example.proyecto_gestion_peliculas.domain.model.Film
