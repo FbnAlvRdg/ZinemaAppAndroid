@@ -1,12 +1,11 @@
 package com.example.proyecto_gestion_peliculas.data.repository
 
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.proyecto_gestion_peliculas.data.remote.datasource.tvserie.TvSerieDataSource
 import com.example.proyecto_gestion_peliculas.data.remote.mapper.toDomain
-import com.example.proyecto_gestion_peliculas.data.remote.paging.topRated.TopRatedSeriesPagingSource
+import com.example.proyecto_gestion_peliculas.data.remote.paging.toprated.TopRatedSeriesPagingSource
 import com.example.proyecto_gestion_peliculas.domain.model.TvSerie
 import com.example.proyecto_gestion_peliculas.domain.repository.TvSerieRepository
 import kotlinx.coroutines.flow.Flow

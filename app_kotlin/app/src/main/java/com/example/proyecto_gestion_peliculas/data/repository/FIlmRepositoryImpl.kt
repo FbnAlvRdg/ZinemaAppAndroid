@@ -5,7 +5,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.proyecto_gestion_peliculas.data.remote.datasource.film.FilmDataSource
 import com.example.proyecto_gestion_peliculas.data.remote.mapper.toDomain
-import com.example.proyecto_gestion_peliculas.data.remote.paging.topRated.TopRatedFilmPagingSource
+import com.example.proyecto_gestion_peliculas.data.remote.paging.mostpopular.MostPopularFilmPagingSource
+import com.example.proyecto_gestion_peliculas.data.remote.paging.toprated.TopRatedFilmPagingSource
 import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
 import kotlinx.coroutines.flow.Flow
@@ -14,11 +15,18 @@ import javax.inject.Inject
 
 class FilmRepositoryImpl @Inject constructor(private val dataSource: FilmDataSource) :
     FilmRepository {
-    override suspend fun getPopularFilms(page: Int): List<Film> {
+    override suspend fun getMostPopularFilms(page: Int): List<Film> {
         return dataSource.getPopularFilms(page)
             .map { filmDTO ->
                 filmDTO.toDomain()
             }
+    }
+
+    override fun getMostPopularFilmsPaging(): Flow<PagingData<Film>> {
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = { MostPopularFilmPagingSource(dataSource) }
+        ).flow
     }
 
     override suspend fun getTopRatedFilms(page: Int): List<Film> {

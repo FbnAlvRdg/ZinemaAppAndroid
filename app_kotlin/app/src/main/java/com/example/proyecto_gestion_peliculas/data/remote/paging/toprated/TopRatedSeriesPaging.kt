@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.data.remote.paging.topRated
+package com.example.proyecto_gestion_peliculas.data.remote.paging.toprated
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

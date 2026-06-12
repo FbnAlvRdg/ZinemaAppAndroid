@@ -3,17 +3,14 @@ package com.example.proyecto_gestion_peliculas.ui.features.explore
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Card
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.proyecto_gestion_peliculas.ui.components.bottombar.AppBottomBar
@@ -26,6 +23,7 @@ import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
 @Composable
 fun ExploreScreen(navigator: Navigator) {
+
     val viewModel: ExploreViewModel = hiltViewModel()
     val topRatedFilmsViewModel: TopRatedFilmsViewModel = hiltViewModel()
     val topRatedSeriesViewModel: TopRatedSeriesViewModel = hiltViewModel()
@@ -47,7 +45,7 @@ fun ExploreScreen(navigator: Navigator) {
                 onTopRated = { navigator.navigateToTopRatedFilms() },
                 onList = {},
                 onLogOut = {
-                    viewModel.logout {
+                    viewModel.logOut {
                         navigator.navigateToLoginClearBackStack()
                     }
                 }
@@ -84,7 +82,10 @@ fun ExploreScreen(navigator: Navigator) {
                         items(films.itemCount) { index ->
                             val film = films[index]
                             film?.let {
-                                FilmCard(film, onDetail = {navigator.navigateToDetailsFilm(film.id)}, onList = {})
+                                FilmCard(
+                                    film,
+                                    onDetail = { navigator.navigateToDetailsFilm(film.id) },
+                                    onList = {})
                             }
                         }
                     }
@@ -95,7 +96,10 @@ fun ExploreScreen(navigator: Navigator) {
                         items(series.itemCount) { index ->
                             val tvSerie = series[index]
                             tvSerie?.let {
-                                TvSerieCard(tvSerie, onDetail = {navigator.navigateToDetailsSerie(tvSerie.id)}, onList = {})
+                                TvSerieCard(
+                                    tvSerie,
+                                    onDetail = { navigator.navigateToDetailsSerie(tvSerie.id) },
+                                    onList = {})
                             }
                         }
                     }

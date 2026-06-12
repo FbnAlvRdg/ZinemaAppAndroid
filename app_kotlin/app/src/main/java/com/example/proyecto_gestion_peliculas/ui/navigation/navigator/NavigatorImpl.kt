@@ -2,15 +2,14 @@ package com.example.proyecto_gestion_peliculas.ui.navigation.navigator
 
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import com.example.proyecto_gestion_peliculas.ui.features.details.DetailsSerieScreen
 import com.example.proyecto_gestion_peliculas.ui.navigation.DetailFilmScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.DetailSerieScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.ExploreScreenKey
-import com.example.proyecto_gestion_peliculas.ui.navigation.FilmListScreenKey
+import com.example.proyecto_gestion_peliculas.ui.navigation.MostPopularScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.FilmsByGenreScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.LoginScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.SignUpScreenKey
-import com.example.proyecto_gestion_peliculas.ui.navigation.TopRatedFilmScreenKey
+import com.example.proyecto_gestion_peliculas.ui.navigation.TopRatedScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.TopRatedSeriesScreenKey
 
 
@@ -32,11 +31,11 @@ class NavigatorImpl(private val backStack: NavBackStack<NavKey>) : Navigator {
     }
 
     override fun navigateToMostPopularFilms() {
-        backStack.add(FilmListScreenKey)
+        backStack.add(MostPopularScreenKey)
     }
 
     override fun navigateToTopRatedFilms() {
-        backStack.add(TopRatedFilmScreenKey)
+        backStack.add(TopRatedScreenKey)
     }
 
     override fun navigateToFilmsByGenre() {
