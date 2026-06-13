@@ -1,4 +1,4 @@
-package com.zinemaapp.zinemaapp.dto.internal;
+package com.zinemaapp.zinemaapp.dto.internal.signup;
 
 public class RegisterRequestDTO {
     private String username;

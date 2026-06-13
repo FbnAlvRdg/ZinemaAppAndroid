@@ -185,7 +185,7 @@ fun DetailsSerieScreen(id: Int, navigator: Navigator) {
                     textAlign = TextAlign.Justify,
                     fontSize = 16.sp
                 )
-            }
+            } ?: "No disponible"
         }
     }
 

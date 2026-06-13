@@ -128,6 +128,21 @@ fun AppBottomBar(
             onClick = {},
             icon = {
                 IconButton(
+                    onClick = { onList() }
+                ) {
+                    Icon(
+                        painterResource(R.drawable.lists_icon),
+                        contentDescription = "Lists"
+                    )
+                }
+            }
+        )
+
+        NavigationBarItem(
+            selected = false,
+            onClick = {},
+            icon = {
+                IconButton(
                     onClick = { onLogOut() }
                 ) {
                     Icon(

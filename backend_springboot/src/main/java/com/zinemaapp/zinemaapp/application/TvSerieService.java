@@ -25,8 +25,20 @@ public class TvSerieService {
         return tvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse);
     }
 
-    public List<TvSerieDTO> getTopRatedSerie(int page) {
+    public List<TvSerieDTO> getTopRatedSeries(int page) {
         TmdbTvSeriesResponse tmdbTvSeriesResponse = tmdbClient.getTopRatedSeries(page);
+
+        List<TvSerieDTO> series = new ArrayList<>();
+
+        for (TmdbTvSerieResponse tmdbTvSerieResponse : tmdbTvSeriesResponse.getResults()) {
+            series.add(tvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse));
+        }
+
+        return series;
+    }
+
+    public List<TvSerieDTO> getMostPopularSeries(int page) {
+        TmdbTvSeriesResponse tmdbTvSeriesResponse = tmdbClient.getMostPopularSeries(page);
 
         List<TvSerieDTO> series = new ArrayList<>();
 

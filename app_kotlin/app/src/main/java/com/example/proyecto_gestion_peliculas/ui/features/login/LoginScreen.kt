@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.proyecto_gestion_peliculas.R
 import com.example.proyecto_gestion_peliculas.data.datastore.readEmail
+import com.example.proyecto_gestion_peliculas.ui.components.dialogs.LogInAlertDialog
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.MainTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
@@ -47,8 +48,8 @@ import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 fun LoginScreen(navigator: Navigator) {
     val viewModel: LoginScreenViewModel = hiltViewModel()
     val context = LocalContext.current
+    val error = viewModel.error
     val alertDialogLogIn = remember { mutableStateOf(false) }
-    val header = "Zinema"
 
     LaunchedEffect(Unit) {
         val savedEmail = readEmail(context)
@@ -63,7 +64,7 @@ fun LoginScreen(navigator: Navigator) {
     }
 
     Scaffold(
-        topBar = { MainTopBar(header) }
+        topBar = { MainTopBar(viewModel.title) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -218,28 +219,19 @@ fun LoginScreen(navigator: Navigator) {
         }
     }
 
-    if (alertDialogLogIn.value) {
-        AlertDialog(
-            onDismissRequest = { alertDialogLogIn.value = false },
-            title = {
-                Text(
-                    text = "ERROR"
-                )
-            },
-            text = {
-                Text(
-                    text = "El email o la contraseña no puede estar vacío"
-                )
-            },
-            confirmButton = {
-                TextButton(onClick = {
-                    alertDialogLogIn.value = false
-                }) {
-                    Text(
-                        text = "OK"
-                    )
-                }
-            }
-        )
-    }
+    LogInAlertDialog(
+        show = alertDialogLogIn.value,
+        title = "Error",
+        message = "El email o la contraseña no puede estar vacío",
+        onDismiss = { alertDialogLogIn.value = false }
+    )
+
+    LogInAlertDialog(
+        show = error != null,
+        title = "Error de autenticación",
+        message = error ?: "",
+        onDismiss = {
+            viewModel.clearError()
+        }
+    )
 }

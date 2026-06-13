@@ -21,7 +21,7 @@ public class FilmController {
         return ResponseEntity.ok(filmService.getPopularFilms(page));
     }
 
-    @GetMapping("/top_rated")
+    @GetMapping("/top-rated")
     public ResponseEntity<List<FilmDTO>> getTopRatedFilms(@RequestParam int page) {
         return ResponseEntity.ok(filmService.getTopRatedFilms(page));
 

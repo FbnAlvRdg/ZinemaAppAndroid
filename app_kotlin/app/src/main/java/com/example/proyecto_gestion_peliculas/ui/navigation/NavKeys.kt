@@ -19,6 +19,10 @@ data object MostPopularScreenKey : NavKey
 @Serializable
 data object FilmsByGenreScreenKey : NavKey
 
+data object ListScreenKey : NavKey
+
+data class ListItemsScreenKey(val listId : Long) : NavKey
+
 @Serializable
 data object AddFilmScreen : NavKey
 

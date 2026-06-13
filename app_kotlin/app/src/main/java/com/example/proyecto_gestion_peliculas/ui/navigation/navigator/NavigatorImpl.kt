@@ -2,11 +2,14 @@ package com.example.proyecto_gestion_peliculas.ui.navigation.navigator
 
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import com.example.proyecto_gestion_peliculas.ui.features.lists.ListScreen
 import com.example.proyecto_gestion_peliculas.ui.navigation.DetailFilmScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.DetailSerieScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.ExploreScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.MostPopularScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.FilmsByGenreScreenKey
+import com.example.proyecto_gestion_peliculas.ui.navigation.ListItemsScreenKey
+import com.example.proyecto_gestion_peliculas.ui.navigation.ListScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.LoginScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.SignUpScreenKey
 import com.example.proyecto_gestion_peliculas.ui.navigation.TopRatedScreenKey
@@ -40,6 +43,14 @@ class NavigatorImpl(private val backStack: NavBackStack<NavKey>) : Navigator {
 
     override fun navigateToFilmsByGenre() {
         backStack.add(FilmsByGenreScreenKey)
+    }
+
+    override fun navigateToLists() {
+        backStack.add(ListScreenKey)
+    }
+
+    override fun navigateToListItems(listId : Long) {
+        backStack.add(ListItemsScreenKey(listId))
     }
 
     override fun navigateToTopRatedSeries() {

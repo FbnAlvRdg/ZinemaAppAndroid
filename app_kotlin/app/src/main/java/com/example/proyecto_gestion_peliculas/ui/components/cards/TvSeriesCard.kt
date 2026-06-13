@@ -2,6 +2,7 @@ package com.example.proyecto_gestion_peliculas.ui.components.cards
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,7 +31,7 @@ import com.example.proyecto_gestion_peliculas.domain.model.TvSerie
 
 
 @Composable
-fun TvSerieCard(tvSerie: TvSerie, onDetail: () -> Unit, onList: () -> Unit) {
+fun TvSerieCard(tvSerie: TvSerie, onDetail: () -> Unit, onLongClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,10 +41,13 @@ fun TvSerieCard(tvSerie: TvSerie, onDetail: () -> Unit, onList: () -> Unit) {
                 shape = RoundedCornerShape(16.dp),
                 ambientColor = Color.Black.copy(alpha = 0.2f),
                 spotColor = Color.Black.copy(alpha = 0.25f)
+            )
+            .combinedClickable(
+                onClick = { onDetail() },
+                onLongClick = { onLongClick() }
             ),
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(1.dp, Color.White.copy(alpha = 0.06f)),
-        onClick = { onDetail() }
     ) {
         Row(
             modifier = Modifier

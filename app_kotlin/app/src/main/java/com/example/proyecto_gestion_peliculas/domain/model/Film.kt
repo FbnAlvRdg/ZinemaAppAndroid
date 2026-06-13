@@ -10,7 +10,7 @@ data class Film(
     val genres: List<Genre>,
     val director: String?,
     val actors: List<Actor>,
-    val synopsis: String,
+    val synopsis: String?,
     val poster: String,
     val rating: Double,
 )

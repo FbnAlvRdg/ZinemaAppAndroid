@@ -11,6 +11,8 @@ import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.NavigatorI
 import com.example.proyecto_gestion_peliculas.ui.features.views.AddFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.details.DetailFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.details.DetailsSerieScreen
+import com.example.proyecto_gestion_peliculas.ui.features.lists.ListScreen
+import com.example.proyecto_gestion_peliculas.ui.features.lists.items.ListItemsScreen
 import com.example.proyecto_gestion_peliculas.ui.features.views.EditFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.mostpopular.MostPopularScreen
 import com.example.proyecto_gestion_peliculas.ui.features.toprated.TopRatedScreen
@@ -55,6 +57,14 @@ fun Navigation() {
                 AddFilmScreen(
                     back = { backStack.remove(backStack.last()) }
                 )
+            }
+
+            entry<ListScreenKey> {
+                ListScreen(navigator = navigator)
+            }
+
+            entry<ListItemsScreenKey> { key ->
+                ListItemsScreen(navigator, key.listId)
             }
 
             entry<EditFilmScreen> {

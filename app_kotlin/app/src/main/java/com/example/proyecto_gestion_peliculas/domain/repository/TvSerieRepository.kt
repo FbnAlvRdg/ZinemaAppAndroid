@@ -6,7 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface TvSerieRepository {
     suspend fun getTopRatedSeries(page: Int): List<TvSerie>
-    fun getTopRatedSeriesPaging() : Flow<PagingData<TvSerie>>
+    fun getMostPopularSeries(): Flow<PagingData<TvSerie>>
+    fun getTopRatedSeriesPaging(): Flow<PagingData<TvSerie>>
     suspend fun getSerieById(id: Int): TvSerie
 
 

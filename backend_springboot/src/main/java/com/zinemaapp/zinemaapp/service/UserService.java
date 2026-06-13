@@ -2,7 +2,7 @@ package com.zinemaapp.zinemaapp.service;
 
 import com.zinemaapp.zinemaapp.domain.User;
 import com.zinemaapp.zinemaapp.dto.internal.login.LoginRequestDTO;
-import com.zinemaapp.zinemaapp.dto.internal.RegisterRequestDTO;
+import com.zinemaapp.zinemaapp.dto.internal.signup.RegisterRequestDTO;
 import com.zinemaapp.zinemaapp.dto.internal.UserResponseDTO;
 import com.zinemaapp.zinemaapp.dto.internal.login.LoginResponseDTO;
 import com.zinemaapp.zinemaapp.repository.UserRepository;

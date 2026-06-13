@@ -1,7 +1,9 @@
 package com.example.proyecto_gestion_peliculas.ui.features.mostpopular
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,12 +30,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,7 +52,10 @@ import com.example.proyecto_gestion_peliculas.ui.components.cards.TvSerieCard
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
 
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.MainTopBar
+import com.example.proyecto_gestion_peliculas.ui.features.explore.ExploreViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.film.mostpopular.MostPopularFilmsViewModel
+import com.example.proyecto_gestion_peliculas.ui.features.lists.ListsViewModel
+import com.example.proyecto_gestion_peliculas.ui.features.lists.items.ListItemViewModel
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import java.time.format.DateTimeFormatter
 
@@ -56,9 +64,42 @@ import java.time.format.DateTimeFormatter
 fun MostPopularScreen(navigator: Navigator) {
 
     val viewModel: MostPopularViewModel = hiltViewModel()
+    val listsViewModel: ListsViewModel = hiltViewModel()
+    val listItemViewModel: ListItemViewModel = hiltViewModel()
+
     val selectedTab = viewModel.selectedTab
     val films = viewModel.films.collectAsLazyPagingItems()
-    val series = emptyList<TvSerie>()
+    val series = viewModel.series.collectAsLazyPagingItems()
+
+    val lists = listsViewModel.lists
+
+    var showDialog by remember { mutableStateOf(false) }
+    var selectedTmdbId by remember { mutableStateOf<Long?>(null) }
+    var selectedType by remember { mutableStateOf<String?>(null) }
+    var selectedTitle by remember { mutableStateOf<String?>(null) }
+    var selectedPoster by remember { mutableStateOf<String?>(null) }
+
+    val context = LocalContext.current
+    val confirmation = listItemViewModel.confirmation
+    val error = listItemViewModel.error
+
+    LaunchedEffect(Unit) {
+        listsViewModel.loadLists()
+    }
+
+    LaunchedEffect(error) {
+        error?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            listItemViewModel.clearError()
+        }
+    }
+
+    LaunchedEffect(confirmation) {
+        confirmation?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            listItemViewModel.clearConfirmation()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -73,7 +114,7 @@ fun MostPopularScreen(navigator: Navigator) {
                 onHome = { navigator.navigateToExplore() },
                 onMostPopular = { navigator.navigateToMostPopularFilms() },
                 onTopRated = { navigator.navigateToTopRatedFilms() },
-                onList = {},
+                onList = { navigator.navigateToLists() },
                 onLogOut = {
                     viewModel.logOut {
                         navigator.navigateToLoginClearBackStack()
@@ -114,29 +155,87 @@ fun MostPopularScreen(navigator: Navigator) {
                                 FilmCard(
                                     film,
                                     onDetail = { navigator.navigateToDetailsFilm(film.id) },
-                                    onList = {})
+                                    onLongClick = {
+                                        selectedTmdbId = film.id.toLong()
+                                        selectedType = "movie"
+                                        selectedTitle = film.title
+                                        selectedPoster = film.poster
+                                        showDialog = true
+                                    }
+                                )
                             }
                         }
                     }
                 }
 
-//                1 -> {
-//                    LazyColumn {
-//                        items(series.itemCount) { index ->
-//                            val tvSerie = series[index]
-//                            tvSerie?.let {
-//                                TvSerieCard(
-//                                    tvSerie,
-//                                    onDetail = { navigator.navigateToDetailsSerie(tvSerie.id) },
-//                                    onList = {})
-//                            }
-//                        }
-//                    }
-//                }
+                1 -> {
+                    LazyColumn {
+                        items(series.itemCount) { index ->
+                            val tvSerie = series[index]
+                            tvSerie?.let {
+                                TvSerieCard(
+                                    tvSerie,
+                                    onDetail = { navigator.navigateToDetailsSerie(tvSerie.id) },
+                                    onLongClick = {
+                                        selectedTmdbId = tvSerie.id.toLong()
+                                        selectedType = "tv"
+                                        selectedTitle = tvSerie.name
+                                        selectedPoster = tvSerie.poster
+                                        showDialog = true
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
-    }
 
+        if (showDialog && selectedTmdbId != null && selectedType != null) {
+            AlertDialog(
+                onDismissRequest = {
+                    showDialog = false
+                    selectedTmdbId = null
+                    selectedType = null
+                },
+                title = { Text("Añadir a lista") },
+
+                text = {
+                    LazyColumn {
+                        items(lists) { list ->
+                            Text(
+                                text = list.name,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        listItemViewModel.addItem(
+                                            listId = list.id.toLong(),
+                                            tmdbId = selectedTmdbId!!,
+                                            type = selectedType!!,
+                                            title = "",
+                                            poster = ""
+                                        )
+                                        showDialog = false
+                                        selectedTmdbId = null
+                                        selectedType = null
+                                    }
+                                    .padding(12.dp)
+                            )
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showDialog = false
+                        selectedTmdbId = null
+                        selectedType = null
+                    }) {
+                        Text("Cancelar")
+                    }
+                }
+            )
+        }
+    }
 
 
 //    if (deleteShowDialog.value) {

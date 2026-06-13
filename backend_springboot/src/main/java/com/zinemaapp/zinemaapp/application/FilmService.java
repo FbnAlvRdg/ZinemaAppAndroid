@@ -22,7 +22,7 @@ public class FilmService {
 
     public List<FilmDTO> getPopularFilms(int page) {
         try {
-            TmdbFilmsResponse tmdbPopularResponse = tmdbClient.getPopularFilms(page);
+            TmdbFilmsResponse tmdbPopularResponse = tmdbClient.getMostPopularFilms(page);
 
             List<FilmDTO> films = new ArrayList<>();
 

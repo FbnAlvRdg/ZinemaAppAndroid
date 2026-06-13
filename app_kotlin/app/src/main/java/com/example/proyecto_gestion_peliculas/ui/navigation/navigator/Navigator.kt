@@ -8,6 +8,8 @@ interface Navigator {
     fun navigateToMostPopularFilms()
     fun navigateToTopRatedFilms()
     fun navigateToFilmsByGenre()
+    fun navigateToLists()
+    fun navigateToListItems(listId : Long)
     fun navigateToTopRatedSeries()
     fun navigateToLoginClearBackStack()
     fun navigateToDetailsFilm(id : Int)

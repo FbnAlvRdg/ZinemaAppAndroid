@@ -26,7 +26,7 @@ public class TmdbClient {
         this.objectMapper = objectMapper;
     }
 
-    public TmdbFilmsResponse getPopularFilms(int page) {
+    public TmdbFilmsResponse getMostPopularFilms(int page) {
         try {
             String url = buildUrl("/movie/popular") + "&page=" + page;
 
@@ -151,6 +151,31 @@ public class TmdbClient {
                 .build();
 
         HttpResponse<String> response = null;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            throw new RuntimeException("Error en la conexión con TMDB: ", e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Petición interrumpida: ", e);
+        }
+
+        if (response.statusCode() >= 400) {
+            throw new RuntimeException("Error: " + response.statusCode() + " body: " + response.body());
+        }
+
+        return objectMapper.readValue(response.body(), TmdbTvSeriesResponse.class);
+    }
+
+    public TmdbTvSeriesResponse getMostPopularSeries(int page) {
+        String url = buildUrl("/tv/popular") + "&page=" + page;
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = null;
+
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException e) {
