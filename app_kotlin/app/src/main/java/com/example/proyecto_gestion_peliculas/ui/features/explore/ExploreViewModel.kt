@@ -31,7 +31,7 @@ class ExploreViewModel @Inject constructor(
     val films = getTopRatedFilmsPagingUseCase().cachedIn(viewModelScope)
     val series = getTopRatedSeriesPagingUseCase().cachedIn(viewModelScope)
 
-    fun logout(onFinished: () -> Unit) {
+    fun logOut(onFinished: () -> Unit) {
         viewModelScope.launch {
             clearJwt(context)
             onFinished()

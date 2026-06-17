@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.data.remote.paging.topRated
+package com.example.proyecto_gestion_peliculas.data.remote.paging.toprated
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -12,7 +12,6 @@ class TopRatedFilmPagingSource(private val dataSource: FilmDataSource) : PagingS
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Film> {
-
         return try {
             val page = params.key ?: 1
             val response = dataSource.getTopRated(page)

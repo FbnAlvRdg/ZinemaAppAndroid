@@ -17,9 +17,14 @@ public class TvSerieController {
         this.tvSerieService = tvSerieService;
     }
 
-    @GetMapping("/top_rated")
+    @GetMapping("/top-rated")
     public ResponseEntity<List<TvSerieDTO>> getTopRatedSeries(@RequestParam int page){
-        return ResponseEntity.ok(tvSerieService.getTopRatedSerie(page));
+        return ResponseEntity.ok(tvSerieService.getTopRatedSeries(page));
+    }
+
+    @GetMapping("/most-popular")
+    public ResponseEntity<List<TvSerieDTO>> getMostPopularSeries(@RequestParam int page){
+        return ResponseEntity.ok(tvSerieService.getMostPopularSeries(page));
     }
 
     @GetMapping("/{id}")

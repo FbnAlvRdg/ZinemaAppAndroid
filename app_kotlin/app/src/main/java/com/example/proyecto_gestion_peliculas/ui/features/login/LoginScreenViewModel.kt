@@ -18,6 +18,9 @@ class LoginScreenViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
+
+    val title = "ZinemaApp"
+
     var email by mutableStateOf("")
         private set
 
@@ -25,6 +28,8 @@ class LoginScreenViewModel @Inject constructor(
         private set
 
     var loginSuccess by mutableStateOf(false)
+
+    var error by mutableStateOf<String?>(null)
 
     fun enterEmail(enteredEmail: String) {
         email = enteredEmail
@@ -43,7 +48,12 @@ class LoginScreenViewModel @Inject constructor(
             } catch (e: Exception) {
                 loginSuccess = false
                 e.printStackTrace()
+                error = "Email o contraseña incorrectos"
             }
         }
+    }
+
+    fun clearError() {
+        error = null
     }
 }

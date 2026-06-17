@@ -14,10 +14,14 @@ data object SignUpScreenKey : NavKey
 data object ExploreScreenKey : NavKey
 
 @Serializable
-data object FilmListScreenKey : NavKey
+data object MostPopularScreenKey : NavKey
 
 @Serializable
 data object FilmsByGenreScreenKey : NavKey
+
+data object ListScreenKey : NavKey
+
+data class ListItemsScreenKey(val listId : Long) : NavKey
 
 @Serializable
 data object AddFilmScreen : NavKey
@@ -32,7 +36,7 @@ data class DetailFilmScreenKey(val id: Int) : NavKey
 data class DetailSerieScreenKey(val id: Int) : NavKey
 
 @Serializable
-data object TopRatedFilmScreenKey : NavKey
+data object TopRatedScreenKey : NavKey
 
 @Serializable
 data object TopRatedSeriesScreenKey : NavKey

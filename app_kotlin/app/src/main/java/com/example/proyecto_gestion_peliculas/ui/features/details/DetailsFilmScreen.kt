@@ -89,14 +89,12 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                 Text(
                     text = "Género: ",
                     fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.3f)
                 )
 
                 Text(
                     text = film.genres.joinToString(", ") { it.name },
-                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.weight(0.7f)
                 )
@@ -111,13 +109,11 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                 Text(
                     text = "Director: ",
                     fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.weight(0.3f)
                 )
 
                 Text(
                     text = film.director ?: "",
-                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.weight(0.7f)
                 )
             }
@@ -138,8 +134,7 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                 Text(
                     text = film.actors.joinToString(", ") { it.name },
                     modifier = Modifier.weight(0.7f),
-                    style = MaterialTheme.typography.bodyLarge,
-                    )
+                )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -151,14 +146,12 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                 Text(
                     text = "Lanzamiento: ",
                     fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.weight(0.3f)
                 )
 
                 Text(
                     text = film.releaseDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                         ?: "",
-                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.weight(0.7f)
                 )
             }
@@ -172,13 +165,11 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                 Text(
                     text = "Valoración: ",
                     fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.weight(0.3f)
                 )
 
                 Text(
                     text = film.rating.toString(),
-                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.weight(0.7f)
                 )
             }
@@ -193,11 +184,13 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            Text(
-                text = film.synopsis,
-                textAlign = TextAlign.Justify,
-                fontSize = 16.sp
-            )
+            film.synopsis?.let {
+                Text(
+                    text = film.synopsis,
+                    textAlign = TextAlign.Justify,
+                    fontSize = 16.sp
+                )
+            } ?: "No disponible"
         }
     }
 }

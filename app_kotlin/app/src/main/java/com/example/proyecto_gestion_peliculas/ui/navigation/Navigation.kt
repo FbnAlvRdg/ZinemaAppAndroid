@@ -1,7 +1,6 @@
 package com.example.proyecto_gestion_peliculas.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
@@ -9,13 +8,14 @@ import com.example.proyecto_gestion_peliculas.ui.features.explore.ExploreScreen
 import com.example.proyecto_gestion_peliculas.ui.features.film.bygenre.FilmsByGenreScreen
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.NavigatorImpl
-import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreenViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.views.AddFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.details.DetailFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.details.DetailsSerieScreen
+import com.example.proyecto_gestion_peliculas.ui.features.lists.ListScreen
+import com.example.proyecto_gestion_peliculas.ui.features.lists.items.ListItemsScreen
 import com.example.proyecto_gestion_peliculas.ui.features.views.EditFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.mostpopular.MostPopularScreen
-import com.example.proyecto_gestion_peliculas.ui.features.film.toprated.TopRatedScreen
+import com.example.proyecto_gestion_peliculas.ui.features.toprated.TopRatedScreen
 import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreen
 import com.example.proyecto_gestion_peliculas.ui.features.signup.SignUpScreen
 import com.example.proyecto_gestion_peliculas.ui.features.tvserie.toprated.TopRatedSeriesScreen
@@ -30,7 +30,6 @@ fun Navigation() {
         backStack = backStack,
         entryProvider = entryProvider {
             entry<LoginScreenKey> {
-                val loginScreenViewModel: LoginScreenViewModel = viewModel()
                 LoginScreen(
                     navigator = navigator,
                 )
@@ -46,7 +45,7 @@ fun Navigation() {
                 ExploreScreen(navigator = navigator)
             }
 
-            entry<FilmListScreenKey> {
+            entry<MostPopularScreenKey> {
                 MostPopularScreen(navigator = navigator)
             }
 
@@ -58,6 +57,14 @@ fun Navigation() {
                 AddFilmScreen(
                     back = { backStack.remove(backStack.last()) }
                 )
+            }
+
+            entry<ListScreenKey> {
+                ListScreen(navigator = navigator)
+            }
+
+            entry<ListItemsScreenKey> { key ->
+                ListItemsScreen(navigator, key.listId)
             }
 
             entry<EditFilmScreen> {
@@ -74,7 +81,7 @@ fun Navigation() {
                 DetailsSerieScreen(id = key.id, navigator = navigator)
             }
 
-            entry<TopRatedFilmScreenKey> {
+            entry<TopRatedScreenKey> {
                 TopRatedScreen(navigator = navigator)
             }
 

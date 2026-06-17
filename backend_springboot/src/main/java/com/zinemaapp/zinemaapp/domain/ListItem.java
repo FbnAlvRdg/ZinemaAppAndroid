@@ -15,6 +15,9 @@ public class ListItem {
     @Column(name = "type")
     private String type;
 
+    private String title;
+    private String poster;
+
     @ManyToOne
     @JoinColumn(name = "list_id")
     private ListUser list;
@@ -32,6 +35,14 @@ public class ListItem {
     public ListItem(Long tmdbId, String type, ListUser list) {
         this.tmdbId = tmdbId;
         this.type = type;
+        this.list = list;
+    }
+
+    public ListItem(Long tmdbId, String type, String title, String poster, ListUser list) {
+        this.tmdbId = tmdbId;
+        this.type = type;
+        this.title = title;
+        this.poster = poster;
         this.list = list;
     }
 
@@ -65,5 +76,21 @@ public class ListItem {
 
     public void setList(ListUser list) {
         this.list = list;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 }
