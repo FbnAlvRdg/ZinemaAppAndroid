@@ -30,7 +30,7 @@ public class UserService {
         }
 
         if (userRepository.existsByUsername(registerRequestDTO.getUsername())) {
-            throw new RuntimeException("El nombre de usuario  ya se encuentra registrado");
+            throw new RuntimeException("El nombre de usuario ya se encuentra registrado");
         }
 
         User user = new User();

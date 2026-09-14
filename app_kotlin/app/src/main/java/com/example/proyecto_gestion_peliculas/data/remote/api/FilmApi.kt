@@ -18,7 +18,7 @@ interface FilmApi {
 
     @GET("movies/discover")
     suspend fun getFilmsByGenre(
-        @Query("idGenre") idGenre: Int,
+        @Query("genre_id") idGenre: Int,
         @Query("page") page: Int
     ): List<FilmDTO>
 }

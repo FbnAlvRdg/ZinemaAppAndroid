@@ -20,7 +20,7 @@ public class JwtService {
 
     public String generateToken(User user) {
         return Jwts.builder().subject(user.getEmail()).issuedAt(new Date())
-                .expiration(Date.from(Instant.now().plus(Duration.ofDays(90)))).signWith(getSigningKey()).compact();
+                .expiration(Date.from(Instant.now().plus(Duration.ofDays(365)))).signWith(getSigningKey()).compact();
     }
 
     public String getSubject(String token) {
