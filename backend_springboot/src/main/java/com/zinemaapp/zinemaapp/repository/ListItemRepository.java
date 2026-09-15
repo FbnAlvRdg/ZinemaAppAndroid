@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ListItemRepository extends JpaRepository<ListItem, Long> {
-    public boolean existsByListAndTmdbId(ListUser list, Long tmdbId);
+    boolean existsByListAndTmdbId(ListUser list, Long tmdbId);
      List<ListItem> findByList(ListUser listUser);
 }
