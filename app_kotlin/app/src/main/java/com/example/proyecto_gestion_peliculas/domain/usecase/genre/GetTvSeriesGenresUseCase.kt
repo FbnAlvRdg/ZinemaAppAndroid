@@ -4,7 +4,7 @@ import com.example.proyecto_gestion_peliculas.data.repository.GenreRepositoryImp
 import com.example.proyecto_gestion_peliculas.domain.model.Genre
 import jakarta.inject.Inject
 
-class GetTvSeriesUseCase @Inject constructor(private val repository: GenreRepositoryImpl) {
+class GetTvSeriesGenresUseCase @Inject constructor(private val repository: GenreRepositoryImpl) {
     suspend operator fun invoke() : List<Genre> {
         return repository.getTvGenres()
     }

@@ -10,12 +10,12 @@ import com.example.proyecto_gestion_peliculas.data.remote.paging.mostpopular.Mos
 import com.example.proyecto_gestion_peliculas.data.remote.paging.toprated.TopRatedFilmPagingSource
 import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
-
 
 class FilmRepositoryImpl @Inject constructor(private val dataSource: FilmDataSource) :
     FilmRepository {
+
     override suspend fun getMostPopularFilms(page: Int): List<Film> {
         return dataSource.getPopularFilms(page)
             .map { filmDTO ->

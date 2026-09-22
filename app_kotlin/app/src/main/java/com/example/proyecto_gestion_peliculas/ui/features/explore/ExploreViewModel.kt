@@ -12,11 +12,13 @@ import androidx.paging.cachedIn
 import com.example.proyecto_gestion_peliculas.data.datastore.clearJwt
 import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.domain.model.Genre
+import com.example.proyecto_gestion_peliculas.domain.model.TvSerie
 import com.example.proyecto_gestion_peliculas.domain.usecase.film.GetFilmsByGenreUseCase
-import com.example.proyecto_gestion_peliculas.domain.usecase.film.GetTopRatedFilmsPagingUseCase
+import com.example.proyecto_gestion_peliculas.domain.usecase.film.GetMostPopularFilmsPagingUseCase
 import com.example.proyecto_gestion_peliculas.domain.usecase.genre.GetFilmGenresUseCase
-import com.example.proyecto_gestion_peliculas.domain.usecase.genre.GetTvSeriesUseCase
-import com.example.proyecto_gestion_peliculas.domain.usecase.tvserie.GetTopRatedSeriesPagingUseCase
+import com.example.proyecto_gestion_peliculas.domain.usecase.genre.GetTvSeriesGenresUseCase
+import com.example.proyecto_gestion_peliculas.domain.usecase.tvserie.GetMostPopularTvSeriesUseCase
+import com.example.proyecto_gestion_peliculas.domain.usecase.tvserie.GetSeriesByGenreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -26,11 +28,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ExploreViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val getTopRatedFilmsPagingUseCase: GetTopRatedFilmsPagingUseCase,
-    private val getTopRatedSeriesPagingUseCase: GetTopRatedSeriesPagingUseCase,
+    private val getMostPopularFilmsPagingUseCase: GetMostPopularFilmsPagingUseCase,
+    private val getMostPopularTvSeriesUseCase: GetMostPopularTvSeriesUseCase,
     private val getFilmGenresUseCase: GetFilmGenresUseCase,
-    private val getTvSeriesGenresUseCase: GetTvSeriesUseCase,
-    private val getFilmsByGenreUseCase: GetFilmsByGenreUseCase
+    private val getTvSeriesGenresUseCase: GetTvSeriesGenresUseCase,
+    private val getFilmsByGenreUseCase: GetFilmsByGenreUseCase,
+    private val getSeriesByGenreUseCase: GetSeriesByGenreUseCase
 ) : ViewModel() {
     var selectedTab by mutableIntStateOf(0)
         private set
@@ -38,20 +41,17 @@ class ExploreViewModel @Inject constructor(
         private set
     var tvSeriesGenres by mutableStateOf<List<Genre>>(emptyList())
         private set
+    var initialFilms by mutableStateOf<Flow<PagingData<Film>>?>(null)
+        private set
+    var initialTvSeries by mutableStateOf<Flow<PagingData<TvSerie>>?>(null)
+        private set
     var films by mutableStateOf<Flow<PagingData<Film>>?>(null)
         private set
-
-    var selectedGenreId by mutableStateOf<Int?>(null)
+    var tvSeries by mutableStateOf<Flow<PagingData<TvSerie>>?>(null)
         private set
-
-    val series = getTopRatedSeriesPagingUseCase().cachedIn(viewModelScope)
 
     fun selectTab(index: Int) {
         selectedTab = index
-    }
-
-    fun selectGenre(id: Int?) {
-        selectedGenreId = id
     }
 
     fun logOut(onFinished: () -> Unit) {
@@ -73,7 +73,22 @@ class ExploreViewModel @Inject constructor(
         }
     }
 
+    fun loadInitialFilms() {
+        initialFilms = getMostPopularFilmsPagingUseCase()
+        films = initialFilms
+    }
+
+    fun loadInitialTvSeries(){
+        initialTvSeries = getMostPopularTvSeriesUseCase()
+        tvSeries = initialTvSeries
+
+    }
+
     fun getFilmsByGenre(genreId: Int) {
         films = getFilmsByGenreUseCase(genreId)
+    }
+
+    fun getSeriesByGenre(genreId: Int) {
+        tvSeries = getSeriesByGenreUseCase(genreId)
     }
 }

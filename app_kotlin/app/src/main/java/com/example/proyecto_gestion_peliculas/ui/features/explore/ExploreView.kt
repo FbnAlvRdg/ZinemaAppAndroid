@@ -2,7 +2,6 @@ package com.example.proyecto_gestion_peliculas.ui.features.explore
 
 
 import android.widget.Toast
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,15 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,18 +28,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.proyecto_gestion_peliculas.domain.model.Genre
 import com.example.proyecto_gestion_peliculas.ui.components.bottombar.AppBottomBar
-import com.example.proyecto_gestion_peliculas.ui.components.cards.FilmCard
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
-import com.example.proyecto_gestion_peliculas.ui.components.cards.TvSerieCard
 import com.example.proyecto_gestion_peliculas.ui.components.dialogs.AddToListDialog
-import com.example.proyecto_gestion_peliculas.ui.features.film.toprated.TopRatedFilmsViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.lists.ListsViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.lists.items.ListItemViewModel
-import com.example.proyecto_gestion_peliculas.ui.features.tvserie.toprated.TopRatedSeriesViewModel
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
 @Composable
@@ -55,12 +46,13 @@ fun ExploreScreen(navigator: Navigator) {
 
     val selectedTab = viewModel.selectedTab
     val films = viewModel.films?.collectAsLazyPagingItems()
-    val series = viewModel.series.collectAsLazyPagingItems()
+    val tvSeries = viewModel.tvSeries?.collectAsLazyPagingItems()
 
     val lists = listsViewModel.lists
 
     var showDialog by remember { mutableStateOf(false) }
-    var selectedGenre by remember { mutableStateOf<Genre?>(null) }
+    var selectedFilmGenre by remember { mutableStateOf<Genre?>(null) }
+    var selectedTvSerieGenre by remember { mutableStateOf<Genre?>(null) }
     var selectedTmdbId by remember { mutableStateOf<Long?>(null) }
     var selectedType by remember { mutableStateOf<String?>(null) }
     var selectedTitle by remember { mutableStateOf<String?>(null) }
@@ -75,6 +67,8 @@ fun ExploreScreen(navigator: Navigator) {
         listsViewModel.loadLists()
         viewModel.getFilmGenres()
         viewModel.getTvSeriesGenres()
+        viewModel.loadInitialFilms()
+        viewModel.loadInitialTvSeries()
     }
 
 
@@ -95,7 +89,7 @@ fun ExploreScreen(navigator: Navigator) {
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Descubrir",
+                title = "Explorar",
                 back = { navigator.back() }
             )
         },
@@ -151,9 +145,9 @@ fun ExploreScreen(navigator: Navigator) {
                         items(viewModel.filmGenres) { genre ->
                             FilterChip(
                                 modifier = Modifier.width(150.dp),
-                                selected = selectedGenre == genre,
+                                selected = selectedFilmGenre == genre,
                                 onClick = {
-                                    selectedGenre = genre
+                                    selectedFilmGenre = genre
                                     viewModel.getFilmsByGenre(genre.id)
                                 },
                                 label = {
@@ -180,14 +174,7 @@ fun ExploreScreen(navigator: Navigator) {
                             }
                         }
                     }
-
-                    Text(
-                        text = films?.loadState?.refresh.toString(),
-                        modifier = Modifier.padding(16.dp)
-                    )
                 }
-
-
 
                 1 -> {
                     LazyRow(
@@ -197,8 +184,11 @@ fun ExploreScreen(navigator: Navigator) {
                         items(viewModel.tvSeriesGenres) { genre ->
                             FilterChip(
                                 modifier = Modifier.width(150.dp),
-                                selected = selectedGenre == genre,
-                                onClick = { selectedGenre = genre },
+                                selected = selectedTvSerieGenre == genre,
+                                onClick = {
+                                    selectedTvSerieGenre = genre
+                                    viewModel.getSeriesByGenre(genre.id)
+                                },
                                 label = {
                                     Text(
                                         text = genre.name,
@@ -209,6 +199,18 @@ fun ExploreScreen(navigator: Navigator) {
                                     )
                                 }
                             )
+                        }
+                    }
+
+                    tvSeries?.let { tvSeries ->
+                        LazyColumn(modifier = Modifier.weight(1f)) {
+                            items(tvSeries.itemCount) { index ->
+                                val tvSerie = tvSeries[index]
+                                Text(
+                                    modifier = Modifier.padding(16.dp),
+                                    text = tvSerie?.name ?: "No disponible"
+                                )
+                            }
                         }
                     }
                 }
