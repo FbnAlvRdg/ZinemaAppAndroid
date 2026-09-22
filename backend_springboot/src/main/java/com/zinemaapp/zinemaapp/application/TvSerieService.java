@@ -54,8 +54,8 @@ public class TvSerieService {
 
         List<TvSerieDTO> series = new ArrayList<>();
 
-        for (TmdbTvSerieResponse tmdbTvSerie : tmdbTvSeriesResponse.getResults()) {
-            series.add(tvSerieMapper.toTvSerieDTO(tmdbTvSerie));
+        for (TmdbTvSerieResponse tmdbTvSerieResponse : tmdbTvSeriesResponse.getResults()) {
+            series.add(tvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse));
         }
 
         return series;

@@ -18,17 +18,22 @@ public class TvSerieController {
     }
 
     @GetMapping("/top-rated")
-    public ResponseEntity<List<TvSerieDTO>> getTopRatedSeries(@RequestParam int page){
+    public ResponseEntity<List<TvSerieDTO>> getTopRatedSeries(@RequestParam int page) {
         return ResponseEntity.ok(tvSerieService.getTopRatedSeries(page));
     }
 
     @GetMapping("/most-popular")
-    public ResponseEntity<List<TvSerieDTO>> getMostPopularSeries(@RequestParam int page){
+    public ResponseEntity<List<TvSerieDTO>> getMostPopularSeries(@RequestParam int page) {
         return ResponseEntity.ok(tvSerieService.getMostPopularSeries(page));
     }
 
+    @GetMapping("/explore")
+    public ResponseEntity<List<TvSerieDTO>> getTvSeriesByGenre(@RequestParam int idGenre, @RequestParam int page) {
+        return ResponseEntity.ok(tvSerieService.getSeriesByGenre(idGenre, page));
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<TvSerieDTO> getSerieById(@PathVariable int id){
+    public ResponseEntity<TvSerieDTO> getSerieById(@PathVariable int id) {
         return ResponseEntity.ok(tvSerieService.getSerieById(id));
     }
 }

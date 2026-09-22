@@ -9,6 +9,6 @@ interface FilmRepository {
     fun getMostPopularFilmsPaging() : Flow<PagingData<Film>>
     suspend fun getTopRatedFilms(page: Int): List<Film>
     fun getTopRatedFilmsPaging(): Flow<PagingData<Film>>
-    suspend fun getFilmsByGenre(idGenre: Int, page: Int): List<Film>
+    fun getFilmsByGenre(idGenre: Int): Flow<PagingData<Film>>
     suspend fun getFilmById(id: Int): Film
 }

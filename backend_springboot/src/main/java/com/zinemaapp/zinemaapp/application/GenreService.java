@@ -35,8 +35,7 @@ public class GenreService {
     public List<GenreDTO> getTvGenres() {
         TmdbGenreResponse tmdbGenreResponse = tmdbClient.getTvGenres();
 
-        List<GenreDTO> genres = new ArrayList<>();
-        return genres = tmdbGenreResponse.getGenres()
+        return tmdbGenreResponse.getGenres()
                 .stream()
                 .map(genreMapper::toGenreDTO)
                 .toList();

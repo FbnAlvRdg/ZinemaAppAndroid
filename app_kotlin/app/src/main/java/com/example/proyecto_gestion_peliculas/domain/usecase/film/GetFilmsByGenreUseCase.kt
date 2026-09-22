@@ -1,11 +1,13 @@
 package com.example.proyecto_gestion_peliculas.domain.usecase.film
 
+import androidx.paging.PagingData
 import com.example.proyecto_gestion_peliculas.domain.model.Film
 import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetFilmsByGenreUseCase @Inject constructor(private val repository: FilmRepository) {
-    suspend operator fun invoke(idGenre: Int, page: Int): List<Film> {
-        return repository.getFilmsByGenre(idGenre, page)
+    operator fun invoke(idGenre: Int): Flow<PagingData<Film>> {
+        return repository.getFilmsByGenre(idGenre)
     }
 }
