@@ -42,7 +42,7 @@ fun AddFilmScreen(back: () -> Unit) {
 
     var anho by remember { mutableStateOf("") }
     var valoracion by remember { mutableStateOf("") }
-    var header = "Añadir película"
+    val header = "Añadir película"
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val scroll = rememberScrollState()

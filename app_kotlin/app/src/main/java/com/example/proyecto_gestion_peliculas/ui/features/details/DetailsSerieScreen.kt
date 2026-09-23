@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
-import com.example.proyecto_gestion_peliculas.ui.features.tvserie.details.DetailsTvSerieViewModel
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

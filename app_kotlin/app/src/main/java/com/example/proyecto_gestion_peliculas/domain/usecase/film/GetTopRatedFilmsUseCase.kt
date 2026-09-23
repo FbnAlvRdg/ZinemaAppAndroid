@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetTopRatedFilmsUseCase @Inject constructor(private val repository: FilmRepository) {
-    suspend operator fun invoke(page: Int): List<Film> {
-        return repository.getTopRatedFilms(page)
+    operator fun invoke(): Flow<PagingData<Film>> {
+        return repository.getTopRatedFilmsPaging()
     }
 }
