@@ -169,7 +169,7 @@ public class TmdbClient {
     }
 
     public TmdbTvSeriesResponse getSeriesByGenre(int idGenre, int page) {
-        String url = buildUrl("/discover/tv") + "&with_genres=" + idGenre + "&page=" + page;
+        String url = buildUrl("/discover/tv") + "with_genres=" + idGenre + "&page=" + page;
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
