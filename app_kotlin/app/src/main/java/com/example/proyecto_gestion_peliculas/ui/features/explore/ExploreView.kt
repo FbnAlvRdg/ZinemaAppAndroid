@@ -2,19 +2,20 @@ package com.example.proyecto_gestion_peliculas.ui.features.explore
 
 
 import android.widget.Toast
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,19 +24,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.proyecto_gestion_peliculas.domain.model.Genre
 import com.example.proyecto_gestion_peliculas.ui.components.bottombar.AppBottomBar
-import com.example.proyecto_gestion_peliculas.ui.components.cards.FilmCard
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
-import com.example.proyecto_gestion_peliculas.ui.components.cards.TvSerieCard
 import com.example.proyecto_gestion_peliculas.ui.components.dialogs.AddToListDialog
-import com.example.proyecto_gestion_peliculas.ui.features.film.toprated.TopRatedFilmsViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.lists.ListsViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.lists.items.ListItemViewModel
-import com.example.proyecto_gestion_peliculas.ui.features.tvserie.toprated.TopRatedSeriesViewModel
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
 @Composable
@@ -46,12 +45,14 @@ fun ExploreScreen(navigator: Navigator) {
     val listItemViewModel: ListItemViewModel = hiltViewModel()
 
     val selectedTab = viewModel.selectedTab
-    val films = viewModel.films.collectAsLazyPagingItems()
-    val series = viewModel.series.collectAsLazyPagingItems()
+    val films = viewModel.films?.collectAsLazyPagingItems()
+    val tvSeries = viewModel.tvSeries?.collectAsLazyPagingItems()
 
     val lists = listsViewModel.lists
 
     var showDialog by remember { mutableStateOf(false) }
+    var selectedFilmGenre by remember { mutableStateOf<Genre?>(null) }
+    var selectedTvSerieGenre by remember { mutableStateOf<Genre?>(null) }
     var selectedTmdbId by remember { mutableStateOf<Long?>(null) }
     var selectedType by remember { mutableStateOf<String?>(null) }
     var selectedTitle by remember { mutableStateOf<String?>(null) }
@@ -64,7 +65,12 @@ fun ExploreScreen(navigator: Navigator) {
 
     LaunchedEffect(Unit) {
         listsViewModel.loadLists()
+        viewModel.getFilmGenres()
+        viewModel.getTvSeriesGenres()
+        viewModel.loadInitialFilms()
+        viewModel.loadInitialTvSeries()
     }
+
 
     LaunchedEffect(error) {
         error?.let {
@@ -83,7 +89,7 @@ fun ExploreScreen(navigator: Navigator) {
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Descubrir",
+                title = "Explorar",
                 back = { navigator.back() }
             )
         },
@@ -131,20 +137,39 @@ fun ExploreScreen(navigator: Navigator) {
             when (selectedTab) {
 
                 0 -> {
-                    LazyColumn {
-                        items(films.itemCount) { index ->
-                            val film = films[index]
-                            film?.let {
-                                FilmCard(
-                                    film,
-                                    onDetail = { navigator.navigateToDetailsFilm(film.id) },
-                                    onLongClick = {
-                                        selectedTmdbId = film.id.toLong()
-                                        selectedType = "movie"
-                                        selectedTitle = film.title
-                                        selectedPoster = film.poster
-                                        showDialog = true
-                                    }
+                    LazyRow(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+
+                    ) {
+                        items(viewModel.filmGenres) { genre ->
+                            FilterChip(
+                                modifier = Modifier.width(150.dp),
+                                selected = selectedFilmGenre == genre,
+                                onClick = {
+                                    selectedFilmGenre = genre
+                                    viewModel.getFilmsByGenre(genre.id)
+                                },
+                                label = {
+                                    Text(
+                                        text = genre.name,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        textAlign = TextAlign.Center,
+                                        maxLines = 1,
+                                        fontSize = 12.sp
+                                    )
+                                }
+                            )
+                        }
+                    }
+
+                    films?.let { films ->
+                        LazyColumn(modifier = Modifier.weight(1f)) {
+                            items(films.itemCount) { index ->
+                                val film = films[index]
+                                Text(
+                                    modifier = Modifier.padding(16.dp),
+                                    text = film?.title ?: "No disponible"
                                 )
                             }
                         }
@@ -152,20 +177,38 @@ fun ExploreScreen(navigator: Navigator) {
                 }
 
                 1 -> {
-                    LazyColumn {
-                        items(series.itemCount) { index ->
-                            val tvSerie = series[index]
-                            tvSerie?.let {
-                                TvSerieCard(
-                                    tvSerie,
-                                    onDetail = { navigator.navigateToDetailsSerie(tvSerie.id) },
-                                    onLongClick = {
-                                        selectedTmdbId = tvSerie.id.toLong()
-                                        selectedType = "tv"
-                                        selectedTitle = tvSerie.name
-                                        selectedPoster = tvSerie.poster
-                                        showDialog = true
-                                    }
+                    LazyRow(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(viewModel.tvSeriesGenres) { genre ->
+                            FilterChip(
+                                modifier = Modifier.width(150.dp),
+                                selected = selectedTvSerieGenre == genre,
+                                onClick = {
+                                    selectedTvSerieGenre = genre
+                                    viewModel.getSeriesByGenre(genre.id)
+                                },
+                                label = {
+                                    Text(
+                                        text = genre.name,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        textAlign = TextAlign.Center,
+                                        maxLines = 1,
+                                        fontSize = 12.sp
+                                    )
+                                }
+                            )
+                        }
+                    }
+
+                    tvSeries?.let { tvSeries ->
+                        LazyColumn(modifier = Modifier.weight(1f)) {
+                            items(tvSeries.itemCount) { index ->
+                                val tvSerie = tvSeries[index]
+                                Text(
+                                    modifier = Modifier.padding(16.dp),
+                                    text = tvSerie?.name ?: "No disponible"
                                 )
                             }
                         }

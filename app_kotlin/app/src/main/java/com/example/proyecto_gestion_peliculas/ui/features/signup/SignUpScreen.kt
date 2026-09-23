@@ -26,9 +26,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,12 +44,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.proyecto_gestion_peliculas.R
+import com.example.proyecto_gestion_peliculas.core.error.Error
 import com.example.proyecto_gestion_peliculas.data.datastore.saveEmail
 import com.example.proyecto_gestion_peliculas.ui.theme.PureWhite
 import com.example.proyecto_gestion_peliculas.core.utils.checkEmail
 import com.example.proyecto_gestion_peliculas.core.utils.checkEqualPassword
 import com.example.proyecto_gestion_peliculas.core.utils.checkPassword
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
+import com.example.proyecto_gestion_peliculas.ui.uistate.UiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,325 +59,369 @@ import kotlinx.coroutines.launch
 @Composable
 fun SignUpScreen(navigator: Navigator) {
     val viewModel: SignUpViewModel = hiltViewModel()
+    val uiState = viewModel.uiState
+    val snackbarHostState = remember { SnackbarHostState() }
     val alertDialogEmail = remember { mutableStateOf(false) }
     val alertDialogPassword = remember { mutableStateOf(false) }
     val alertDialogEqualPas = remember { mutableStateOf(false) }
     val context = LocalContext.current
     val scroll = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(scroll),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.height(100.dp))
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { error ->
+            val message = when (error) {
+                Error.CONNECTION_ERROR ->
+                    "No se ha podido conectar con el servidor"
 
-        Text(
-            text = "¡Registrate!",
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+                Error.INVALID_CREDENTIALS ->
+                    "Email o contraseña incorrectos"
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            OutlinedTextField(
-                value = viewModel.email,
-                onValueChange = viewModel::onEmailChange,
-                label = {
-                    Text(
-                        text = "Email"
-                    )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedLabelColor = MaterialTheme.colorScheme.outline,
-                    unfocusedLabelColor = MaterialTheme.colorScheme.outline,
-                    focusedBorderColor = MaterialTheme.colorScheme.outline,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                    focusedPlaceholderColor = MaterialTheme.colorScheme.outline
-                )
+                Error.CONFLICT ->
+                    "El email o el nombre de usuario ya existen"
+
+                Error.UNKNOWN ->
+                    "Ha ocurrido un error inesperado"
+
+                else ->
+                    "Error desconocido"
+            }
+
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+
+            viewModel.cleanError()
+        }
+    }
+
+    LaunchedEffect(viewModel.registerSuccess) {
+        if (viewModel.registerSuccess) navigator.back()
+    }
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState
             )
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(scroll),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedTextField(
-                value = viewModel.username,
-                onValueChange = viewModel::onUsernameChange,
-                label = {
-                    Text(
-                        text = "Username"
-                    )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedLabelColor = MaterialTheme.colorScheme.outline,
-                    unfocusedLabelColor = MaterialTheme.colorScheme.outline,
-                    focusedBorderColor = MaterialTheme.colorScheme.outline,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                    focusedPlaceholderColor = MaterialTheme.colorScheme.outline
-                )
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            OutlinedTextField(
-                value = viewModel.password,
-                onValueChange = viewModel::onPasswordChange,
-                label = {
-                    Text(
-                        text = "Contraseña"
-                    )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedLabelColor = MaterialTheme.colorScheme.outline,
-                    unfocusedLabelColor = MaterialTheme.colorScheme.outline,
-                    focusedBorderColor = MaterialTheme.colorScheme.outline,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                    focusedPlaceholderColor = MaterialTheme.colorScheme.outline
-                )
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            OutlinedTextField(
-                value = viewModel.confirmPassword,
-                onValueChange = viewModel::onConfirmPasswordChange,
-                label = {
-                    Text(
-                        text = "Repite la contraseña"
-                    )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedLabelColor = MaterialTheme.colorScheme.outline,
-                    unfocusedLabelColor = MaterialTheme.colorScheme.outline,
-                    focusedBorderColor = MaterialTheme.colorScheme.outline,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                    focusedPlaceholderColor = MaterialTheme.colorScheme.outline
-                )
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            OutlinedTextField(
-                value = viewModel.phone,
-                onValueChange = viewModel::onPhoneChange,
-                label = {
-                    Text(
-                        text = "Teléfono"
-                    )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedLabelColor = MaterialTheme.colorScheme.outline,
-                    unfocusedLabelColor = MaterialTheme.colorScheme.outline,
-                    focusedBorderColor = MaterialTheme.colorScheme.outline,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                    focusedPlaceholderColor = MaterialTheme.colorScheme.outline
-                )
-            )
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = viewModel.checkedRememberMe,
-                onCheckedChange = { viewModel.onCheckedRememberMeChange() },
-                colors = CheckboxDefaults.colors(
-                    checkedColor = MaterialTheme.colorScheme.primary,
-                    uncheckedColor = MaterialTheme.colorScheme.primary,
-                    checkmarkColor = MaterialTheme.colorScheme.onPrimary
-                )
-            )
-            Text(
-                text = "Recuérdame",
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = viewModel.checkedTerms,
-                onCheckedChange = { viewModel.onCheckedTermsChange() },
-                colors = CheckboxDefaults.colors(
-                    checkedColor = MaterialTheme.colorScheme.primary,
-                    uncheckedColor = MaterialTheme.colorScheme.primary,
-                    checkmarkColor = MaterialTheme.colorScheme.onPrimary
-                )
-            )
+            Spacer(modifier = Modifier.height(100.dp))
 
             Text(
-                text = "Acepto los términos y condiciones",
+                text = "¡Registrate!",
+                textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground
             )
-        }
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                OutlinedTextField(
+                    value = viewModel.email,
+                    onValueChange = viewModel::onEmailChange,
+                    label = {
+                        Text(
+                            text = "Email"
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedLabelColor = MaterialTheme.colorScheme.outline,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.outline
+                    )
+                )
+            }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            HorizontalDivider(
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                OutlinedTextField(
+                    value = viewModel.username,
+                    onValueChange = viewModel::onUsernameChange,
+                    label = {
+                        Text(
+                            text = "Username"
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedLabelColor = MaterialTheme.colorScheme.outline,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.outline
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                OutlinedTextField(
+                    value = viewModel.password,
+                    onValueChange = viewModel::onPasswordChange,
+                    label = {
+                        Text(
+                            text = "Contraseña"
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedLabelColor = MaterialTheme.colorScheme.outline,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.outline
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                OutlinedTextField(
+                    value = viewModel.confirmPassword,
+                    onValueChange = viewModel::onConfirmPasswordChange,
+                    label = {
+                        Text(
+                            text = "Repite la contraseña"
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedLabelColor = MaterialTheme.colorScheme.outline,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.outline
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                OutlinedTextField(
+                    value = viewModel.phone,
+                    onValueChange = viewModel::onPhoneChange,
+                    label = {
+                        Text(
+                            text = "Teléfono"
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedLabelColor = MaterialTheme.colorScheme.outline,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.outline
+                    )
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = viewModel.checkedRememberMe,
+                    onCheckedChange = { viewModel.onCheckedRememberMeChange() },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = MaterialTheme.colorScheme.primary,
+                        uncheckedColor = MaterialTheme.colorScheme.primary,
+                        checkmarkColor = MaterialTheme.colorScheme.onPrimary
+                    )
+                )
+                Text(
+                    text = "Recuérdame",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = viewModel.checkedTerms,
+                    onCheckedChange = { viewModel.onCheckedTermsChange() },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = MaterialTheme.colorScheme.primary,
+                        uncheckedColor = MaterialTheme.colorScheme.primary,
+                        checkmarkColor = MaterialTheme.colorScheme.onPrimary
+                    )
+                )
+
+                Text(
+                    text = "Acepto los términos y condiciones",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .width(120.dp),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Text(
+
+                    text = "o",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                HorizontalDivider(
+                    Modifier
+                        .padding(horizontal = 16.dp)
+                        .width(120.dp),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+
+            Text(
+                text = "Continuar con:",
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Row(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .width(120.dp),
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Text(
-
-                text = "o",
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            HorizontalDivider(
-                Modifier
-                    .padding(horizontal = 16.dp)
-                    .width(120.dp),
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
-
-        Text(
-            text = "Continuar con:",
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            IconButton(
-                onClick = {},
-                modifier = Modifier.background(
-                    color = PureWhite,
-                    shape = CircleShape
-                )
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    modifier = Modifier.size(60.dp),
-                    contentDescription = "Registrarse con Google",
-                    painter = painterResource(R.drawable.icono_google)
-                )
+
+                IconButton(
+                    onClick = {},
+                    modifier = Modifier.background(
+                        color = PureWhite,
+                        shape = CircleShape
+                    )
+                ) {
+                    Image(
+                        modifier = Modifier.size(60.dp),
+                        contentDescription = "Registrarse con Google",
+                        painter = painterResource(R.drawable.icono_google)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(32.dp))
+
+                IconButton(
+                    onClick = {},
+                    modifier = Modifier.background(
+                        color = PureWhite,
+                        shape = CircleShape
+                    )
+                ) {
+                    Image(
+                        modifier = Modifier.size(60.dp),
+                        contentDescription = "Registrarse con Apple",
+                        painter = painterResource(R.drawable.icono_apple)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(32.dp))
+
+                IconButton(
+                    onClick = {},
+                    shape = CircleShape,
+                    modifier = Modifier.background(
+                        color = PureWhite,
+                        shape = CircleShape
+                    )
+                ) {
+                    Image(
+                        modifier = Modifier.size(60.dp),
+                        contentDescription = "Registrarse con X",
+                        painter = painterResource(R.drawable.icono_x)
+                    )
+                }
+
             }
 
-            Spacer(modifier = Modifier.width(32.dp))
-
-            IconButton(
-                onClick = {},
-                modifier = Modifier.background(
-                    color = PureWhite,
-                    shape = CircleShape
-                )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Image(
-                    modifier = Modifier.size(60.dp),
-                    contentDescription = "Registrarse con Apple",
-                    painter = painterResource(R.drawable.icono_apple)
-                )
-            }
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        if (!checkEmail(viewModel.email)) {
+                            alertDialogEmail.value = true
+                            return@Button
+                        }
 
-            Spacer(modifier = Modifier.width(32.dp))
+                        if (!checkPassword(viewModel.password)) {
+                            alertDialogPassword.value = true
 
-            IconButton(
-                onClick = {},
-                shape = CircleShape,
-                modifier = Modifier.background(
-                    color = PureWhite,
-                    shape = CircleShape
-                )
-            ) {
-                Image(
-                    modifier = Modifier.size(60.dp),
-                    contentDescription = "Registrarse con X",
-                    painter = painterResource(R.drawable.icono_x)
-                )
-            }
+                            return@Button
+                        }
 
-        }
+                        if (!checkEqualPassword(viewModel.password, viewModel.confirmPassword)) {
+                            alertDialogEqualPas.value = true
+                            return@Button
+                        }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                modifier = Modifier.weight(1f),
-                onClick = {
-                    if (!checkEmail(viewModel.email)) {
-                        alertDialogEmail.value = true
-                        return@Button
-                    }
+                        CoroutineScope(Dispatchers.IO).launch {
+                            saveEmail(context, viewModel.email)
+                        }
 
-                    if (!checkPassword(viewModel.password)) {
-                        alertDialogPassword.value = true
+                        viewModel.register()
+                    },
+                ) {
+                    Text(
+                        text = "Registrarse"
+                    )
+                }
 
-                        return@Button
-                    }
+                Spacer(modifier = Modifier.width(8.dp))
 
-                    if (!checkEqualPassword(viewModel.password, viewModel.confirmPassword)) {
-                        alertDialogEqualPas.value = true
-                        return@Button
-                    }
-
-                    CoroutineScope(Dispatchers.IO).launch {
-                        saveEmail(context, viewModel.email)
-                    }
-
-                    viewModel.register()
-                    navigator.back()
-                },
-            ) {
-                Text(
-                    text = "Registrarse"
-                )
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Button(
-                modifier = Modifier.weight(1f),
-                onClick = { navigator.back() },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    contentColor = MaterialTheme.colorScheme.onSecondary
-                )
-            ) {
-                Text(
-                    text = "Cancelar"
-                )
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        navigator.back()
+                        viewModel.clean()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.onSecondary
+                    )
+                ) {
+                    Text(
+                        text = "Cancelar"
+                    )
+                }
             }
         }
     }

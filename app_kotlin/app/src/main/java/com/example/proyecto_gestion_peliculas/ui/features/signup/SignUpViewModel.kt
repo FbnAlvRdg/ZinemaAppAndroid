@@ -5,9 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.proyecto_gestion_peliculas.core.error.Error
 import com.example.proyecto_gestion_peliculas.domain.usecase.auth.RegisterUseCase
+import com.example.proyecto_gestion_peliculas.ui.uistate.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +30,10 @@ class SignUpViewModel @Inject constructor(private val registerUseCase: RegisterU
     var checkedRememberMe by mutableStateOf(false)
         private set
     var checkedTerms by mutableStateOf(false)
+        private set
+    var uiState by mutableStateOf(UiState())
+        private set
+    var registerSuccess by mutableStateOf(false)
         private set
 
     fun onUsernameChange(value: String) {
@@ -58,7 +66,42 @@ class SignUpViewModel @Inject constructor(private val registerUseCase: RegisterU
 
     fun register() {
         viewModelScope.launch {
-            registerUseCase(username, email, password)
+            try {
+                registerUseCase(username, email, password)
+                registerSuccess = true
+            } catch (e: IOException) {
+                uiState = uiState.copy(
+                    error = Error.CONNECTION_ERROR
+                )
+            } catch (e: HttpException) {
+                uiState = uiState.copy(
+                    error = when (e.code()) {
+                        403, 409 -> Error.CONFLICT
+                        in 500..599 -> Error.CONNECTION_ERROR
+                        else -> Error.UNKNOWN
+                    }
+                )
+            } catch (e: Exception) {
+                uiState = uiState.copy(
+                    error = Error.UNKNOWN
+                )
+            }
         }
+    }
+
+    fun clean(){
+        email = ""
+        username = ""
+        password = ""
+        confirmPassword = ""
+        phone = ""
+        checkedTerms = false
+        checkedRememberMe = false
+    }
+
+    fun cleanError() {
+        uiState = uiState.copy(
+            error = null
+        )
     }
 }

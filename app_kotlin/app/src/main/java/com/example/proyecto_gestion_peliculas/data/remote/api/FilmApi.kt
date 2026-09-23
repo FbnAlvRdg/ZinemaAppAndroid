@@ -13,12 +13,12 @@ interface FilmApi {
     @GET("movies/top-rated")
     suspend fun getTopRatedFilms(@Query("page") page: Int): List<FilmDTO>
 
-    @GET("movies/{id}")
-    suspend fun getFilmById(@Path("id") id: Int): DetailsFilmDTO
-
-    @GET("movies/discover")
+    @GET("movies/explore")
     suspend fun getFilmsByGenre(
         @Query("genre_id") idGenre: Int,
         @Query("page") page: Int
     ): List<FilmDTO>
+
+    @GET("movies/{id}")
+    suspend fun getFilmById(@Path("id") id: Int): DetailsFilmDTO
 }

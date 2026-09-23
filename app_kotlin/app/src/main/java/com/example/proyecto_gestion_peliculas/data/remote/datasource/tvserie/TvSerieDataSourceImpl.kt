@@ -13,6 +13,13 @@ class TvSerieDataSourceImpl @Inject constructor(private val api: TvSerieApi) : T
         return api.getMostPopular(page)
     }
 
+    override suspend fun getSeriesByGenre(
+        genreId: Int,
+        page: Int
+    ): List<TvSerieDTO> {
+        return api.getSeriesByGenre(genreId, page)
+    }
+
     override suspend fun getById(id: Int): TvSerieDTO {
         return api.getSerieById(id)
     }

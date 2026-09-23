@@ -7,8 +7,10 @@ import com.zinemaapp.zinemaapp.dto.internal.UserResponseDTO;
 import com.zinemaapp.zinemaapp.dto.internal.login.LoginResponseDTO;
 import com.zinemaapp.zinemaapp.repository.UserRepository;
 import com.zinemaapp.zinemaapp.security.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -26,11 +28,15 @@ public class UserService {
 
     public UserResponseDTO register(RegisterRequestDTO registerRequestDTO) {
         if (userRepository.existsByEmail(registerRequestDTO.getEmail())) {
-            throw new RuntimeException("El email ya se encuentra registrado");
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT, "El email ya se encuentra registrado"
+            );
         }
 
         if (userRepository.existsByUsername(registerRequestDTO.getUsername())) {
-            throw new RuntimeException("El nombre de usuario ya se encuentra registrado");
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT, "El nombre de usuario ya se encuentra registrado"
+            );
         }
 
         User user = new User();
@@ -52,13 +58,17 @@ public class UserService {
         Optional<User> user = userRepository.findByEmail(loginRequestDTO.getEmail());
 
         if (user.isEmpty()) {
-            throw new RuntimeException("El usuario no ha sido encontrado");
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "El email no es correcto"
+            );
         }
 
         User userToResponse = user.get();
 
         if (!passwordEncoder.matches(loginRequestDTO.getPassword(), userToResponse.getPassword())) {
-            throw new RuntimeException("La contraseña es incorrecta");
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "La contraseña no es correcta"
+            );
         }
 
         String token = jwtService.generateToken(userToResponse);
@@ -71,10 +81,10 @@ public class UserService {
         return new LoginResponseDTO(token, userResponseDTO);
     }
 
-    public UserResponseDTO getCurrentUser(String email){
+    public UserResponseDTO getCurrentUser(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
-        if (userOptional.isEmpty()){
+        if (userOptional.isEmpty()) {
             throw new RuntimeException("El email no se ha encontrado");
         }
 

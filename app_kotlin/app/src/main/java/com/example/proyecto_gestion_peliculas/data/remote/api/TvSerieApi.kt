@@ -1,5 +1,6 @@
 package com.example.proyecto_gestion_peliculas.data.remote.api
 
+import com.example.proyecto_gestion_peliculas.data.remote.dto.credits.GenreDTO
 import com.example.proyecto_gestion_peliculas.data.remote.dto.series.TvSerieDTO
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -11,6 +12,12 @@ interface TvSerieApi {
 
     @GET("tv/most-popular")
     suspend fun getMostPopular(@Query("page") page: Int): List<TvSerieDTO>
+
+    @GET("tv/explore")
+    suspend fun getSeriesByGenre(
+        @Query("idGenre") idGenre : Int,
+        @Query("page") page: Int
+    ) : List<TvSerieDTO>
 
     @GET("tv/{id}")
     suspend fun getSerieById(@Path("id") id: Int): TvSerieDTO

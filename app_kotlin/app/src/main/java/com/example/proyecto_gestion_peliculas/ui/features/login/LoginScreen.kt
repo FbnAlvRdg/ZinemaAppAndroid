@@ -14,14 +14,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.proyecto_gestion_peliculas.R
+import com.example.proyecto_gestion_peliculas.core.error.Error
 import com.example.proyecto_gestion_peliculas.data.datastore.readEmail
 import com.example.proyecto_gestion_peliculas.ui.components.dialogs.LogInAlertDialog
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.MainTopBar
@@ -48,7 +51,8 @@ import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 fun LoginScreen(navigator: Navigator) {
     val viewModel: LoginScreenViewModel = hiltViewModel()
     val context = LocalContext.current
-    val error = viewModel.error
+    val uiState = viewModel.uiState
+    val snackbarHostState = remember { SnackbarHostState() }
     val alertDialogLogIn = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -63,8 +67,36 @@ fun LoginScreen(navigator: Navigator) {
         }
     }
 
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { error ->
+            val message = when (error) {
+                Error.CONNECTION_ERROR ->
+                    "No se ha podido conectar con el servidor"
+
+                Error.INVALID_CREDENTIALS ->
+                    "Email o contraseña incorrectos"
+
+                Error.UNKNOWN ->
+                    "Ha ocurrido un error inesperado"
+
+                else ->
+                    "Error desconocido"
+            }
+
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+
+            viewModel.clearError()
+        }
+    }
+
     Scaffold(
-        topBar = { MainTopBar(viewModel.title) }
+        topBar = { MainTopBar(viewModel.title) },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -224,14 +256,5 @@ fun LoginScreen(navigator: Navigator) {
         title = "Error",
         message = "El email o la contraseña no puede estar vacío",
         onDismiss = { alertDialogLogIn.value = false }
-    )
-
-    LogInAlertDialog(
-        show = error != null,
-        title = "Error de autenticación",
-        message = error ?: "",
-        onDismiss = {
-            viewModel.clearError()
-        }
     )
 }
