@@ -14,10 +14,14 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.proyecto_gestion_peliculas.R
+import com.example.proyecto_gestion_peliculas.core.error.Error
 import com.example.proyecto_gestion_peliculas.ui.components.bottombar.AppBottomBar
 import com.example.proyecto_gestion_peliculas.ui.components.dialogs.ConfirmationDialog
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
@@ -42,6 +47,36 @@ fun ListScreen(navigator: Navigator) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     var selectedListId by remember { mutableStateOf<Long?>(null) }
     var listName by remember { mutableStateOf("") }
+    val uiState = viewModel.uiState
+    val snackbarHostState by remember { mutableStateOf(SnackbarHostState()) }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { error ->
+            val message = when (error) {
+                Error.CONNECTION_ERROR ->
+                    "Se ha producido un error de conexión"
+
+                Error.SERVER_ERROR ->
+                    "Error en el servidor"
+
+                Error.NOT_FOUND ->
+                    "No se ha encontrado el contenido"
+
+                Error.UNKNOWN ->
+                    "Ha ocurrido un error inesperado"
+
+                else ->
+                    "Error desconocido"
+            }
+
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+
+            viewModel.cleanError()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -72,6 +107,9 @@ fun ListScreen(navigator: Navigator) {
                     contentDescription = "Add"
                 )
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {

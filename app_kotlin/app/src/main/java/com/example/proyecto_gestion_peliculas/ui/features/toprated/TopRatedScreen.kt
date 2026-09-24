@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.proyecto_gestion_peliculas.core.error.Error
 import com.example.proyecto_gestion_peliculas.ui.components.bottombar.AppBottomBar
 import com.example.proyecto_gestion_peliculas.ui.components.cards.FilmCard
 import com.example.proyecto_gestion_peliculas.ui.components.cards.TvSerieCard
@@ -37,8 +41,8 @@ fun TopRatedScreen(navigator: Navigator) {
     val listItemViewModel: ListItemViewModel = hiltViewModel()
 
     val selectedTab = viewModel.selectedTab
-    val films = viewModel.films.collectAsLazyPagingItems()
-    val series = viewModel.series.collectAsLazyPagingItems()
+    val films = viewModel.films?.collectAsLazyPagingItems()
+    val series = viewModel.series?.collectAsLazyPagingItems()
 
     val lists = listsViewModel.lists
 
@@ -50,16 +54,54 @@ fun TopRatedScreen(navigator: Navigator) {
 
     val context = LocalContext.current
     val confirmation = listItemViewModel.confirmation
-    val error = listItemViewModel.error
+    val listItemError = listItemViewModel.uiState.error
+    val uiState = viewModel.uiState
+    val snackbarHostState by remember { mutableStateOf(SnackbarHostState()) }
 
 
     LaunchedEffect(Unit) {
         listsViewModel.loadLists()
     }
 
-    LaunchedEffect(error) {
-        error?.let {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+    LaunchedEffect(selectedTab) {
+        if (selectedTab == 0) {
+            viewModel.getTopRatedFilms()
+        } else {
+            viewModel.getTopRatedSeries()
+        }
+    }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { error ->
+            val message = when (error) {
+                Error.CONNECTION_ERROR ->
+                    "Se ha producido un error de conexión"
+
+                Error.SERVER_ERROR ->
+                    "Error en el servidor"
+
+                Error.NOT_FOUND ->
+                    "No se ha encontrado el contenido"
+
+                Error.UNKNOWN ->
+                    "Ha ocurrido un error inesperado"
+
+                else ->
+                    "Error desconocido"
+            }
+
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+
+            viewModel.cleanError()
+        }
+    }
+
+    LaunchedEffect(listItemError) {
+        listItemError?.let {
+            Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
             listItemViewModel.clearError()
         }
     }
@@ -91,6 +133,9 @@ fun TopRatedScreen(navigator: Navigator) {
                     }
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { paddingValues ->
         Column(
@@ -118,42 +163,46 @@ fun TopRatedScreen(navigator: Navigator) {
 
             when (selectedTab) {
                 0 -> {
-                    LazyColumn {
-                        items(films.itemCount) { index ->
-                            val film = films[index]
-                            film?.let {
-                                FilmCard(
-                                    film,
-                                    onDetail = { navigator.navigateToDetailsFilm(film.id) },
-                                    onLongClick = {
-                                        selectedTmdbId = film.id.toLong()
-                                        selectedType = "movie"
-                                        selectedTitle = film.title
-                                        selectedPoster = film.poster
-                                        showDialog = true
-                                    }
-                                )
+                    films?.let {
+                        LazyColumn {
+                            items(films.itemCount) { index ->
+                                val film = films[index]
+                                film?.let {
+                                    FilmCard(
+                                        film,
+                                        onDetail = { navigator.navigateToDetailsFilm(film.id) },
+                                        onLongClick = {
+                                            selectedTmdbId = film.id.toLong()
+                                            selectedType = "movie"
+                                            selectedTitle = film.title
+                                            selectedPoster = film.poster
+                                            showDialog = true
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
                 }
 
                 1 -> {
-                    LazyColumn {
-                        items(series.itemCount) { index ->
-                            val tvSerie = series[index]
-                            tvSerie?.let {
-                                TvSerieCard(
-                                    tvSerie,
-                                    onDetail = { navigator.navigateToDetailsSerie(tvSerie.id) },
-                                    onLongClick = {
-                                        selectedTmdbId = tvSerie.id.toLong()
-                                        selectedType = "tv"
-                                        selectedTitle = tvSerie.name
-                                        selectedPoster = tvSerie.poster
-                                        showDialog = true
-                                    }
-                                )
+                    series?.let {
+                        LazyColumn {
+                            items(series.itemCount) { index ->
+                                val tvSerie = series[index]
+                                tvSerie?.let {
+                                    TvSerieCard(
+                                        tvSerie,
+                                        onDetail = { navigator.navigateToDetailsSerie(tvSerie.id) },
+                                        onLongClick = {
+                                            selectedTmdbId = tvSerie.id.toLong()
+                                            selectedType = "tv"
+                                            selectedTitle = tvSerie.name
+                                            selectedPoster = tvSerie.poster
+                                            showDialog = true
+                                        }
+                                    )
+                                }
                             }
                         }
                     }

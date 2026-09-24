@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.features.film.details
+package com.example.proyecto_gestion_peliculas.ui.features.details
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,13 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_gestion_peliculas.domain.model.Film
-import com.example.proyecto_gestion_peliculas.domain.usecase.film.GetDetailsFilmUseCase
+import com.example.proyecto_gestion_peliculas.domain.usecase.film.GetFilmsByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailsFilmViewModel @Inject constructor(private val getDetailsFilmUseCase: GetDetailsFilmUseCase) :
+class DetailsFilmViewModel @Inject constructor(private val getFilmsByIdUseCase: GetFilmsByIdUseCase) :
     ViewModel() {
 
     var header = "Detalles"
@@ -21,7 +21,7 @@ class DetailsFilmViewModel @Inject constructor(private val getDetailsFilmUseCase
 
     fun loadFilm(id: Int) {
         viewModelScope.launch {
-            film = getDetailsFilmUseCase(id)
+            film = getFilmsByIdUseCase(id)
         }
     }
 }

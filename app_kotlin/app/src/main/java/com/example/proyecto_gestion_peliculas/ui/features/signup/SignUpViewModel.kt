@@ -85,6 +85,10 @@ class SignUpViewModel @Inject constructor(private val registerUseCase: RegisterU
                 uiState = uiState.copy(
                     error = Error.UNKNOWN
                 )
+            } finally {
+                uiState = uiState.copy(
+                    isLoading = false
+                )
             }
         }
     }

@@ -1,11 +1,13 @@
 package com.example.proyecto_gestion_peliculas.domain.usecase.film
 
-import com.example.proyecto_gestion_peliculas.data.repository.FilmRepositoryImpl
+import androidx.paging.PagingData
 import com.example.proyecto_gestion_peliculas.domain.model.Film
+import com.example.proyecto_gestion_peliculas.domain.repository.FilmRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetMostPopularFilmsUseCase @Inject constructor(private val filmRepository: FilmRepositoryImpl) {
-    suspend fun invoke(page : Int) : List<Film>{
-        return filmRepository.getMostPopularFilms(page)
+class GetMostPopularFilmsUseCase @Inject constructor(private val repository: FilmRepository) {
+    operator fun invoke(): Flow<PagingData<Film>> {
+        return repository.getMostPopularFilmsPaging()
     }
 }

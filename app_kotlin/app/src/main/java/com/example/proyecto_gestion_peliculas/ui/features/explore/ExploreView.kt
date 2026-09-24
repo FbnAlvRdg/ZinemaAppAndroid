@@ -14,6 +14,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.proyecto_gestion_peliculas.core.error.Error
 import com.example.proyecto_gestion_peliculas.domain.model.Genre
 import com.example.proyecto_gestion_peliculas.ui.components.bottombar.AppBottomBar
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
@@ -59,8 +64,10 @@ fun ExploreScreen(navigator: Navigator) {
     var selectedPoster by remember { mutableStateOf<String?>(null) }
 
     val context = LocalContext.current
+    val listItemError = listItemViewModel.uiState.error
     val confirmation = listItemViewModel.confirmation
-    val error = listItemViewModel.error
+    val uiState = viewModel.uiState
+    val snackbarHostState by remember { mutableStateOf(SnackbarHostState()) }
 
 
     LaunchedEffect(Unit) {
@@ -71,10 +78,9 @@ fun ExploreScreen(navigator: Navigator) {
         viewModel.loadInitialTvSeries()
     }
 
-
-    LaunchedEffect(error) {
-        error?.let {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+    LaunchedEffect(listItemError) {
+        listItemError?.let {
+            Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
             listItemViewModel.clearError()
         }
     }
@@ -83,6 +89,34 @@ fun ExploreScreen(navigator: Navigator) {
         confirmation?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             listItemViewModel.clearConfirmation()
+        }
+    }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { error ->
+            val message = when (error) {
+                Error.CONNECTION_ERROR ->
+                    "Se ha producido un error de conexión"
+
+                Error.SERVER_ERROR ->
+                    "Error en el servidor"
+
+                Error.NOT_FOUND ->
+                    "No se ha encontrado el contenido"
+
+                Error.UNKNOWN ->
+                    "Ha ocurrido un error inesperado"
+
+                else ->
+                    "Error desconocido"
+            }
+
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+
+            viewModel.cleanError()
         }
     }
 
@@ -105,10 +139,12 @@ fun ExploreScreen(navigator: Navigator) {
                     }
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
 
     ) { paddingValues ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()

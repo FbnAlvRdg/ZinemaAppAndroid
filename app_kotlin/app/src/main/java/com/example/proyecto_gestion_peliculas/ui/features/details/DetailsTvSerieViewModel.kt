@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas.ui.features.tvserie.details
+package com.example.proyecto_gestion_peliculas.ui.features.details
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
