@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.proyecto_gestion_peliculas.R
@@ -114,33 +114,31 @@ fun ListScreen(navigator: Navigator) {
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             items(lists) { list ->
-                Card(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(16.dp)
                         .clickable {
                             navigator.navigateToListItems(list.id.toLong())
-                        }
+                        },
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = list.name)
-                        IconButton(
-                            onClick = {
-                                selectedListId = list.id.toLong()
-                                showDeleteDialog = true
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.icono_delete),
-                                contentDescription = "Delete List"
-                            )
+                    Text(
+                        text = list.name,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                    IconButton(
+                        onClick = {
+                            selectedListId = list.id.toLong()
+                            showDeleteDialog = true
                         }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.icono_delete),
+                            contentDescription = "Delete List"
+                        )
                     }
                 }
             }
@@ -163,7 +161,9 @@ fun ListScreen(navigator: Navigator) {
             },
             dismissButton = {
                 TextButton(
-                    onClick = { }
+                    onClick = {
+                        showDialog = false
+                    }
                 ) {
                     Text("Cancelar")
                 }

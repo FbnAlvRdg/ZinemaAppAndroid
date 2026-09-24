@@ -1,14 +1,15 @@
 package com.example.proyecto_gestion_peliculas.ui.features.details
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -18,22 +19,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
-import java.time.format.DateTimeFormatter
-
 
 @Composable
 fun DetailFilmScreen(id: Int, navigator: Navigator) {
     val scroll = rememberScrollState()
-    val viewModel: DetailsFilmViewModel = hiltViewModel()
+    val viewModel: DetailsViewModel = hiltViewModel()
 
     LaunchedEffect(id) {
         viewModel.loadFilm(id)
@@ -53,143 +49,106 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp)
-                .verticalScroll(scroll)
+                .verticalScroll(state = scroll)
         ) {
-            AsyncImage(
-                model = film.poster,
-                contentDescription = "Portada",
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(2f / 3f),
-                contentScale = ContentScale.Crop
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = film.title,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.headlineMedium,
-                )
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .weight(1f)
+                        .fillMaxHeight()
+                ) {
+                    AsyncImage(
+                        model = film.poster,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(200.dp)
+                            .aspectRatio(2f / 3f)
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        text = film.title,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Géneros",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Text(
+                        text = film.genres.joinToString(", ") { genre -> genre.name },
+                        style = MaterialTheme.typography.labelSmall
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Actores",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Text(
+                        text = film.actors.joinToString(", ") { actor -> actor.name },
+                        style = MaterialTheme.typography.labelSmall
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Lanzamiento",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Text(
+                        text = film.releaseDate?.toString() ?: "-",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Valoración",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Text(
+                        text = "⭐ ${film.rating ?: "-"}",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
-                Text(
-                    text = "Género: ",
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.weight(0.3f)
-                )
 
                 Text(
-                    text = film.genres.joinToString(", ") { it.name },
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.weight(0.7f)
+                    text = "Sinopsis",
+                    style = MaterialTheme.typography.titleSmall
                 )
+
+                film.synopsis?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Justify
+
+                    )
+                }
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
-            ) {
-                Text(
-                    text = "Director: ",
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.weight(0.3f)
-                )
-
-                Text(
-                    text = film.director ?: "",
-                    modifier = Modifier.weight(0.7f)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Actores: ",
-                    textAlign = TextAlign.Justify,
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.weight(0.3f)
-                )
-
-                Text(
-                    text = film.actors.joinToString(", ") { it.name },
-                    modifier = Modifier.weight(0.7f),
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
-            ) {
-                Text(
-                    text = "Lanzamiento: ",
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.weight(0.3f)
-                )
-
-                Text(
-                    text = film.releaseDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                        ?: "",
-                    modifier = Modifier.weight(0.7f)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
-            ) {
-                Text(
-                    text = "Valoración: ",
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.weight(0.3f)
-                )
-
-                Text(
-                    text = film.rating.toString(),
-                    modifier = Modifier.weight(0.7f)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Sinopsis",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            film.synopsis?.let {
-                Text(
-                    text = film.synopsis,
-                    textAlign = TextAlign.Justify,
-                    fontSize = 16.sp
-                )
-            } ?: "No disponible"
         }
     }
 }

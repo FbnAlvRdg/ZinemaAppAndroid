@@ -103,7 +103,7 @@ class ListItemViewModel @Inject constructor(
                 )
                 confirmation = null
             } finally {
-                uiState.copy(
+                uiState = uiState.copy(
                     isLoading = false
                 )
             }

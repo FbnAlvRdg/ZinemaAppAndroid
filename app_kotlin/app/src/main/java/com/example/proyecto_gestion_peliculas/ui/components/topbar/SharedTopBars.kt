@@ -15,7 +15,7 @@ import com.example.proyecto_gestion_peliculas.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainTopBar(header: String) {
+fun MainTopBar(header: String, onAction: () -> Unit) {
     TopAppBar(
         title = {
             Text(
@@ -30,7 +30,7 @@ fun MainTopBar(header: String) {
         ),
         actions = {
             IconButton(
-                onClick = {}
+                onClick = { onAction() }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.more_vert_icon),
@@ -53,7 +53,7 @@ fun AppTopBar(
         navigationIcon = {
             IconButton(
                 onClick = { back() },
-                ) {
+            ) {
                 Icon(
                     painter = painterResource(R.drawable.icono_back),
                     contentDescription = "Back",

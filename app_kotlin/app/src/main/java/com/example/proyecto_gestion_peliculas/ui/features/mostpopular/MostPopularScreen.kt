@@ -30,12 +30,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.proyecto_gestion_peliculas.core.error.Error
 import com.example.proyecto_gestion_peliculas.ui.components.bottombar.AppBottomBar
-import com.example.proyecto_gestion_peliculas.ui.components.cards.FilmCard
-import com.example.proyecto_gestion_peliculas.ui.components.cards.TvSerieCard
+import com.example.proyecto_gestion_peliculas.ui.components.screens.MediaScreen
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
 
 import com.example.proyecto_gestion_peliculas.ui.features.lists.ListsViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.lists.items.ListItemViewModel
+import com.example.proyecto_gestion_peliculas.ui.model.Media
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
 @Composable
@@ -171,14 +171,14 @@ fun MostPopularScreen(navigator: Navigator) {
                             items(films.itemCount) { index ->
                                 val film = films[index]
                                 film?.let {
-                                    FilmCard(
-                                        film,
-                                        onDetail = { navigator.navigateToDetailsFilm(film.id) },
+                                    MediaScreen(
+                                        navigator = navigator,
+                                        media = Media.MediaFilm(film),
                                         onLongClick = {
-                                            selectedTmdbId = film.id.toLong()
-                                            selectedType = "movie"
-                                            selectedTitle = film.title
-                                            selectedPoster = film.poster
+                                            selectedTmdbId = it.id.toLong()
+                                            selectedType = "movies"
+                                            selectedTitle = it.title
+                                            selectedPoster = it.poster
                                             showDialog = true
                                         }
                                     )
@@ -192,16 +192,16 @@ fun MostPopularScreen(navigator: Navigator) {
                     series?.let {
                         LazyColumn {
                             items(series.itemCount) { index ->
-                                val tvSerie = series[index]
-                                tvSerie?.let {
-                                    TvSerieCard(
-                                        tvSerie,
-                                        onDetail = { navigator.navigateToDetailsSerie(tvSerie.id) },
+                                val serie = series[index]
+                                serie?.let {
+                                    MediaScreen(
+                                        navigator = navigator,
+                                        media = Media.MediaSerie(serie),
                                         onLongClick = {
-                                            selectedTmdbId = tvSerie.id.toLong()
+                                            selectedTmdbId = it.id.toLong()
                                             selectedType = "tv"
-                                            selectedTitle = tvSerie.name
-                                            selectedPoster = tvSerie.poster
+                                            selectedTitle = it.name
+                                            selectedPoster = it.poster
                                             showDialog = true
                                         }
                                     )

@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -38,8 +37,10 @@ import com.example.proyecto_gestion_peliculas.domain.model.Genre
 import com.example.proyecto_gestion_peliculas.ui.components.bottombar.AppBottomBar
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
 import com.example.proyecto_gestion_peliculas.ui.components.dialogs.AddToListDialog
+import com.example.proyecto_gestion_peliculas.ui.components.screens.MediaScreen
 import com.example.proyecto_gestion_peliculas.ui.features.lists.ListsViewModel
 import com.example.proyecto_gestion_peliculas.ui.features.lists.items.ListItemViewModel
+import com.example.proyecto_gestion_peliculas.ui.model.Media
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
 @Composable
@@ -51,7 +52,7 @@ fun ExploreScreen(navigator: Navigator) {
 
     val selectedTab = viewModel.selectedTab
     val films = viewModel.films?.collectAsLazyPagingItems()
-    val tvSeries = viewModel.tvSeries?.collectAsLazyPagingItems()
+    val series = viewModel.tvSeries?.collectAsLazyPagingItems()
 
     val lists = listsViewModel.lists
 
@@ -203,10 +204,19 @@ fun ExploreScreen(navigator: Navigator) {
                         LazyColumn(modifier = Modifier.weight(1f)) {
                             items(films.itemCount) { index ->
                                 val film = films[index]
-                                Text(
-                                    modifier = Modifier.padding(16.dp),
-                                    text = film?.title ?: "No disponible"
-                                )
+                                film?.let {
+                                    MediaScreen(
+                                        navigator = navigator,
+                                        media = Media.MediaFilm(film),
+                                        onLongClick = {
+                                            selectedTmdbId = it.id.toLong()
+                                            selectedType = "movie"
+                                            selectedTitle = it.title
+                                            selectedPoster = it.poster
+                                            showDialog = true
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
@@ -238,14 +248,23 @@ fun ExploreScreen(navigator: Navigator) {
                         }
                     }
 
-                    tvSeries?.let { tvSeries ->
+                    series?.let { series ->
                         LazyColumn(modifier = Modifier.weight(1f)) {
-                            items(tvSeries.itemCount) { index ->
-                                val tvSerie = tvSeries[index]
-                                Text(
-                                    modifier = Modifier.padding(16.dp),
-                                    text = tvSerie?.name ?: "No disponible"
-                                )
+                            items(series.itemCount) { index ->
+                                val serie = series[index]
+                                serie?.let {
+                                    MediaScreen(
+                                        navigator = navigator,
+                                        media = Media.MediaSerie(serie),
+                                        onLongClick = {
+                                            selectedTmdbId = it.id.toLong()
+                                            selectedType = "tv"
+                                            selectedTitle = it.name
+                                            selectedPoster = it.poster
+                                            showDialog = true
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
