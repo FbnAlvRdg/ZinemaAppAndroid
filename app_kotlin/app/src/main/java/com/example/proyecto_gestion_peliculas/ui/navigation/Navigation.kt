@@ -7,18 +7,14 @@ import androidx.navigation3.ui.NavDisplay
 import com.example.proyecto_gestion_peliculas.ui.features.explore.ExploreScreen
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.NavigatorImpl
-import com.example.proyecto_gestion_peliculas.ui.features.views.AddFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.details.DetailFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.details.DetailsSerieScreen
 import com.example.proyecto_gestion_peliculas.ui.features.lists.ListScreen
 import com.example.proyecto_gestion_peliculas.ui.features.lists.items.ListItemsScreen
-import com.example.proyecto_gestion_peliculas.ui.features.views.EditFilmScreen
 import com.example.proyecto_gestion_peliculas.ui.features.mostpopular.MostPopularScreen
 import com.example.proyecto_gestion_peliculas.ui.features.toprated.TopRatedScreen
 import com.example.proyecto_gestion_peliculas.ui.features.login.LoginScreen
 import com.example.proyecto_gestion_peliculas.ui.features.signup.SignUpScreen
-import com.example.proyecto_gestion_peliculas.ui.features.tvserie.toprated.TopRatedSeriesScreen
-
 
 @Composable
 fun Navigation() {
@@ -48,24 +44,12 @@ fun Navigation() {
                 MostPopularScreen(navigator = navigator)
             }
 
-            entry<AddFilmScreen> {
-                AddFilmScreen(
-                    back = { backStack.remove(backStack.last()) }
-                )
-            }
-
             entry<ListScreenKey> {
                 ListScreen(navigator = navigator)
             }
 
             entry<ListItemsScreenKey> { key ->
                 ListItemsScreen(navigator, key.listId)
-            }
-
-            entry<EditFilmScreen> {
-                EditFilmScreen(
-                    back = { backStack.remove(backStack.last()) }
-                )
             }
 
             entry<DetailFilmScreenKey> { key ->
@@ -78,10 +62,6 @@ fun Navigation() {
 
             entry<TopRatedScreenKey> {
                 TopRatedScreen(navigator = navigator)
-            }
-
-            entry<TopRatedSeriesScreenKey> {
-                TopRatedSeriesScreen(navigator = navigator)
             }
         }
     )

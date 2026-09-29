@@ -31,7 +31,7 @@ class MostPopularViewModel @Inject constructor(
     private val getMostPopularSeriesUseCase: GetMostPopularTvSeriesUseCase
 ) : ViewModel() {
 
-    var header = "Most Popular"
+    var header = "Populares"
     var selectedTab by mutableIntStateOf(0)
         private set
     var films by mutableStateOf<Flow<PagingData<Film>>?>(emptyFlow())

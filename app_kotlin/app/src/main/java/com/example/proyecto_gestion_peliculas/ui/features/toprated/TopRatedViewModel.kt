@@ -32,7 +32,7 @@ class TopRatedViewModel @Inject constructor(
     private val getTopRatedSeriesUseCase: GetTopRatedSeriesPagingUseCase
 ) : ViewModel() {
 
-    var header = "Top Rated"
+    var header = "Mejor Valoradas"
     var selectedTab by mutableIntStateOf(0)
         private set
     var films by mutableStateOf<Flow<PagingData<Film>>?>(emptyFlow())

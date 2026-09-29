@@ -14,6 +14,8 @@ private val DarkColorScheme = darkColorScheme(
     primary = TerracottaRed,
     onPrimary = PureWhite,
 
+    onSecondary = TerracottaRed,
+
     background = GrisCarbon,
     onBackground = PureWhite,
 

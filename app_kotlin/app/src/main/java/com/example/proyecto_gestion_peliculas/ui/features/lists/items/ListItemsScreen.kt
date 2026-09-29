@@ -3,6 +3,7 @@ package com.example.proyecto_gestion_peliculas.ui.features.lists.items
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -26,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -95,45 +98,43 @@ fun ListItemsScreen(navigator: Navigator, listId: Long) {
                 val imageUrl = item.poster?.let {
                     "https://image.tmdb.org/t/p/w500$it"
                 }
-                Card(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(16.dp)
                         .clickable {
                             if (item.type == "movie") {
                                 navigator.navigateToDetailsFilm(item.tmdbId.toInt())
                             } else {
                                 navigator.navigateToDetailsSerie(item.tmdbId.toInt())
                             }
-                        }
+                        },
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = "Poster",
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        AsyncImage(
-                            model = imageUrl,
-                            contentDescription = "Poster",
-                            modifier = Modifier
-                                .width(60.dp)
-                                .height(90.dp)
-                        )
-                        Text(text = "${item.title}")
-                        IconButton(
-                            onClick = {
-                                selectedListId = listId
-                                selectedItemId = item.id
-                                showDeleteDialog = true
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.icono_delete),
-                                contentDescription = "Delete item"
-                            )
+                            .width(60.dp)
+                            .aspectRatio(2f / 3f)
+                    )
+                    Text(
+                        text = "${item.title}",
+                        textAlign = TextAlign.Start,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    IconButton(
+                        onClick = {
+                            selectedListId = listId
+                            selectedItemId = item.id
+                            showDeleteDialog = true
                         }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.icono_delete),
+                            contentDescription = "Delete item"
+                        )
                     }
                 }
             }

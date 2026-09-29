@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -33,7 +35,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun DetailsSerieScreen(id: Int, navigator: Navigator) {
     val scroll = rememberScrollState()
-    val viewModel : DetailsTvSerieViewModel = hiltViewModel()
+    val viewModel: DetailsViewModel = hiltViewModel()
     val serie = viewModel.serie
 
     LaunchedEffect(id) {
@@ -52,140 +54,119 @@ fun DetailsSerieScreen(id: Int, navigator: Navigator) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp)
-                .verticalScroll(scroll)
+                .verticalScroll(state = scroll)
         ) {
-            AsyncImage(
-                model = serie?.poster,
-                contentDescription = "Portada",
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(2f / 3f),
-                contentScale = ContentScale.Crop
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
             ) {
-                serie?.name?.let {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .weight(1f)
+                        .fillMaxHeight()
+                ) {
+                    AsyncImage(
+                        model = serie?.poster ?: "-",
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(200.dp)
+                            .aspectRatio(2f / 3f)
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    serie?.name?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.titleMedium,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Text(
-                        text = it,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.headlineMedium,
+                        text = "Géneros",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    serie?.genres?.joinToString(", ") { genre -> genre?.name.toString() }?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Actores",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    serie?.actors?.joinToString(", ") { actor -> actor?.name.toString() }?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Lanzamiento",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Text(
+                        text = serie?.firstAireDate ?: "-",
+                        style = MaterialTheme.typography.labelSmall
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Valoración",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Text(
+                        text = "⭐ ${serie?.rating ?: "-"}",
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
+
                 Text(
-                    text = "Género: ",
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.weight(0.3f)
+                    text = "Sinopsis",
+                    style = MaterialTheme.typography.titleSmall
                 )
 
-                serie?.genres?.joinToString(", ") { it?.name.toString() }?.let {
+                serie?.overview?.let {
                     Text(
                         text = it,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.weight(0.7f)
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Justify
                     )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = "Actores: ",
-                    textAlign = TextAlign.Justify,
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.weight(0.3f)
-                )
-
-                serie?.actors?.joinToString(", ") { it?.name.toString() }?.let {
-                    Text(
-                        text = it,
-                        modifier = Modifier.weight(0.7f),
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
-            ) {
-                Text(
-                    text = "Lanzamiento: ",
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.weight(0.3f)
-                )
-
-                Text(
-                    text = serie?.firstAireDate?.let {
-                        LocalDate.parse(it).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                    } ?: "Fecha desconocida",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.weight(0.7f)
+                } ?: Text(
+                    text = "No disponible",
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Justify
                 )
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
-            ) {
-                Text(
-                    text = "Valoración: ",
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.weight(0.3f)
-                )
-
-                Text(
-                    text = serie?.rating.toString(),
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.weight(0.7f)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Sinopsis",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            serie?.overview?.let {
-                Text(
-                    text = it,
-                    textAlign = TextAlign.Justify,
-                    fontSize = 16.sp
-                )
-            } ?: "No disponible"
         }
     }
-
 }
+
+
+
+

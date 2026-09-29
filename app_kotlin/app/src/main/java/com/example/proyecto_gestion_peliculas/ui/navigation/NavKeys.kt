@@ -24,12 +24,6 @@ data object ListScreenKey : NavKey
 data class ListItemsScreenKey(val listId : Long) : NavKey
 
 @Serializable
-data object AddFilmScreen : NavKey
-
-@Serializable
-data object EditFilmScreen : NavKey
-
-@Serializable
 data class DetailFilmScreenKey(val id: Int) : NavKey
 
 @Serializable

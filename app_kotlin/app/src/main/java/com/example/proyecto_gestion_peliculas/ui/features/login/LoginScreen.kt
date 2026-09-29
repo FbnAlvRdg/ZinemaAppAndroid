@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -23,10 +24,13 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -45,14 +49,14 @@ import com.example.proyecto_gestion_peliculas.ui.components.dialogs.LogInAlertDi
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.MainTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
 
-
 @Composable
 fun LoginScreen(navigator: Navigator) {
     val viewModel: LoginScreenViewModel = hiltViewModel()
     val context = LocalContext.current
     val uiState = viewModel.uiState
-    val snackbarHostState = remember { SnackbarHostState() }
-    val alertDialogLogIn = remember { mutableStateOf(false) }
+    val snackbarHostState by remember { mutableStateOf(SnackbarHostState()) }
+    var alertDialogLogIn by remember { mutableStateOf(false) }
+    var showMessage by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         val savedEmail = readEmail(context)
@@ -92,7 +96,7 @@ fun LoginScreen(navigator: Navigator) {
     }
 
     Scaffold(
-        topBar = { MainTopBar(viewModel.title) },
+        topBar = { MainTopBar(viewModel.title, onAction = { showMessage = true }) },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }
@@ -210,7 +214,7 @@ fun LoginScreen(navigator: Navigator) {
                 Button(
                     onClick = {
                         if (viewModel.email.isBlank() || viewModel.password.isBlank()) {
-                            alertDialogLogIn.value = true
+                            alertDialogLogIn = true
                         } else {
                             viewModel.login()
                         }
@@ -251,9 +255,39 @@ fun LoginScreen(navigator: Navigator) {
     }
 
     LogInAlertDialog(
-        show = alertDialogLogIn.value,
+        show = alertDialogLogIn,
         title = "Error",
         message = "El email o la contraseña no puede estar vacío",
-        onDismiss = { alertDialogLogIn.value = false }
+        onDismiss = { alertDialogLogIn = false }
     )
+
+    if (showMessage) {
+        AlertDialog(
+            onDismissRequest = {
+                showMessage = false
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showMessage = false
+                    }
+                ) {
+                    Text(
+                        text = "Aceptar"
+                    )
+                }
+            },
+            title =
+                {
+                    Text(
+                        text = "About TMDB"
+                    )
+                },
+            text = {
+                Text(
+                    text = "Data available in this app is provided by The Movie Database (TMDB)."
+                )
+            }
+        )
+    }
 }
