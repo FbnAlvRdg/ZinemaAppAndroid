@@ -1,11 +1,11 @@
 package com.zinemaapp.zinemaapp.service;
 
-import com.zinemaapp.zinemaapp.domain.User;
+import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.UserEntity;
 import com.zinemaapp.zinemaapp.dto.internal.login.LoginRequestDTO;
 import com.zinemaapp.zinemaapp.dto.internal.signup.RegisterRequestDTO;
 import com.zinemaapp.zinemaapp.dto.internal.UserResponseDTO;
 import com.zinemaapp.zinemaapp.dto.internal.login.LoginResponseDTO;
-import com.zinemaapp.zinemaapp.repository.UserRepository;
+import com.zinemaapp.zinemaapp.infrastructure.repository.UserRepository;
 import com.zinemaapp.zinemaapp.security.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,23 +39,23 @@ public class UserService {
             );
         }
 
-        User user = new User();
-        user.setEmail(registerRequestDTO.getEmail());
-        user.setUsername(registerRequestDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(registerRequestDTO.getEmail());
+        userEntity.setUsername(registerRequestDTO.getUsername());
+        userEntity.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
 
-        User userSaved = userRepository.save(user);
+        UserEntity userEntitySaved = userRepository.save(userEntity);
 
         UserResponseDTO userResponseDTO = new UserResponseDTO();
-        userResponseDTO.setId(userSaved.getId());
-        userResponseDTO.setEmail(userSaved.getEmail());
-        userResponseDTO.setUsername(userSaved.getUsername());
+        userResponseDTO.setId(userEntitySaved.getId());
+        userResponseDTO.setEmail(userEntitySaved.getEmail());
+        userResponseDTO.setUsername(userEntitySaved.getUsername());
 
         return userResponseDTO;
     }
 
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
-        Optional<User> user = userRepository.findByEmail(loginRequestDTO.getEmail());
+        Optional<UserEntity> user = userRepository.findByEmail(loginRequestDTO.getEmail());
 
         if (user.isEmpty()) {
             throw new ResponseStatusException(
@@ -63,37 +63,37 @@ public class UserService {
             );
         }
 
-        User userToResponse = user.get();
+        UserEntity userEntityToResponse = user.get();
 
-        if (!passwordEncoder.matches(loginRequestDTO.getPassword(), userToResponse.getPassword())) {
+        if (!passwordEncoder.matches(loginRequestDTO.getPassword(), userEntityToResponse.getPassword())) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, "La contraseña no es correcta"
             );
         }
 
-        String token = jwtService.generateToken(userToResponse);
+        String token = jwtService.generateToken(userEntityToResponse);
 
         UserResponseDTO userResponseDTO = new UserResponseDTO();
-        userResponseDTO.setId(userToResponse.getId());
-        userResponseDTO.setUsername(userToResponse.getUsername());
-        userResponseDTO.setEmail(userToResponse.getEmail());
+        userResponseDTO.setId(userEntityToResponse.getId());
+        userResponseDTO.setUsername(userEntityToResponse.getUsername());
+        userResponseDTO.setEmail(userEntityToResponse.getEmail());
 
         return new LoginResponseDTO(token, userResponseDTO);
     }
 
     public UserResponseDTO getCurrentUser(String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
+        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
 
         if (userOptional.isEmpty()) {
             throw new RuntimeException("El email no se ha encontrado");
         }
 
-        User user = userOptional.get();
+        UserEntity userEntity = userOptional.get();
 
         UserResponseDTO userResponseDTO = new UserResponseDTO();
-        userResponseDTO.setId(user.getId());
-        userResponseDTO.setEmail(user.getEmail());
-        userResponseDTO.setUsername(user.getUsername());
+        userResponseDTO.setId(userEntity.getId());
+        userResponseDTO.setEmail(userEntity.getEmail());
+        userResponseDTO.setUsername(userEntity.getUsername());
 
         return userResponseDTO;
     }

@@ -3,8 +3,8 @@ package com.zinemaapp.zinemaapp.application;
 import com.zinemaapp.zinemaapp.dto.external.TmdbGenre;
 import com.zinemaapp.zinemaapp.dto.external.TmdbGenreResponse;
 import com.zinemaapp.zinemaapp.dto.internal.GenreDTO;
-import com.zinemaapp.zinemaapp.infrastructure.TmdbClient;
-import com.zinemaapp.zinemaapp.mapper.GenreMapper;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.client.TmdbClient;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper.TmdbGenreMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,11 +13,11 @@ import java.util.List;
 @Service
 public class GenreService {
     private final TmdbClient tmdbClient;
-    private final GenreMapper genreMapper;
+    private final TmdbGenreMapper tmdbGenreMapper;
 
-    public GenreService(TmdbClient tmdbClient, GenreMapper genreMapper) {
+    public GenreService(TmdbClient tmdbClient, TmdbGenreMapper tmdbGenreMapper) {
         this.tmdbClient = tmdbClient;
-        this.genreMapper = genreMapper;
+        this.tmdbGenreMapper = tmdbGenreMapper;
     }
 
     public List<GenreDTO> getFilmGenres() {
@@ -26,7 +26,7 @@ public class GenreService {
         List<GenreDTO> genres = new ArrayList<>();
 
         for (TmdbGenre tmdbGenre : tmdbGenreResponse.getGenres()) {
-            genres.add(genreMapper.toGenreDTO(tmdbGenre));
+            genres.add(tmdbGenreMapper.toGenreDTO(tmdbGenre));
         }
 
         return genres;
@@ -37,7 +37,7 @@ public class GenreService {
 
         return tmdbGenreResponse.getGenres()
                 .stream()
-                .map(genreMapper::toGenreDTO)
+                .map(tmdbGenreMapper::toGenreDTO)
                 .toList();
     }
 }

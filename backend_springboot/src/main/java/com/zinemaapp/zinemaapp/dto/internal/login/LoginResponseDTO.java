@@ -1,6 +1,5 @@
 package com.zinemaapp.zinemaapp.dto.internal.login;
 
-import com.zinemaapp.zinemaapp.domain.User;
 import com.zinemaapp.zinemaapp.dto.internal.UserResponseDTO;
 
 public class LoginResponseDTO {

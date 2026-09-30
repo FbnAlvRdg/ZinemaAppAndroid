@@ -1,9 +1,9 @@
 package com.zinemaapp.zinemaapp.service;
 
-import com.zinemaapp.zinemaapp.domain.ListUser;
-import com.zinemaapp.zinemaapp.domain.User;
-import com.zinemaapp.zinemaapp.repository.ListUserRepository;
-import com.zinemaapp.zinemaapp.repository.UserRepository;
+import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.ListUserEntity;
+import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.UserEntity;
+import com.zinemaapp.zinemaapp.infrastructure.repository.ListUserRepository;
+import com.zinemaapp.zinemaapp.infrastructure.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,40 +20,40 @@ public class ListUserService {
         this.userRepository = userRepository;
     }
 
-    public ListUser createList(String name, User user) {
-        ListUser list = new ListUser();
+    public ListUserEntity createList(String name, UserEntity userEntity) {
+        ListUserEntity list = new ListUserEntity();
         list.setName(name);
-        list.setUser(user);
+        list.setUser(userEntity);
 
         return listUserRepository.save(list);
     }
 
-    public List<ListUser> getListsByUser(User user) {
-        return listUserRepository.findByUser(user);
+    public List<ListUserEntity> getListsByUser(UserEntity userEntity) {
+        return listUserRepository.findByUser(userEntity);
     }
 
     public boolean deleteList(String email, Long listId) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
+        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
 
         if (userOptional.isEmpty()) {
             throw new RuntimeException("No se ha encontrado el usuario");
         }
 
-        User user = userOptional.get();
+        UserEntity userEntity = userOptional.get();
 
-        Optional<ListUser> listUserOptional = listUserRepository.findById(listId);
+        Optional<ListUserEntity> listUserOptional = listUserRepository.findById(listId);
 
         if (listUserOptional.isEmpty()) {
             throw new RuntimeException("No se ha encontrado la lista");
         }
 
-        ListUser listUser = listUserOptional.get();
+        ListUserEntity listUserEntity = listUserOptional.get();
 
-        if (!listUser.getUser().getId().equals(user.getId())) {
+        if (!listUserEntity.getUser().getId().equals(userEntity.getId())) {
             throw new RuntimeException("El usuario no tiene permisos sobre la lista");
         }
 
-        listUserRepository.delete(listUser);
+        listUserRepository.delete(listUserEntity);
         return true;
     }
 }

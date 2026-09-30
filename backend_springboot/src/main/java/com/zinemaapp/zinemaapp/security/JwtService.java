@@ -1,6 +1,6 @@
 package com.zinemaapp.zinemaapp.security;
 
-import com.zinemaapp.zinemaapp.domain.User;
+import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.UserEntity;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +18,8 @@ public class JwtService {
     @Value("${jwt.secret.key}")
     private String SECRET_KEY;
 
-    public String generateToken(User user) {
-        return Jwts.builder().subject(user.getEmail()).issuedAt(new Date())
+    public String generateToken(UserEntity userEntity) {
+        return Jwts.builder().subject(userEntity.getEmail()).issuedAt(new Date())
                 .expiration(Date.from(Instant.now().plus(Duration.ofDays(365)))).signWith(getSigningKey()).compact();
     }
 

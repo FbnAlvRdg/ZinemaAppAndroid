@@ -1,10 +1,10 @@
 package com.zinemaapp.zinemaapp.application;
 
-import com.zinemaapp.zinemaapp.dto.external.film.TmdbFilmsResponse;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.film.TmdbFilmsResponse;
 import com.zinemaapp.zinemaapp.dto.internal.FilmDTO;
-import com.zinemaapp.zinemaapp.dto.external.film.TmdbFilmResponse;
-import com.zinemaapp.zinemaapp.infrastructure.TmdbClient;
-import com.zinemaapp.zinemaapp.mapper.FilmMapper;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.film.TmdbFilmResponse;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.client.TmdbClient;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper.TmdbFilmMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,24 +13,24 @@ import java.util.List;
 @Service
 public class FilmService {
     private final TmdbClient tmdbClient;
-    private final FilmMapper filmMapper;
+    private final TmdbFilmMapper tmdbFilmMapper;
 
-    public FilmService(TmdbClient tmdbClient, FilmMapper filmMapper) {
+    public FilmService(TmdbClient tmdbClient, TmdbFilmMapper tmdbFilmMapper) {
         this.tmdbClient = tmdbClient;
-        this.filmMapper = filmMapper;
+        this.tmdbFilmMapper = tmdbFilmMapper;
     }
 
     public List<FilmDTO> getPopularFilms(int page) {
         try {
             TmdbFilmsResponse tmdbPopularResponse = tmdbClient.getMostPopularFilms(page);
 
-            List<FilmDTO> films = new ArrayList<>();
+            List<FilmDTO> filmDTOS = new ArrayList<>();
 
             for (TmdbFilmResponse tmdbFilm : tmdbPopularResponse.getResults()) {
-                films.add(filmMapper.toFilmDTO(tmdbFilm));
+                filmDTOS.add(tmdbFilmMapper.toDomain(tmdbFilm));
             }
 
-            return films;
+            return filmDTOS;
         } catch (Exception e) {
             throw new RuntimeException("Error obteniendo las películas más populares", e);
         }
@@ -39,29 +39,29 @@ public class FilmService {
     public List<FilmDTO> getTopRatedFilms(int page) {
         TmdbFilmsResponse tmdbTopRatedResponse = tmdbClient.getTopRatedFilms(page);
 
-        List<FilmDTO> films = new ArrayList<>();
+        List<FilmDTO> filmDTOS = new ArrayList<>();
 
         for (TmdbFilmResponse tmdbFilm : tmdbTopRatedResponse.getResults()) {
-            films.add(filmMapper.toFilmDTO(tmdbFilm));
+            filmDTOS.add(tmdbFilmMapper.toDomain(tmdbFilm));
         }
 
-        return films;
+        return filmDTOS;
     }
 
     public List<FilmDTO> getFilmsByGenre(int idGenre, int page) {
         TmdbFilmsResponse tmdbFilmsResponse = tmdbClient.getFilmsByGenre(idGenre, page);
 
-        List<FilmDTO> films = new ArrayList<>();
+        List<FilmDTO> filmDTOS = new ArrayList<>();
 
         for (TmdbFilmResponse tmdbFilm : tmdbFilmsResponse.getResults()) {
-            films.add(filmMapper.toFilmDTO(tmdbFilm));
+            filmDTOS.add(tmdbFilmMapper.toDomain(tmdbFilm));
         }
 
-        return films;
+        return filmDTOS;
     }
 
     public FilmDTO getFilmById(int id) {
         TmdbFilmResponse tmdbFilmResponse = tmdbClient.getFilmById(id);
-        return filmMapper.toFilmDTO(tmdbFilmResponse);
+        return tmdbFilmMapper.toDomain(tmdbFilmResponse);
     }
 }

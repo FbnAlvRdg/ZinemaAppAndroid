@@ -1,10 +1,10 @@
 package com.zinemaapp.zinemaapp.application;
 
-import com.zinemaapp.zinemaapp.dto.external.tvserie.TmdbTvSerieResponse;
-import com.zinemaapp.zinemaapp.dto.external.tvserie.TmdbTvSeriesResponse;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.tvserie.TmdbTvSerieResponse;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.tvserie.TmdbTvSeriesResponse;
 import com.zinemaapp.zinemaapp.dto.internal.TvSerieDTO;
-import com.zinemaapp.zinemaapp.infrastructure.TmdbClient;
-import com.zinemaapp.zinemaapp.mapper.TvSerieMapper;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.client.TmdbClient;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper.TmdbTvSerieMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,16 +13,16 @@ import java.util.List;
 @Service
 public class TvSerieService {
     private final TmdbClient tmdbClient;
-    private final TvSerieMapper tvSerieMapper;
+    private final TmdbTvSerieMapper tmdbTvSerieMapper;
 
-    public TvSerieService(TmdbClient tmdbClient, TvSerieMapper tvSerieMapper) {
+    public TvSerieService(TmdbClient tmdbClient, TmdbTvSerieMapper tmdbTvSerieMapper) {
         this.tmdbClient = tmdbClient;
-        this.tvSerieMapper = tvSerieMapper;
+        this.tmdbTvSerieMapper = tmdbTvSerieMapper;
     }
 
     public TvSerieDTO getSerieById(int id) {
         TmdbTvSerieResponse tmdbTvSerieResponse = tmdbClient.getSeriesById(id);
-        return tvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse);
+        return tmdbTvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse);
     }
 
     public List<TvSerieDTO> getTopRatedSeries(int page) {
@@ -31,7 +31,7 @@ public class TvSerieService {
         List<TvSerieDTO> series = new ArrayList<>();
 
         for (TmdbTvSerieResponse tmdbTvSerieResponse : tmdbTvSeriesResponse.getResults()) {
-            series.add(tvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse));
+            series.add(tmdbTvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse));
         }
 
         return series;
@@ -43,7 +43,7 @@ public class TvSerieService {
         List<TvSerieDTO> series = new ArrayList<>();
 
         for (TmdbTvSerieResponse tmdbTvSerieResponse : tmdbTvSeriesResponse.getResults()) {
-            series.add(tvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse));
+            series.add(tmdbTvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse));
         }
 
         return series;
@@ -55,7 +55,7 @@ public class TvSerieService {
         List<TvSerieDTO> series = new ArrayList<>();
 
         for (TmdbTvSerieResponse tmdbTvSerieResponse : tmdbTvSeriesResponse.getResults()) {
-            series.add(tvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse));
+            series.add(tmdbTvSerieMapper.toTvSerieDTO(tmdbTvSerieResponse));
         }
 
         return series;
