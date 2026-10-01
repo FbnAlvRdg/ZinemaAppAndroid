@@ -5,9 +5,11 @@ import com.zinemaapp.zinemaapp.domain.repository.FilmRepository;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.client.TmdbClient;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper.TmdbFilmMapper;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper.TmdbFilmsMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class TmdbFilmRepositoryImpl implements FilmRepository {
     private final TmdbClient tmdbClient;
     private final TmdbFilmsMapper tmdbFilmsMapper;

@@ -1,6 +1,6 @@
 package com.zinemaapp.zinemaapp.infrastructure.tmdb.client;
 
-import com.zinemaapp.zinemaapp.dto.external.TmdbGenreResponse;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.genre.TmdbGenreResponse;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.film.TmdbFilmResponse;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.film.TmdbFilmsResponse;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.tvserie.TmdbTvSerieResponse;
@@ -75,7 +75,7 @@ public class TmdbClient {
     }
 
     public TmdbFilmsResponse getFilmsByGenre(int idGenre, int page) {
-        String url = buildUrl("/discover/movie") + "&with_genres=" + idGenre;
+        String url = buildUrl("/discover/movie") + "&with_genres=" + idGenre + "&page=" + page;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .GET()

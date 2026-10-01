@@ -4,15 +4,17 @@ import com.zinemaapp.zinemaapp.domain.model.ListItem;
 import com.zinemaapp.zinemaapp.domain.model.ListUser;
 import com.zinemaapp.zinemaapp.domain.model.User;
 import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.ListUserEntity;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-
+@Component
 public class ListUserMapper {
     private final UserMapper userMapper;
     private final ListItemMapper listItemMapper;
 
-    public ListUserMapper(UserMapper userMapper, ListItemMapper listItemMapper) {
+    public ListUserMapper(@Lazy UserMapper userMapper, ListItemMapper listItemMapper) {
         this.userMapper = userMapper;
         this.listItemMapper = listItemMapper;
     }

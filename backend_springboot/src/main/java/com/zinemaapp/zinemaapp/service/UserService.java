@@ -1,12 +1,12 @@
 package com.zinemaapp.zinemaapp.service;
 
 import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.UserEntity;
-import com.zinemaapp.zinemaapp.dto.internal.login.LoginRequestDTO;
-import com.zinemaapp.zinemaapp.dto.internal.signup.RegisterRequestDTO;
-import com.zinemaapp.zinemaapp.dto.internal.UserResponseDTO;
-import com.zinemaapp.zinemaapp.dto.internal.login.LoginResponseDTO;
+import com.zinemaapp.zinemaapp.presentation.dto.login.LoginRequestDTO;
+import com.zinemaapp.zinemaapp.presentation.dto.signup.RegisterRequestDTO;
+import com.zinemaapp.zinemaapp.presentation.dto.signup.UserResponseDTO;
+import com.zinemaapp.zinemaapp.presentation.dto.login.LoginResponseDTO;
 import com.zinemaapp.zinemaapp.infrastructure.repository.UserRepository;
-import com.zinemaapp.zinemaapp.security.JwtService;
+import com.zinemaapp.zinemaapp.infrastructure.security.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,9 @@
 package com.zinemaapp.zinemaapp.presentation.controller;
 
-import com.zinemaapp.zinemaapp.dto.internal.login.LoginRequestDTO;
-import com.zinemaapp.zinemaapp.dto.internal.signup.RegisterRequestDTO;
-import com.zinemaapp.zinemaapp.dto.internal.UserResponseDTO;
-import com.zinemaapp.zinemaapp.dto.internal.login.LoginResponseDTO;
+import com.zinemaapp.zinemaapp.presentation.dto.login.LoginRequestDTO;
+import com.zinemaapp.zinemaapp.presentation.dto.signup.RegisterRequestDTO;
+import com.zinemaapp.zinemaapp.presentation.dto.signup.UserResponseDTO;
+import com.zinemaapp.zinemaapp.presentation.dto.login.LoginResponseDTO;
 import com.zinemaapp.zinemaapp.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

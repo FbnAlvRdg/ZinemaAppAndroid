@@ -1,8 +1,8 @@
 package com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.film;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.zinemaapp.zinemaapp.dto.external.TmdbCredits;
-import com.zinemaapp.zinemaapp.dto.external.TmdbGenre;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.credits.TmdbCredits;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.genre.TmdbGenre;
 
 import java.util.List;
 

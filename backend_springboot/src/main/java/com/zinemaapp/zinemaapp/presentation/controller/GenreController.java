@@ -1,7 +1,9 @@
 package com.zinemaapp.zinemaapp.presentation.controller;
 
-import com.zinemaapp.zinemaapp.application.GenreService;
-import com.zinemaapp.zinemaapp.dto.internal.GenreDTO;
+import com.zinemaapp.zinemaapp.application.usecase.genre.GetFilmsGenresUseCase;
+import com.zinemaapp.zinemaapp.application.usecase.genre.GetTvSeriesGenresUseCase;
+import com.zinemaapp.zinemaapp.presentation.dto.credits.GenreDTO;
+import com.zinemaapp.zinemaapp.presentation.mapper.GenreMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,22 +14,28 @@ import java.util.List;
 @RestController
 @RequestMapping("/genres")
 public class GenreController {
+    private final GetFilmsGenresUseCase getFilmsGenresUseCase;
+    private final GetTvSeriesGenresUseCase getTvSeriesGenresUseCase;
+    private final GenreMapper genreMapper;
 
-    private final GenreService genreService;
-
-    public GenreController(GenreService genreService) {
-        this.genreService = genreService;
+    public GenreController(GetFilmsGenresUseCase getFilmsGenresUseCase, GetTvSeriesGenresUseCase getTvSeriesGenresUseCase, GenreMapper genreMapper) {
+        this.getFilmsGenresUseCase = getFilmsGenresUseCase;
+        this.getTvSeriesGenresUseCase = getTvSeriesGenresUseCase;
+        this.genreMapper = genreMapper;
     }
 
     @GetMapping
     @RequestMapping("/films")
     public ResponseEntity<List<GenreDTO>> getFilmGenres() {
-        return ResponseEntity.ok(genreService.getFilmGenres());
+        List<GenreDTO> filmGenres = getFilmsGenresUseCase.getFilmGenres().stream().map(genreMapper::toDTO).toList();
+        return ResponseEntity.ok(filmGenres);
     }
 
     @GetMapping
     @RequestMapping("/tv")
-    public ResponseEntity<List<GenreDTO>> getTvGenres(){
-        return ResponseEntity.ok(genreService.getTvGenres());
+    public ResponseEntity<List<GenreDTO>> getTvGenres() {
+        List<GenreDTO> tvSeriesGenres = getTvSeriesGenresUseCase.getTvSeriesGenres().stream().map(genreMapper::toDTO).toList();
+        return ResponseEntity.ok(tvSeriesGenres);
     }
+
 }

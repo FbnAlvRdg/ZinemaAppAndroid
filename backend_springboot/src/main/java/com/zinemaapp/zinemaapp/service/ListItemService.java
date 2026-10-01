@@ -5,7 +5,7 @@ import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.ListUserEntity;
 import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.UserEntity;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.film.TmdbFilmResponse;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.tvserie.TmdbTvSerieResponse;
-import com.zinemaapp.zinemaapp.dto.internal.items.ListItemResponseDTO;
+import com.zinemaapp.zinemaapp.presentation.dto.items.ListItemResponseDTO;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.client.TmdbClient;
 import com.zinemaapp.zinemaapp.infrastructure.repository.ListItemRepository;
 import com.zinemaapp.zinemaapp.infrastructure.repository.ListUserRepository;

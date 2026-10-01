@@ -2,10 +2,10 @@ package com.zinemaapp.zinemaapp.presentation.controller;
 
 import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.ListUserEntity;
 import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.UserEntity;
-import com.zinemaapp.zinemaapp.dto.internal.items.AddItemRequest;
-import com.zinemaapp.zinemaapp.dto.internal.items.ListItemResponseDTO;
-import com.zinemaapp.zinemaapp.dto.internal.lists.CreateListRequest;
-import com.zinemaapp.zinemaapp.dto.internal.lists.ListResponseDTO;
+import com.zinemaapp.zinemaapp.presentation.dto.items.AddItemRequest;
+import com.zinemaapp.zinemaapp.presentation.dto.items.ListItemResponseDTO;
+import com.zinemaapp.zinemaapp.presentation.dto.lists.CreateListRequest;
+import com.zinemaapp.zinemaapp.presentation.dto.lists.ListResponseDTO;
 import com.zinemaapp.zinemaapp.infrastructure.repository.UserRepository;
 import com.zinemaapp.zinemaapp.service.ListItemService;
 import com.zinemaapp.zinemaapp.service.ListUserService;

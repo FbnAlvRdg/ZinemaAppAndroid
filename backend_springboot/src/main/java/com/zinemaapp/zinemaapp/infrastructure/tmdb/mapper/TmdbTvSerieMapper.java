@@ -3,8 +3,8 @@ package com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper;
 import com.zinemaapp.zinemaapp.domain.model.Actor;
 import com.zinemaapp.zinemaapp.domain.model.Genre;
 import com.zinemaapp.zinemaapp.domain.model.TvSerie;
-import com.zinemaapp.zinemaapp.dto.external.TmdbCast;
-import com.zinemaapp.zinemaapp.dto.external.TmdbGenre;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.credits.TmdbCast;
+import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.genre.TmdbGenre;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.tvserie.TmdbTvSerieResponse;
 import org.springframework.stereotype.Component;
 
