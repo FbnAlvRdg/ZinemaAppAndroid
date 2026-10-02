@@ -15,7 +15,4 @@ interface AuthApi {
 
     @POST("auth/login")
     suspend fun login(@Body login: LoginRequestDTO): LoginResponseDTO
-
-    @GET("auth/me")
-    suspend fun me() : UserResponseDTO
 }

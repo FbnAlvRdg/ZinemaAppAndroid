@@ -123,7 +123,11 @@ fun DetailsSerieScreen(id: Int, navigator: Navigator) {
                         style = MaterialTheme.typography.labelLarge
                     )
                     Text(
-                        text = serie?.firstAireDate ?: "-",
+                        text = serie?.firstAireDate?.let {
+                            LocalDate.parse(it).format(
+                                DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                            )
+                        } ?: "-",
                         style = MaterialTheme.typography.labelSmall
                     )
 
