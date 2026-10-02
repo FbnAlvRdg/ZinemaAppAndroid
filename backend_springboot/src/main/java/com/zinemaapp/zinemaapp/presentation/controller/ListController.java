@@ -1,14 +1,19 @@
 package com.zinemaapp.zinemaapp.presentation.controller;
 
-import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.ListUserEntity;
-import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.UserEntity;
-import com.zinemaapp.zinemaapp.presentation.dto.items.AddItemRequest;
-import com.zinemaapp.zinemaapp.presentation.dto.items.ListItemResponseDTO;
+import com.zinemaapp.zinemaapp.application.usecase.lists.CreateListUseCase;
+import com.zinemaapp.zinemaapp.application.usecase.lists.DeleteListUseCase;
+import com.zinemaapp.zinemaapp.application.usecase.lists.GetListsByUserUseCase;
+import com.zinemaapp.zinemaapp.application.usecase.lists.listItem.AddItemUseCase;
+import com.zinemaapp.zinemaapp.application.usecase.lists.listItem.DeleteItemUseCase;
+import com.zinemaapp.zinemaapp.application.usecase.lists.listItem.GetItemsUseCase;
+import com.zinemaapp.zinemaapp.domain.model.lists.ListItem;
+import com.zinemaapp.zinemaapp.domain.model.lists.ListUser;
+import com.zinemaapp.zinemaapp.domain.model.user.User;
+import com.zinemaapp.zinemaapp.presentation.dto.lists.items.AddItemRequest;
+import com.zinemaapp.zinemaapp.presentation.dto.lists.items.ListItemResponseDTO;
 import com.zinemaapp.zinemaapp.presentation.dto.lists.CreateListRequest;
 import com.zinemaapp.zinemaapp.presentation.dto.lists.ListResponseDTO;
-import com.zinemaapp.zinemaapp.infrastructure.repository.UserRepository;
-import com.zinemaapp.zinemaapp.service.ListItemService;
-import com.zinemaapp.zinemaapp.service.ListUserService;
+import com.zinemaapp.zinemaapp.domain.repository.user.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,14 +25,22 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/lists")
 public class ListController {
-    private final ListUserService listUserService;
+    private final CreateListUseCase createListUseCase;
+    private final GetListsByUserUseCase getListsByUserUseCase;
+    private final DeleteListUseCase deleteListUseCase;
+    private final AddItemUseCase addItemUseCase;
+    private final GetItemsUseCase getItemsUseCase;
+    private final DeleteItemUseCase deleteItemUseCase;
     private final UserRepository userRepository;
-    private final ListItemService listItemService;
 
-    public ListController(ListUserService listUserService, UserRepository userRepository, ListItemService listItemService) {
-        this.listUserService = listUserService;
+    public ListController(CreateListUseCase createListUseCase, GetListsByUserUseCase getListsByUserUseCase, DeleteListUseCase deleteListUseCase, AddItemUseCase addItemUseCase, GetItemsUseCase getItemsUseCase, DeleteItemUseCase deleteItemUseCase, UserRepository userRepository) {
+        this.createListUseCase = createListUseCase;
+        this.getListsByUserUseCase = getListsByUserUseCase;
+        this.deleteListUseCase = deleteListUseCase;
+        this.addItemUseCase = addItemUseCase;
+        this.getItemsUseCase = getItemsUseCase;
+        this.deleteItemUseCase = deleteItemUseCase;
         this.userRepository = userRepository;
-        this.listItemService = listItemService;
     }
 
     @PostMapping
@@ -35,45 +48,55 @@ public class ListController {
             @RequestBody CreateListRequest request,
             Principal principal) {
 
-        String email = principal.getName();
-        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
+        User user = getUserFromPrincipal(principal);
 
-        if (userOptional.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado el usuario");
-        }
+        ListUser listUser = createListUseCase.createList(
+                request.getName(),
+                user.getId()
+        );
 
-        UserEntity userEntity = userOptional.get();
-
-        ListUserEntity list = listUserService.createList(request.getName(), userEntity);
         ListResponseDTO response = new ListResponseDTO(
-                list.getId(),
-                list.getName()
+                listUser.getId(),
+                listUser.getName()
         );
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<ListResponseDTO>> getLists(Principal principal) {
-        String email = principal.getName();
-        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
+    public ResponseEntity<List<ListResponseDTO>> getListsByUser(Principal principal) {
 
-        if (userOptional.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado el usuario");
-        }
+        User user = getUserFromPrincipal(principal);
 
-        UserEntity userEntity = userOptional.get();
-        List<ListUserEntity> lists = listUserService.getListsByUser(userEntity);
+        List<ListUser> listsUser = getListsByUserUseCase.getListsByUser(user.getId());
         List<ListResponseDTO> response = new ArrayList<>();
-        for (ListUserEntity list : lists) {
-            ListResponseDTO responseDTO = new ListResponseDTO(
-                    list.getId(),
-                    list.getName()
+
+        for (ListUser listUser : listsUser) {
+            ListResponseDTO listResponseDTO = new ListResponseDTO(
+                    listUser.getId(),
+                    listUser.getName()
             );
-            response.add(responseDTO);
+
+            response.add(listResponseDTO);
         }
 
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{listId}")
+    public ResponseEntity<Boolean> deleteList(
+            @PathVariable Long listId,
+            Principal principal
+    ) {
+
+        User user = getUserFromPrincipal(principal);
+
+        boolean deleted = deleteListUseCase.deleteList(
+                user.getId(),
+                listId
+        );
+
+        return ResponseEntity.ok(deleted);
     }
 
     @PostMapping("/{listId}/items")
@@ -82,22 +105,65 @@ public class ListController {
             @RequestBody AddItemRequest request,
             Principal principal
     ) {
-        listItemService.addItem(principal.getName(), listId, request.getTmdbId(), request.getType());
+        User user = getUserFromPrincipal(principal);
+        addItemUseCase.addItem(
+                user.getId(),
+                listId,
+                request.getTmdbId(),
+                request.getType()
+        );
+
         return ResponseEntity.ok(true);
     }
 
     @GetMapping("/{listId}/items")
-    public ResponseEntity<List<ListItemResponseDTO>> getItems(@PathVariable Long listId, Principal principal) {
-        return ResponseEntity.ok(listItemService.getItems(principal.getName(), listId));
+    public ResponseEntity<List<ListItemResponseDTO>> getItems(
+            @PathVariable Long listId,
+            Principal principal
+    ) {
+        String email = principal.getName();
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            throw new RuntimeException("No se ha encontrado el usuario");
+        }
+
+        User user = userOptional.get();
+
+        List<ListItem> items = getItemsUseCase.getItems(user.getId(), listId);
+        List<ListItemResponseDTO> response = new ArrayList<>();
+
+        for (ListItem item : items) {
+            ListItemResponseDTO listItemResponseDTO = new ListItemResponseDTO(
+                    item.getId(),
+                    item.getTmdbId(),
+                    item.getType(),
+                    item.getTitle(),
+                    item.getPoster()
+            );
+
+            response.add(listItemResponseDTO);
+        }
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{listId}/items/{itemId}")
     public ResponseEntity<Boolean> deleteItem(@PathVariable Long listId, @PathVariable Long itemId, Principal principal) {
-        return ResponseEntity.ok(listItemService.deleteItem(principal.getName(), listId, itemId));
+        User user = getUserFromPrincipal(principal);
+        return ResponseEntity.ok(deleteItemUseCase.deleteItem(user.getId(), listId, itemId));
     }
 
-    @DeleteMapping("/{listId}")
-    public ResponseEntity<Boolean> deleteList(@PathVariable Long listId, Principal principal) {
-        return ResponseEntity.ok(listUserService.deleteList(principal.getName(), listId));
+    private User getUserFromPrincipal(Principal principal) {
+
+        String email = principal.getName();
+
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            throw new RuntimeException("No se ha encontrado el usuario");
+        }
+
+        return userOptional.get();
     }
 }

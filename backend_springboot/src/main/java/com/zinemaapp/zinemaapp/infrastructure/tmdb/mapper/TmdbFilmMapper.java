@@ -1,8 +1,8 @@
 package com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper;
 
-import com.zinemaapp.zinemaapp.domain.model.Actor;
-import com.zinemaapp.zinemaapp.domain.model.Film;
-import com.zinemaapp.zinemaapp.domain.model.Genre;
+import com.zinemaapp.zinemaapp.domain.model.common.Actor;
+import com.zinemaapp.zinemaapp.domain.model.film.Film;
+import com.zinemaapp.zinemaapp.domain.model.common.Genre;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.credits.TmdbCast;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.credits.TmdbCrew;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.film.TmdbFilmResponse;

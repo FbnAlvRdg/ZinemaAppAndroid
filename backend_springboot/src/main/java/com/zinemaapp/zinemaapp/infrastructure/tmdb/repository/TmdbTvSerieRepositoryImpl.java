@@ -1,7 +1,7 @@
 package com.zinemaapp.zinemaapp.infrastructure.tmdb.repository;
 
-import com.zinemaapp.zinemaapp.domain.model.TvSerie;
-import com.zinemaapp.zinemaapp.domain.repository.TvSerieRepository;
+import com.zinemaapp.zinemaapp.domain.model.tvserie.TvSerie;
+import com.zinemaapp.zinemaapp.domain.repository.tvseries.TvSerieRepository;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.client.TmdbClient;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper.TmdbTvSerieMapper;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper.TmdbTvSeriesMapper;

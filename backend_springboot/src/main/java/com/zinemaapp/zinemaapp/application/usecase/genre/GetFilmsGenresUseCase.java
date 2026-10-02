@@ -1,7 +1,7 @@
 package com.zinemaapp.zinemaapp.application.usecase.genre;
 
-import com.zinemaapp.zinemaapp.domain.model.Genre;
-import com.zinemaapp.zinemaapp.domain.repository.GenreRepository;
+import com.zinemaapp.zinemaapp.domain.model.common.Genre;
+import com.zinemaapp.zinemaapp.domain.repository.genre.GenreRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

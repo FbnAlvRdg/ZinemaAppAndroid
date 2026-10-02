@@ -1,7 +1,7 @@
 package com.zinemaapp.zinemaapp.application.usecase.tvserie;
 
-import com.zinemaapp.zinemaapp.domain.model.TvSerie;
-import com.zinemaapp.zinemaapp.domain.repository.TvSerieRepository;
+import com.zinemaapp.zinemaapp.domain.model.tvserie.TvSerie;
+import com.zinemaapp.zinemaapp.domain.repository.tvseries.TvSerieRepository;
 import org.springframework.stereotype.Service;
 
 @Service

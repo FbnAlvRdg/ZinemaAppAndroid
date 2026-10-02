@@ -1,7 +1,7 @@
 package com.zinemaapp.zinemaapp.application.usecase.film;
 
-import com.zinemaapp.zinemaapp.domain.model.Film;
-import com.zinemaapp.zinemaapp.domain.repository.FilmRepository;
+import com.zinemaapp.zinemaapp.domain.model.film.Film;
+import com.zinemaapp.zinemaapp.domain.repository.film.FilmRepository;
 import org.springframework.stereotype.Service;
 
 @Service

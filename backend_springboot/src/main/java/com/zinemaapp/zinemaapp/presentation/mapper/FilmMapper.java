@@ -1,6 +1,6 @@
 package com.zinemaapp.zinemaapp.presentation.mapper;
 
-import com.zinemaapp.zinemaapp.domain.model.Film;
+import com.zinemaapp.zinemaapp.domain.model.film.Film;
 import com.zinemaapp.zinemaapp.presentation.dto.credits.ActorDTO;
 import com.zinemaapp.zinemaapp.presentation.dto.films.FilmDTO;
 import com.zinemaapp.zinemaapp.presentation.dto.credits.GenreDTO;

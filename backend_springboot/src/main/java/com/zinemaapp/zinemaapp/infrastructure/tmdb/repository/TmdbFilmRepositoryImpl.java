@@ -1,7 +1,7 @@
 package com.zinemaapp.zinemaapp.infrastructure.tmdb.repository;
 
-import com.zinemaapp.zinemaapp.domain.model.Film;
-import com.zinemaapp.zinemaapp.domain.repository.FilmRepository;
+import com.zinemaapp.zinemaapp.domain.model.film.Film;
+import com.zinemaapp.zinemaapp.domain.repository.film.FilmRepository;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.client.TmdbClient;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper.TmdbFilmMapper;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper.TmdbFilmsMapper;

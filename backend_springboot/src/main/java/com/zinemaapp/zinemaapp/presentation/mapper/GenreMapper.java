@@ -1,6 +1,6 @@
 package com.zinemaapp.zinemaapp.presentation.mapper;
 
-import com.zinemaapp.zinemaapp.domain.model.Genre;
+import com.zinemaapp.zinemaapp.domain.model.common.Genre;
 import com.zinemaapp.zinemaapp.presentation.dto.credits.GenreDTO;
 import org.springframework.stereotype.Component;
 

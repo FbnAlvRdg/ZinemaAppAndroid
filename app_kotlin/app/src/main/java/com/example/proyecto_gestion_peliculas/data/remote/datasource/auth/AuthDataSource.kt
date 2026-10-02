@@ -8,5 +8,4 @@ import com.example.proyecto_gestion_peliculas.data.remote.dto.auth.UserResponseD
 interface AuthDataSource {
     suspend fun register(registerRequestDTO: RegisterRequestDTO) : UserResponseDTO
     suspend fun login(loginRequestDTO: LoginRequestDTO) : LoginResponseDTO
-    suspend fun me() : UserResponseDTO
 }

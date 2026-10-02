@@ -1,7 +1,7 @@
 package com.zinemaapp.zinemaapp.infrastructure.tmdb.repository;
 
-import com.zinemaapp.zinemaapp.domain.model.Genre;
-import com.zinemaapp.zinemaapp.domain.repository.GenreRepository;
+import com.zinemaapp.zinemaapp.domain.model.common.Genre;
+import com.zinemaapp.zinemaapp.domain.repository.genre.GenreRepository;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.client.TmdbClient;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper.TmdbGenreMapper;
 import org.springframework.stereotype.Component;

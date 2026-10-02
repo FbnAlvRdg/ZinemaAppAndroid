@@ -1,6 +1,6 @@
 package com.zinemaapp.zinemaapp.infrastructure.tmdb.mapper;
 
-import com.zinemaapp.zinemaapp.domain.model.Film;
+import com.zinemaapp.zinemaapp.domain.model.film.Film;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.film.TmdbFilmsResponse;
 import org.springframework.stereotype.Component;
 

@@ -15,8 +15,4 @@ class AuthDataSourceImpl @Inject constructor(private val api : AuthApi) : AuthDa
     override suspend fun login(loginRequestDTO: LoginRequestDTO): LoginResponseDTO {
         return api.login(loginRequestDTO)
     }
-
-    override suspend fun me(): UserResponseDTO {
-        return api.me()
-    }
 }

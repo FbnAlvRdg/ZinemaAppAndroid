@@ -2,6 +2,7 @@ package com.zinemaapp.zinemaapp.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public class ListUserEntity {
     private UserEntity userEntity;
 
     @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ListItemEntity> items;
+    private List<ListItemEntity> items = new ArrayList<>();
 
     public ListUserEntity() {
     }

@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.proyecto_gestion_peliculas.ui.components.topbar.AppTopBar
 import com.example.proyecto_gestion_peliculas.ui.navigation.navigator.Navigator
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun DetailFilmScreen(id: Int, navigator: Navigator) {
@@ -112,7 +113,7 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                         style = MaterialTheme.typography.labelLarge
                     )
                     Text(
-                        text = film.releaseDate?.toString() ?: "-",
+                        text = film.releaseDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: "-",
                         style = MaterialTheme.typography.labelSmall
                     )
 

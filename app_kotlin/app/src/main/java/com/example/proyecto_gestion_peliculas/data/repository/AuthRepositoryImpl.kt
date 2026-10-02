@@ -39,8 +39,4 @@ class AuthRepositoryImpl @Inject constructor(private val dataSource: AuthDataSou
 
         return dataSource.login(request).toDomain()
     }
-
-    override suspend fun me(): User {
-        return dataSource.me().toDomain()
-    }
 }

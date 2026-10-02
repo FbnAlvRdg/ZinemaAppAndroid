@@ -1,6 +1,6 @@
 package com.zinemaapp.zinemaapp.presentation.mapper;
 
-import com.zinemaapp.zinemaapp.domain.model.Actor;
+import com.zinemaapp.zinemaapp.domain.model.common.Actor;
 import com.zinemaapp.zinemaapp.presentation.dto.credits.ActorDTO;
 import org.springframework.stereotype.Component;
 

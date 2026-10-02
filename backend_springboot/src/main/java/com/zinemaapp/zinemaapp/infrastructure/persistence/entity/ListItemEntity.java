@@ -25,19 +25,6 @@ public class ListItemEntity {
     public ListItemEntity() {
     }
 
-    public ListItemEntity(Long id, Long tmdbId, String type, ListUserEntity list) {
-        this.id = id;
-        this.tmdbId = tmdbId;
-        this.type = type;
-        this.list = list;
-    }
-
-    public ListItemEntity(Long tmdbId, String type, ListUserEntity list) {
-        this.tmdbId = tmdbId;
-        this.type = type;
-        this.list = list;
-    }
-
     public ListItemEntity(Long tmdbId, String type, String title, String poster, ListUserEntity list) {
         this.tmdbId = tmdbId;
         this.type = type;
