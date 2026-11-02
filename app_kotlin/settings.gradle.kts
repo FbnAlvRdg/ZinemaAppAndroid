@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "proyecto_gestion_peliculas"
+rootProject.name = "zinema_app_android"
 include(":app")

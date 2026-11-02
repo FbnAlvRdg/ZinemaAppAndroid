@@ -1,0 +1,14 @@
+package com.zinemaapp.domain.repository
+
+import androidx.paging.PagingData
+import com.zinemaapp.domain.model.Film
+import kotlinx.coroutines.flow.Flow
+
+interface FilmRepository {
+    suspend fun getMostPopularFilms(page: Int): List<Film>
+    fun getMostPopularFilmsPaging() : Flow<PagingData<Film>>
+    suspend fun getTopRatedFilms(page: Int): List<Film>
+    fun getTopRatedFilmsPaging(): Flow<PagingData<Film>>
+    fun getFilmsByGenre(idGenre: Int): Flow<PagingData<Film>>
+    suspend fun getFilmById(id: Int): Film
+}

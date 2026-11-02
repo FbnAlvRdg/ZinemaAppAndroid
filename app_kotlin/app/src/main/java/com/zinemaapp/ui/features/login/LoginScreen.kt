@@ -1,0 +1,293 @@
+package com.zinemaapp.ui.features.login
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration.Short
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.zinemaapp.R
+import com.zinemaapp.data.datastore.readEmail
+import com.zinemaapp.ui.navigation.navigator.Navigator
+import com.zinemaapp.core.error.Error
+import com.zinemaapp.ui.components.dialogs.LogInAlertDialog
+import com.zinemaapp.ui.components.topbar.MainTopBar
+
+
+@Composable
+fun LoginScreen(navigator: Navigator) {
+    val viewModel: LoginScreenViewModel = hiltViewModel()
+    val context = LocalContext.current
+    val uiState = viewModel.uiState
+    val snackbarHostState by remember { mutableStateOf(SnackbarHostState()) }
+    var alertDialogLogIn by remember { mutableStateOf(false) }
+    var showMessage by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        val savedEmail = readEmail(context)
+        viewModel.enterEmail(savedEmail)
+    }
+
+    LaunchedEffect(viewModel.loginSuccess) {
+        if (viewModel.loginSuccess) {
+            navigator.navigateToExplore()
+            viewModel.loginSuccess = false
+        }
+    }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { error ->
+            val message = when (error) {
+                Error.CONNECTION_ERROR ->
+                    "No se ha podido conectar con el servidor"
+
+                Error.INVALID_CREDENTIALS ->
+                    "Email o contraseña incorrectos"
+
+                Error.UNKNOWN ->
+                    "Ha ocurrido un error inesperado"
+
+                else ->
+                    "Error desconocido"
+            }
+
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = Short
+            )
+
+            viewModel.clearError()
+        }
+    }
+
+    Scaffold(
+        topBar = { MainTopBar(viewModel.title, onAction = { showMessage = true }) },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = "¡Bienvenido a tu App!",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Box {
+                    Image(
+                        contentDescription = "Logo",
+                        painter = painterResource(R.drawable.logo_app),
+                        modifier = Modifier.size(100.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(60.dp))
+
+            Text(
+                text = "Introduce tus datos:",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 26.sp,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                OutlinedTextField(
+                    value = viewModel.email,
+                    onValueChange = { enteredEmail -> viewModel.enterEmail(enteredEmail = enteredEmail) },
+                    label = {
+                        Text(
+                            text = "Email"
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            text = "tucorreo@gmail.com"
+
+                        )
+                    },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.primary
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedLabelColor = MaterialTheme.colorScheme.outline,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.outline
+                    )
+
+                )
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                OutlinedTextField(
+                    value = viewModel.password,
+                    onValueChange = { enteredPassword ->
+                        viewModel.enterPassword(
+                            enteredPassword
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = "Contraseña"
+                        )
+                    },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.primary
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedLabelColor = MaterialTheme.colorScheme.outline,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.outline,
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.outline
+                    ),
+                    visualTransformation = PasswordVisualTransformation()
+                )
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Button(
+                    onClick = {
+                        if (viewModel.email.isBlank() || viewModel.password.isBlank()) {
+                            alertDialogLogIn = true
+                        } else {
+                            viewModel.login()
+                        }
+                    },
+
+                    modifier = Modifier.width(100.dp)
+                ) {
+                    Text(
+                        text = "Log in"
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(20.dp))
+
+                Button(
+                    onClick = { navigator.navigateToSignUp() },
+                    modifier = Modifier.width(100.dp)
+                ) {
+                    Text(
+                        text = "Sign Up"
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "¿Has olvidado tu contraseña?",
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 10.sp
+                )
+            }
+        }
+    }
+
+    LogInAlertDialog(
+        show = alertDialogLogIn,
+        title = "Error",
+        message = "El email o la contraseña no puede estar vacío",
+        onDismiss = { alertDialogLogIn = false }
+    )
+
+    if (showMessage) {
+        AlertDialog(
+            onDismissRequest = {
+                showMessage = false
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showMessage = false
+                    }
+                ) {
+                    Text(
+                        text = "Aceptar"
+                    )
+                }
+            },
+            title =
+                {
+                    Text(
+                        text = "About TMDB"
+                    )
+                },
+            text = {
+                Text(
+                    text = "Data available in this app is provided by The Movie Database (TMDB)."
+                )
+            }
+        )
+    }
+}

@@ -1,0 +1,17 @@
+package com.zinemaapp.ui.navigation.navigator
+
+interface Navigator {
+    fun back()
+    fun navigateToLogIn()
+    fun navigateToSignUp()
+    fun navigateToExplore()
+    fun navigateToMostPopularFilms()
+    fun navigateToTopRatedFilms()
+    fun navigateToFilmsByGenre()
+    fun navigateToLists()
+    fun navigateToListItems(listId : Long)
+    fun navigateToTopRatedSeries()
+    fun navigateToLoginClearBackStack()
+    fun navigateToDetailsFilm(id : Int)
+    fun navigateToDetailsSerie(id: Int)
+}

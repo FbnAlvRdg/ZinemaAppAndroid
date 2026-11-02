@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas
+package com.zinemaapp
 
 import org.junit.Test
 

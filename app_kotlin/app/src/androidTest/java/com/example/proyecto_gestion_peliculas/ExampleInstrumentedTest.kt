@@ -1,4 +1,4 @@
-package com.example.proyecto_gestion_peliculas
+package com.zinemaapp
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

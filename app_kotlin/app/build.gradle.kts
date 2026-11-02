@@ -3,18 +3,19 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
     id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
+
 }
 
 android {
-    namespace = "com.example.proyecto_gestion_peliculas"
+    namespace = "com.zinemaapp"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.proyecto_gestion_peliculas"
+        applicationId = "com.zinemaapp"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

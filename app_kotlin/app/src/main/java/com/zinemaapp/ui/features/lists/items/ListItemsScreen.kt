@@ -1,0 +1,167 @@
+package com.zinemaapp.ui.features.lists.items
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import com.zinemaapp.R
+import com.zinemaapp.ui.components.dialogs.ConfirmationDialog
+import com.zinemaapp.ui.navigation.navigator.Navigator
+import com.zinemaapp.core.error.Error
+import com.zinemaapp.ui.components.topbar.AppTopBar
+
+@Composable
+fun ListItemsScreen(navigator: Navigator, listId: Long) {
+    val viewModel: ListItemViewModel = hiltViewModel()
+    val items = viewModel.items
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var selectedItemId by remember { mutableStateOf<Long?>(null) }
+    var selectedListId by remember { mutableStateOf<Long?>(null) }
+    val uiState = viewModel.uiState
+    var snackbarHostState by remember { mutableStateOf(SnackbarHostState()) }
+
+
+    LaunchedEffect(listId) {
+        viewModel.loadItems(listId)
+    }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { error ->
+            val message = when (error) {
+                Error.CONNECTION_ERROR ->
+                    "Se ha producido un error de conexión"
+
+                Error.SERVER_ERROR ->
+                    "Error en el servidor"
+
+                Error.NOT_FOUND ->
+                    "No se ha encontrado el contenido"
+
+                Error.UNKNOWN ->
+                    "Ha ocurrido un error inesperado"
+
+                else ->
+                    "Error desconocido"
+            }
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+
+            viewModel.clearError()
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            AppTopBar(
+                title = viewModel.header,
+                back = { navigator.back() }
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            items(items) { item ->
+                val imageUrl = item.poster?.let {
+                    "https://image.tmdb.org/t/p/w500$it"
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .clickable {
+                            if (item.type == "movie") {
+                                navigator.navigateToDetailsFilm(item.tmdbId.toInt())
+                            } else {
+                                navigator.navigateToDetailsSerie(item.tmdbId.toInt())
+                            }
+                        },
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AsyncImage(
+                        model = imageUrl,
+                        contentDescription = "Poster",
+                        modifier = Modifier
+                            .width(60.dp)
+                            .aspectRatio(2f / 3f)
+                    )
+                    Text(
+                        text = "${item.title}",
+                        textAlign = TextAlign.Start,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    IconButton(
+                        onClick = {
+                            selectedListId = listId
+                            selectedItemId = item.id
+                            showDeleteDialog = true
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.icono_delete),
+                            contentDescription = "Delete item"
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    ConfirmationDialog(
+        show = showDeleteDialog,
+        title = "Eliminar elemento",
+        message = "¿Seguro que quieres borrar el elememto?",
+        onConfirm = {
+            selectedListId?.let { listId ->
+                selectedItemId?.let { itemId ->
+                    viewModel.deleteItem(
+                        listId = listId,
+                        itemId = itemId
+                    )
+                }
+            }
+            showDeleteDialog = false
+            selectedListId = null
+            selectedItemId = null
+        },
+        onDismiss = {
+            showDeleteDialog = false
+            selectedListId = null
+            selectedItemId = null
+        }
+    )
+}
+
+

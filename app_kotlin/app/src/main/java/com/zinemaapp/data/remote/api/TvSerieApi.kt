@@ -1,0 +1,24 @@
+package com.zinemaapp.data.remote.api
+
+
+import com.zinemaapp.data.remote.dto.series.TvSerieDTO
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
+
+interface TvSerieApi {
+    @GET("tv/top-rated")
+    suspend fun getTopRatedSeries(@Query("page") page: Int): List<TvSerieDTO>
+
+    @GET("tv/most-popular")
+    suspend fun getMostPopular(@Query("page") page: Int): List<TvSerieDTO>
+
+    @GET("tv/explore")
+    suspend fun getSeriesByGenre(
+        @Query("idGenre") idGenre: Int,
+        @Query("page") page: Int
+    ): List<TvSerieDTO>
+
+    @GET("tv/{id}")
+    suspend fun getSerieById(@Path("id") id: Int): TvSerieDTO
+}
