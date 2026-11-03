@@ -1,49 +1,54 @@
-# Android Studio
+```gitignore
+# ==============================
+# Android Studio / IntelliJ
+# ==============================
 .idea/
 *.iml
 *.iws
-.gradle/
-local.properties
-captures/
-.externalNativeBuild/
+out/
 
-# Build outputs
-/build/
-/app/build/
-/**/build/
-
-# Gradle files
+# ==============================
+# Gradle
+# ==============================
 .gradle/
 build/
 !gradle-wrapper.jar
 
-# Kotlin
-*.kotlin_module
-
-# Logs
-*.log
-
-# Android specific
+# ==============================
+# Android
+# ==============================
+local.properties
+captures/
+.externalNativeBuild/
 *.apk
 *.ap_
 *.aab
 *.dex
 *.class
-*.so
-*.jar
-*.war
-*.ear
 *.keystore
 
-# NDK
-obj/
-*.o
+# ==============================
+# Kotlin
+# ==============================
+*.kotlin_module
+
+# ==============================
+# Java / NDK
+# ==============================
 *.so
+*.o
+obj/
+*.war
+*.ear
 
-# IntelliJ
-out/
+# ==============================
+# Logs
+# ==============================
+*.log
 
-# Misc
+# ==============================
+# Miscellaneous
+# ==============================
 .DS_Store
 *.tmp
 *.temp
@@ -54,25 +59,28 @@ out/
 *.orig
 *.rej
 
+# ==============================
 # Coverage
+# ==============================
 *.ec
 *.em
 coverage/
 *.profraw
 
-# Firebase / Google Services
+# ==============================
+# Firebase
+# ==============================
 google-services.json
 google-services-info.plist
 
-# Mac specific
-*.DS_Store
+# ==============================
+# Environment variables
+# ==============================
+.env
+.env.*
 
-# JetBrains IDEs
-.idea/
-*.iml
-*.iws
-application.properties
-
+# ==============================
 # Agents
-
-AGENTS.md
+# ==============================
+# AGENTS.md se mantiene versionado
+```
