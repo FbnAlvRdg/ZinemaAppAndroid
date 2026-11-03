@@ -82,5 +82,7 @@ google-services-info.plist
 # ==============================
 # Agents
 # ==============================
-# AGENTS.md se mantiene versionado
+AGENTS.md
+.session-summary
+
 ```
