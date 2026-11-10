@@ -17,10 +17,12 @@ public class JwtService {
 
     @Value("${jwt.secret.key}")
     private String SECRET_KEY;
+    @Value("${jwt.expiration-hours}")
+    private long expirationHours;
 
     public String generateToken(String email) {
         return Jwts.builder().subject(email).issuedAt(new Date())
-                .expiration(Date.from(Instant.now().plus(Duration.ofDays(365)))).signWith(getSigningKey()).compact();
+                .expiration(Date.from(Instant.now().plus(Duration.ofHours(expirationHours)))).signWith(getSigningKey()).compact();
     }
 
     public String getSubject(String token) {
