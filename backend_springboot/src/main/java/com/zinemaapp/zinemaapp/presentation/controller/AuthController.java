@@ -13,6 +13,7 @@ import com.zinemaapp.zinemaapp.presentation.dto.login.LoginResponseDTO;
 import com.zinemaapp.zinemaapp.presentation.mapper.LoginMapper;
 import com.zinemaapp.zinemaapp.presentation.mapper.RegisterRequestMapper;
 import com.zinemaapp.zinemaapp.presentation.mapper.UserMapper;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,14 +36,14 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@RequestBody RegisterRequestDTO registerRequestDTO) {
+    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) {
         RegisterRequest registerRequest = registerRequestMapper.toDomain(registerRequestDTO);
         User user = registerUseCase.register(registerRequest);
         return ResponseEntity.ok(userMapper.toDTO(user));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
         LoginRequest loginRequest = loginMapper.toDomain(loginRequestDTO);
         LoginResponse loginResponse = loginUseCase.login(loginRequest);
         return ResponseEntity.ok(loginMapper.toDTO(loginResponse));

@@ -6,11 +6,15 @@ import com.zinemaapp.zinemaapp.application.usecase.film.GetPopularFilmsUseCase;
 import com.zinemaapp.zinemaapp.application.usecase.film.GetTopRatedFilmsUseCase;
 import com.zinemaapp.zinemaapp.presentation.dto.films.FilmDTO;
 import com.zinemaapp.zinemaapp.presentation.mapper.FilmMapper;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/movies")
 public class FilmController {
@@ -30,7 +34,7 @@ public class FilmController {
 
 
     @GetMapping("/popular")
-    public ResponseEntity<List<FilmDTO>> getPopularFilms(@RequestParam int page) {
+    public ResponseEntity<List<FilmDTO>> getPopularFilms(@RequestParam @Positive @Max(500) int page) {
         List<FilmDTO> films = getPopularFilmsUseCase.getPopularFilms(page)
                 .stream()
                 .map(filmMapper::toDTO)
@@ -40,7 +44,7 @@ public class FilmController {
     }
 
     @GetMapping("/top-rated")
-    public ResponseEntity<List<FilmDTO>> getTopRatedFilms(@RequestParam int page) {
+    public ResponseEntity<List<FilmDTO>> getTopRatedFilms(@RequestParam @Positive @Max(500) int page) {
         List<FilmDTO> films = getTopRatedFilmsUseCase.getTopRatedFilms(page)
                 .stream()
                 .map(filmMapper::toDTO)
@@ -52,8 +56,8 @@ public class FilmController {
 
     @GetMapping("/explore")
     public ResponseEntity<List<FilmDTO>> getFilmsbyGenre(
-            @RequestParam(name = "genre_id") int idGenre,
-            @RequestParam int page
+            @RequestParam(name = "genre_id") @Positive int idGenre,
+            @RequestParam @Positive @Max(500) int page
     ) {
         List<FilmDTO> films = getFilmsByGenreUseCase.getFilmsByGenre(idGenre, page)
                 .stream()
@@ -64,7 +68,7 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FilmDTO> getFilmById(@PathVariable int id) {
+    public ResponseEntity<FilmDTO> getFilmById(@PathVariable @Positive int id) {
         FilmDTO film = filmMapper.toDTO(getFilmByIdUseCase.getFilmById(id));
         return ResponseEntity.ok(film);
     }
