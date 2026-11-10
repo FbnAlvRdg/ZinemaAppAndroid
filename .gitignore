@@ -78,6 +78,7 @@ google-services-info.plist
 # ==============================
 .env
 .env.*
+!.env.example
 
 # ==============================
 # Agents

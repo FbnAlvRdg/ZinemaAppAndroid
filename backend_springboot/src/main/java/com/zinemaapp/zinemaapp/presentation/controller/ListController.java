@@ -14,6 +14,7 @@ import com.zinemaapp.zinemaapp.presentation.dto.lists.items.ListItemResponseDTO;
 import com.zinemaapp.zinemaapp.presentation.dto.lists.CreateListRequest;
 import com.zinemaapp.zinemaapp.presentation.dto.lists.ListResponseDTO;
 import com.zinemaapp.zinemaapp.domain.repository.user.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +46,7 @@ public class ListController {
 
     @PostMapping
     public ResponseEntity<ListResponseDTO> createList(
-            @RequestBody CreateListRequest request,
+            @Valid @RequestBody CreateListRequest request,
             Principal principal) {
 
         User user = getUserFromPrincipal(principal);
@@ -102,7 +103,7 @@ public class ListController {
     @PostMapping("/{listId}/items")
     public ResponseEntity<Boolean> addItem(
             @PathVariable Long listId,
-            @RequestBody AddItemRequest request,
+            @RequestBody @Valid AddItemRequest request,
             Principal principal
     ) {
         User user = getUserFromPrincipal(principal);

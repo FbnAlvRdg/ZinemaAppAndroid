@@ -4,16 +4,14 @@ public class UserResponseDTO {
     private Long id;
     private String email;
     private String username;
-    private String password;
 
     public UserResponseDTO() {
     }
 
-    public UserResponseDTO(Long id, String email, String username, String password) {
+    public UserResponseDTO(Long id, String email, String username) {
         this.id = id;
         this.email = email;
         this.username = username;
-        this.password = password;
     }
 
     public Long getId() {
@@ -40,11 +38,4 @@ public class UserResponseDTO {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
