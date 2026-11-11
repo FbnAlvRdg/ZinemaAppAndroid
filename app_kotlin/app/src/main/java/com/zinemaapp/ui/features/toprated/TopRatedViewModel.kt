@@ -13,15 +13,13 @@ import com.zinemaapp.domain.model.TvSerie
 import com.zinemaapp.domain.usecase.film.GetTopRatedFilmsUseCase
 import com.zinemaapp.domain.usecase.tvserie.GetTopRatedSeriesPagingUseCase
 import com.zinemaapp.ui.uistate.UiState
-import com.zinemaapp.core.error.Error
+import com.zinemaapp.core.error.mapper.toAppError
 import com.zinemaapp.data.datastore.clearJwt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
-import okio.IOException
-import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,21 +50,9 @@ class TopRatedViewModel @Inject constructor(
                     isLoading = true
                 )
                 films = getTopRatedFilmsUseCase()
-            } catch (e: IOException) {
-                uiState = uiState.copy(
-                    error = Error.CONNECTION_ERROR
-                )
-            } catch (e: HttpException) {
-                uiState = uiState.copy(
-                    error = when (e.code()) {
-                        404 -> Error.NOT_FOUND
-                        in 500..599 -> Error.SERVER_ERROR
-                        else -> Error.UNKNOWN
-                    }
-                )
             } catch (e: Exception) {
                 uiState = uiState.copy(
-                    error = Error.UNKNOWN
+                    error = e.toAppError()
                 )
             } finally {
                 uiState = uiState.copy(
@@ -83,21 +69,10 @@ class TopRatedViewModel @Inject constructor(
                     isLoading = true
                 )
                 series = getTopRatedSeriesUseCase()
-            } catch (e: IOException) {
-                uiState = uiState.copy(
-                    error = Error.CONNECTION_ERROR
-                )
-            } catch (e: HttpException) {
-                uiState = uiState.copy(
-                    error = when (e.code()) {
-                        404 -> Error.NOT_FOUND
-                        in 500..599 -> Error.SERVER_ERROR
-                        else -> Error.UNKNOWN
-                    }
-                )
+
             } catch (e: Exception) {
                 uiState = uiState.copy(
-                    error = Error.UNKNOWN
+                    error = e.toAppError()
                 )
             } finally {
                 uiState = uiState.copy(

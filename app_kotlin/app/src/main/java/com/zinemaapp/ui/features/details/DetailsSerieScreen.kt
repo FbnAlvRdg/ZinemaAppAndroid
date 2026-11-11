@@ -14,15 +14,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.zinemaapp.core.error.Error
 import com.zinemaapp.ui.components.topbar.AppTopBar
 import com.zinemaapp.ui.navigation.navigator.Navigator
 import java.time.LocalDate
@@ -33,11 +37,49 @@ import java.time.format.DateTimeFormatter
 fun DetailsSerieScreen(id: Int, navigator: Navigator) {
     val scroll = rememberScrollState()
     val viewModel: DetailsViewModel = hiltViewModel()
-    val serie = viewModel.serie
+    val uiState = viewModel.uiState
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(id) {
         viewModel.loadSerie(id)
     }
+
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { error ->
+            val message = when (error) {
+                Error.CONNECTION_ERROR ->
+                    "No se ha podido conectar con el servidor"
+
+                Error.NOT_FOUND ->
+                    "No se ha encontrado la serie"
+
+                Error.SERVER_ERROR ->
+                    "El servidor no está disponible"
+
+                Error.UNAUTHORIZED ->
+                    "Tu sesión ha caducado"
+
+                Error.FORBIDDEN ->
+                    "No tienes permisos para acceder"
+
+                Error.VALIDATION_ERROR ->
+                    "Los datos no son válidos"
+
+                Error.CONFLICT ->
+                    "Se ha producido un conflicto"
+
+                Error.INVALID_CREDENTIALS ->
+                    "Las credenciales no son correctas"
+
+                Error.UNKNOWN ->
+                    "Ha ocurrido un error inesperado"
+            }
+            snackbarHostState.showSnackbar(message)
+            viewModel.clearError()
+        }
+    }
+
+    val serie = viewModel.serie
 
     Scaffold(
         topBar = {
@@ -45,7 +87,8 @@ fun DetailsSerieScreen(id: Int, navigator: Navigator) {
                 title = viewModel.header,
                 back = { navigator.back() }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { innerPadding ->
         Column(
             modifier = Modifier

@@ -1,5 +1,6 @@
 package com.zinemaapp.zinemaapp.application.usecase.lists.listItem;
 
+import com.zinemaapp.zinemaapp.domain.exception.ForbiddenException;
 import com.zinemaapp.zinemaapp.domain.model.lists.ListItem;
 import com.zinemaapp.zinemaapp.domain.model.lists.ListUser;
 import com.zinemaapp.zinemaapp.domain.repository.lists.ListItemRepository;
@@ -21,8 +22,8 @@ public class GetItemsUseCase {
     public List<ListItem> getItems(Long userId, Long listId) {
         ListUser listUser = listUserRepository.findById(listId);
 
-        if (!listUser.getUser().getId().equals(userId)){
-            throw new RuntimeException("El usuario no tiene permisos sobre la lista");
+        if (!listUser.getUser().getId().equals(userId)) {
+            throw new ForbiddenException("El usuario no tiene permisos sobre la lista");
         }
 
         return listItemRepository.findByList(listId);

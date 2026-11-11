@@ -10,11 +10,10 @@ import com.zinemaapp.data.datastore.saveJwt
 import com.zinemaapp.domain.usecase.auth.LoginUseCase
 import com.zinemaapp.ui.uistate.UiState
 import com.zinemaapp.core.error.Error
+import com.zinemaapp.core.error.mapper.toAppError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,27 +45,22 @@ class LoginScreenViewModel @Inject constructor(
                 uiState = uiState.copy(
                     isLoading = true
                 )
+
                 val result = loginUseCase(email, password)
+
                 saveJwt(context, result.token)
                 loginSuccess = true
-            } catch (e: IOException) {
-                loginSuccess = false
-                uiState = uiState.copy(
-                    error = Error.CONNECTION_ERROR
-                )
-            } catch (e: HttpException) {
-                loginSuccess = false
-                uiState = uiState.copy(
-                    error = when (e.code()) {
-                        401, 403 -> Error.INVALID_CREDENTIALS
-                        in 500..599 -> Error.CONNECTION_ERROR
-                        else -> Error.UNKNOWN
-                    }
-                )
+
             } catch (e: Exception) {
                 loginSuccess = false
+
+                val mappedError = e.toAppError()
+
                 uiState = uiState.copy(
-                    error = Error.UNKNOWN
+                    error = when (mappedError) {
+                        Error.UNAUTHORIZED -> Error.INVALID_CREDENTIALS
+                        else -> mappedError
+                    }
                 )
             } finally {
                 uiState = uiState.copy(
