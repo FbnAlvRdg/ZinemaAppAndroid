@@ -27,11 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.zinemaapp.ui.features.lists.ListsViewModel
 import com.zinemaapp.ui.features.lists.items.ListItemViewModel
 import com.zinemaapp.ui.navigation.navigator.Navigator
 import com.zinemaapp.core.error.Error
+import com.zinemaapp.core.error.mapper.toAppError
 import com.zinemaapp.ui.components.bottombar.AppBottomBar
 import com.zinemaapp.ui.components.screens.MediaScreen
 import com.zinemaapp.ui.components.topbar.AppTopBar
@@ -99,6 +101,98 @@ fun MostPopularScreen(navigator: Navigator) {
             )
 
             viewModel.cleanError()
+        }
+    }
+
+    LaunchedEffect(films?.loadState?.refresh) {
+        val loadState = films?.loadState?.refresh
+
+        if (loadState is LoadState.Error) {
+            val error = loadState.error.toAppError()
+
+            val message = when (error) {
+                Error.CONNECTION_ERROR -> "Se ha producido un error de conexión"
+
+                Error.SERVER_ERROR -> "Se ha producido un error en el servidor"
+
+                Error.NOT_FOUND -> "No se ha encontrado contenido"
+
+                else -> "Ha ocurrido un error inesperado"
+            }
+
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+        }
+    }
+
+    LaunchedEffect(series?.loadState?.refresh) {
+        val loadState = series?.loadState?.refresh
+
+        if (loadState is LoadState.Error) {
+            val error = loadState.error.toAppError()
+
+            val message = when (error) {
+                Error.CONNECTION_ERROR -> "Se ha producido un error de conexión"
+
+                Error.SERVER_ERROR -> "Se ha producido un error en el servidor"
+
+                Error.NOT_FOUND -> "No se ha encontrado contenido"
+
+                else -> "Ha ocurrido un error inesperado"
+            }
+
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+        }
+    }
+
+    LaunchedEffect(films?.loadState?.append) {
+        val loadState = films?.loadState?.append
+
+        if (loadState is LoadState.Error) {
+            val error = loadState.error.toAppError()
+
+            val message = when (error) {
+                Error.CONNECTION_ERROR -> "Se ha producido un error de conexión"
+
+                Error.SERVER_ERROR -> "Se ha producido un error en el servidor"
+
+                Error.NOT_FOUND -> "No se ha encontrado contenido"
+
+                else -> "Ha ocurrido un error inesperado"
+            }
+
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+        }
+    }
+
+    LaunchedEffect(series?.loadState?.append) {
+        val loadState = series?.loadState?.append
+
+        if (loadState is LoadState.Error) {
+            val error = loadState.error.toAppError()
+
+            val message = when (error) {
+                Error.CONNECTION_ERROR -> "Se ha producido un error de conexión"
+
+                Error.SERVER_ERROR -> "Se ha producido un error en el servidor"
+
+                Error.NOT_FOUND -> "No se ha encontrado contenido"
+
+                else -> "Ha ocurrido un error inesperado"
+            }
+
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
         }
     }
 

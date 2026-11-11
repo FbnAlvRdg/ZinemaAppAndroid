@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.zinemaapp.data.remote.datasource.tvserie.TvSerieDataSource
 import com.zinemaapp.data.remote.mapper.toDomain
 import com.zinemaapp.domain.model.TvSerie
+import kotlinx.coroutines.CancellationException
 import kotlin.collections.map
 
 class SeriesByGenrePagingSource(
@@ -12,7 +13,10 @@ class SeriesByGenrePagingSource(
     private val genreId: Int
 ) : PagingSource<Int, TvSerie>() {
     override fun getRefreshKey(state: PagingState<Int, TvSerie>): Int? {
-        return state.anchorPosition
+        val anchorPosition = state.anchorPosition ?: return null
+        val anchorPage = state.closestPageToPosition(anchorPosition) ?: return null
+
+        return anchorPage.prevKey?.plus(1) ?: anchorPage.nextKey?.minus(1)
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TvSerie> {
@@ -25,6 +29,8 @@ class SeriesByGenrePagingSource(
                 prevKey = if (page == 1) null else page - 1,
                 nextKey = if (response.isEmpty()) null else page + 1
             )
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
