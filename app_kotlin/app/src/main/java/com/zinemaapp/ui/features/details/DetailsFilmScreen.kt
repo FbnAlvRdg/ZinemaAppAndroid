@@ -14,9 +14,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -25,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.zinemaapp.ui.components.topbar.AppTopBar
 import com.zinemaapp.ui.navigation.navigator.Navigator
+import com.zinemaapp.core.error.Error
 import java.time.format.DateTimeFormatter
 
 
@@ -32,12 +36,49 @@ import java.time.format.DateTimeFormatter
 fun DetailFilmScreen(id: Int, navigator: Navigator) {
     val scroll = rememberScrollState()
     val viewModel: DetailsViewModel = hiltViewModel()
+    val uiState = viewModel.uiState
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(id) {
         viewModel.loadFilm(id)
     }
 
-    val film = viewModel.film ?: return
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let { error ->
+            val message = when (error) {
+                Error.CONNECTION_ERROR ->
+                    "No se ha podido conectar con el servidor"
+
+                Error.NOT_FOUND ->
+                    "No se ha encontrado la película"
+
+                Error.SERVER_ERROR ->
+                    "El servidor no está disponible"
+
+                Error.UNAUTHORIZED ->
+                    "Tu sesión ha caducado"
+
+                Error.FORBIDDEN ->
+                    "No tienes permisos para acceder"
+
+                Error.VALIDATION_ERROR ->
+                    "Los datos no son válidos"
+
+                Error.CONFLICT ->
+                    "Se ha producido un conflicto"
+
+                Error.INVALID_CREDENTIALS ->
+                    "Las credenciales no son correctas"
+
+                Error.UNKNOWN ->
+                    "Ha ocurrido un error inesperado"
+            }
+            snackbarHostState.showSnackbar(message)
+            viewModel.clearError()
+        }
+    }
+
+    val film = viewModel.film
 
     Scaffold(
         topBar = {
@@ -45,7 +86,9 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                 title = viewModel.header,
                 back = { navigator.back() }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -64,7 +107,7 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                         .fillMaxHeight()
                 ) {
                     AsyncImage(
-                        model = film.poster,
+                        model = film?.poster,
                         contentDescription = null,
                         modifier = Modifier
                             .width(200.dp)
@@ -79,11 +122,13 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                         .padding(16.dp),
                     horizontalAlignment = Alignment.Start
                 ) {
-                    Text(
-                        text = film.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Center
-                    )
+                    film?.title?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.titleMedium,
+                            textAlign = TextAlign.Center
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -91,10 +136,12 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                         text = "Géneros",
                         style = MaterialTheme.typography.labelLarge
                     )
-                    Text(
-                        text = film.genres.joinToString(", ") { genre -> genre.name },
-                        style = MaterialTheme.typography.labelSmall
-                    )
+                    film?.genres?.joinToString(", ") { genre -> genre.name }?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -102,10 +149,12 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                         text = "Actores",
                         style = MaterialTheme.typography.labelLarge
                     )
-                    Text(
-                        text = film.actors.joinToString(", ") { actor -> actor.name },
-                        style = MaterialTheme.typography.labelSmall
-                    )
+                    film?.actors?.let {
+                        Text(
+                            text = it.joinToString(", ") { actor -> actor.name },
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -114,7 +163,8 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                         style = MaterialTheme.typography.labelLarge
                     )
                     Text(
-                        text = film.releaseDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) ?: "-",
+                        text = film?.releaseDate?.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                            ?: "-",
                         style = MaterialTheme.typography.labelSmall
                     )
 
@@ -125,7 +175,7 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                         style = MaterialTheme.typography.labelLarge
                     )
                     Text(
-                        text = "⭐ ${film.rating ?: "-"}",
+                        text = "⭐ ${film?.rating ?: "-"}",
                         style = MaterialTheme.typography.labelSmall
                     )
                 }
@@ -142,7 +192,7 @@ fun DetailFilmScreen(id: Int, navigator: Navigator) {
                     style = MaterialTheme.typography.titleSmall
                 )
 
-                film.synopsis?.let {
+                film?.synopsis?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodyMedium,

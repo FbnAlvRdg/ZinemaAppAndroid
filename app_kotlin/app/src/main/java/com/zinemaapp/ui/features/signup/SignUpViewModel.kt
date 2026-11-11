@@ -7,11 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zinemaapp.domain.usecase.auth.RegisterUseCase
 import com.zinemaapp.ui.uistate.UiState
-import com.zinemaapp.core.error.Error
+import com.zinemaapp.core.error.mapper.toAppError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -69,21 +67,9 @@ class SignUpViewModel @Inject constructor(private val registerUseCase: RegisterU
             try {
                 registerUseCase(username, email, password)
                 registerSuccess = true
-            } catch (e: IOException) {
-                uiState = uiState.copy(
-                    error = Error.CONNECTION_ERROR
-                )
-            } catch (e: HttpException) {
-                uiState = uiState.copy(
-                    error = when (e.code()) {
-                        403, 409 -> Error.CONFLICT
-                        in 500..599 -> Error.CONNECTION_ERROR
-                        else -> Error.UNKNOWN
-                    }
-                )
             } catch (e: Exception) {
                 uiState = uiState.copy(
-                    error = Error.UNKNOWN
+                    error = e.toAppError()
                 )
             } finally {
                 uiState = uiState.copy(

@@ -19,13 +19,11 @@ import com.zinemaapp.domain.usecase.genre.GetTvSeriesGenresUseCase
 import com.zinemaapp.domain.usecase.tvserie.GetMostPopularTvSeriesUseCase
 import com.zinemaapp.domain.usecase.tvserie.GetSeriesByGenreUseCase
 import com.zinemaapp.ui.uistate.UiState
-import com.zinemaapp.core.error.Error
+import com.zinemaapp.core.error.mapper.toAppError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,6 +56,7 @@ class ExploreViewModel @Inject constructor(
     fun selectTab(index: Int) {
         selectedTab = index
     }
+
     fun getFilmGenres() {
         viewModelScope.launch {
             try {
@@ -65,21 +64,9 @@ class ExploreViewModel @Inject constructor(
                     isLoading = true
                 )
                 filmGenres = getFilmGenresUseCase()
-            } catch (e: IOException) {
-                uiState = uiState.copy(
-                    error = Error.CONNECTION_ERROR
-                )
-            } catch (e: HttpException) {
-                uiState = uiState.copy(
-                    error = when (e.code()) {
-                        404 -> Error.NOT_FOUND
-                        in 500..599 -> Error.SERVER_ERROR
-                        else -> Error.UNKNOWN
-                    }
-                )
             } catch (e: Exception) {
                 uiState = uiState.copy(
-                    error = Error.UNKNOWN
+                    error = e.toAppError()
                 )
             } finally {
                 uiState = uiState.copy(
@@ -96,21 +83,9 @@ class ExploreViewModel @Inject constructor(
                     isLoading = true
                 )
                 tvSeriesGenres = getTvSeriesGenresUseCase()
-            } catch (e: IOException) {
-                uiState = uiState.copy(
-                    error = Error.CONNECTION_ERROR
-                )
-            } catch (e: HttpException) {
-                uiState = uiState.copy(
-                    error = when (e.code()) {
-                        404 -> Error.NOT_FOUND
-                        in 500..599 -> Error.SERVER_ERROR
-                        else -> Error.UNKNOWN
-                    }
-                )
             } catch (e: Exception) {
                 uiState = uiState.copy(
-                    error = Error.UNKNOWN
+                    error = e.toAppError()
                 )
             } finally {
                 uiState = uiState.copy(
@@ -124,21 +99,9 @@ class ExploreViewModel @Inject constructor(
         try {
             initialFilms = getMostPopularFilmsUseCase()
             films = initialFilms
-        } catch (e: IOException) {
-            uiState = uiState.copy(
-                error = Error.CONNECTION_ERROR
-            )
-        } catch (e: HttpException) {
-            uiState = uiState.copy(
-                error = when (e.code()) {
-                    404 -> Error.NOT_FOUND
-                    in 500..599 -> Error.SERVER_ERROR
-                    else -> Error.UNKNOWN
-                }
-            )
         } catch (e: Exception) {
             uiState = uiState.copy(
-                error = Error.UNKNOWN
+                error = e.toAppError()
             )
         } finally {
             uiState = uiState.copy(
@@ -154,21 +117,10 @@ class ExploreViewModel @Inject constructor(
             )
             initialTvSeries = getMostPopularTvSeriesUseCase()
             tvSeries = initialTvSeries
-        } catch (e: IOException) {
-            uiState = uiState.copy(
-                error = Error.CONNECTION_ERROR
-            )
-        } catch (e: HttpException) {
-            uiState = uiState.copy(
-                error = when (e.code()) {
-                    404 -> Error.NOT_FOUND
-                    in 500..599 -> Error.SERVER_ERROR
-                    else -> Error.UNKNOWN
-                }
-            )
+
         } catch (e: Exception) {
             uiState = uiState.copy(
-                error = Error.UNKNOWN
+                error = e.toAppError()
             )
         } finally {
             uiState = uiState.copy(
@@ -183,21 +135,10 @@ class ExploreViewModel @Inject constructor(
                 isLoading = true
             )
             films = getFilmsByGenreUseCase(genreId)
-        } catch (e: IOException) {
-            uiState = uiState.copy(
-                error = Error.CONNECTION_ERROR
-            )
-        } catch (e: HttpException) {
-            uiState = uiState.copy(
-                error = when (e.code()) {
-                    404 -> Error.NOT_FOUND
-                    in 500..599 -> Error.SERVER_ERROR
-                    else -> Error.UNKNOWN
-                }
-            )
+
         } catch (e: Exception) {
             uiState = uiState.copy(
-                error = Error.UNKNOWN
+                error = e.toAppError()
             )
         } finally {
             uiState = uiState.copy(
@@ -212,21 +153,9 @@ class ExploreViewModel @Inject constructor(
                 isLoading = true
             )
             tvSeries = getSeriesByGenreUseCase(genreId)
-        } catch (e: IOException) {
-            uiState = uiState.copy(
-                error = Error.CONNECTION_ERROR
-            )
-        } catch (e: HttpException) {
-            uiState = uiState.copy(
-                error = when (e.code()) {
-                    404 -> Error.NOT_FOUND
-                    in 500..599 -> Error.SERVER_ERROR
-                    else -> Error.UNKNOWN
-                }
-            )
         } catch (e: Exception) {
             uiState = uiState.copy(
-                error = Error.UNKNOWN
+                error = e.toAppError()
             )
         } finally {
             uiState = uiState.copy(

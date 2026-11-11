@@ -1,9 +1,6 @@
 package com.zinemaapp.zinemaapp.presentation.exception;
 
-import com.zinemaapp.zinemaapp.domain.exception.ConflictException;
-import com.zinemaapp.zinemaapp.domain.exception.ForbiddenException;
-import com.zinemaapp.zinemaapp.domain.exception.InvalidDataException;
-import com.zinemaapp.zinemaapp.domain.exception.ResourceNotFoundException;
+import com.zinemaapp.zinemaapp.domain.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -94,6 +91,17 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(ExternalServiceException.class)
+    public ResponseEntity<ErrorResponse> handleExternalServiceError(ExternalServiceException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_GATEWAY.value(),
+                "EXTERNAL_SERVICE_ERROR",
+                exception.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)

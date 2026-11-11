@@ -10,12 +10,10 @@ import com.zinemaapp.domain.usecase.lists.AddItemsUseCase
 import com.zinemaapp.domain.usecase.lists.DeleteItemUseCase
 import com.zinemaapp.domain.usecase.lists.GetItemsUseCase
 import com.zinemaapp.ui.uistate.UiState
-import com.zinemaapp.core.error.Error
+import com.zinemaapp.core.error.mapper.toAppError
 import com.zinemaapp.data.remote.dto.lists.AddItemRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 import javax.inject.Inject
 
 
@@ -42,21 +40,9 @@ class ListItemViewModel @Inject constructor(
                 )
                 val result = getItemsUseCase(listId)
                 items = result
-            } catch (e: IOException) {
-                uiState = uiState.copy(
-                    error = Error.CONNECTION_ERROR
-                )
-            } catch (e: HttpException) {
-                uiState = uiState.copy(
-                    error = when (e.code()) {
-                        404 -> Error.NOT_FOUND
-                        in 500..599 -> Error.SERVER_ERROR
-                        else -> Error.UNKNOWN
-                    }
-                )
             } catch (e: Exception) {
                 uiState = uiState.copy(
-                    error = Error.UNKNOWN
+                    error = e.toAppError()
                 )
             } finally {
                 uiState = uiState.copy(
@@ -81,25 +67,10 @@ class ListItemViewModel @Inject constructor(
                 addItemsUseCase(listId, addItemRequest)
                 loadItems(listId)
                 confirmation = "Se ha guardado en la lista"
-            } catch (e: IOException) {
-                uiState = uiState.copy(
-                    error = Error.CONNECTION_ERROR
-                )
-                confirmation = null
-            } catch (e: HttpException) {
-                uiState = uiState.copy(
-                    error = when (e.code()) {
-                        404 -> Error.NOT_FOUND
-                        409 -> Error.CONFLICT
-                        in 500..599 -> Error.SERVER_ERROR
-                        else -> Error.UNKNOWN
-                    }
-                )
-                confirmation = null
             } catch (e: Exception) {
                 uiState = uiState.copy(
                     isLoading = false,
-                    error = Error.UNKNOWN
+                    error = e.toAppError()
                 )
                 confirmation = null
             } finally {
@@ -119,21 +90,9 @@ class ListItemViewModel @Inject constructor(
                 deleteItemUseCase(listId, itemId)
                 loadItems(listId)
 
-            } catch (e: IOException) {
-                uiState = uiState.copy(
-                    error = Error.CONNECTION_ERROR
-                )
-            } catch (e: HttpException) {
-                uiState = uiState.copy(
-                    error = when (e.code()) {
-                        404 -> Error.NOT_FOUND
-                        in 500..599 -> Error.SERVER_ERROR
-                        else -> Error.UNKNOWN
-                    }
-                )
             } catch (e: Exception) {
                 uiState = uiState.copy(
-                    error = Error.UNKNOWN
+                    error = e.toAppError()
                 )
             } finally {
                 uiState = uiState.copy(

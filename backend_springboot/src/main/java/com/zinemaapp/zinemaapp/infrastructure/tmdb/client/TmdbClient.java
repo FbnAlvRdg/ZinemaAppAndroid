@@ -1,5 +1,6 @@
 package com.zinemaapp.zinemaapp.infrastructure.tmdb.client;
 
+import com.zinemaapp.zinemaapp.domain.exception.ExternalServiceException;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.genre.TmdbGenreResponse;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.film.TmdbFilmResponse;
 import com.zinemaapp.zinemaapp.infrastructure.tmdb.dto.film.TmdbFilmsResponse;
@@ -39,13 +40,13 @@ public class TmdbClient {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 400) {
-                throw new RuntimeException("Error (Respuesta Inválida): " + response.statusCode() + "body: " + response.body());
+                throw new ExternalServiceException("Respuesta inválida desde el servicio externo");
             }
 
             return objectMapper.readValue(response.body(), TmdbFilmsResponse.class);
 
         } catch (Exception e) {
-            throw new RuntimeException("Error en la conexión: ", e);
+            throw new ExternalServiceException("Error en la conexión con el servicio externo");
         }
     }
 
@@ -61,13 +62,13 @@ public class TmdbClient {
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException e) {
-            throw new RuntimeException("Error de conexión con TMDB", e);
+            throw new ExternalServiceException("Error de conexión con el servicio externo");
         } catch (InterruptedException e) {
-            throw new RuntimeException("Petición interrumpida", e);
+            throw new ExternalServiceException("Petición interrumpida");
         }
 
         if (response.statusCode() >= 400) {
-            throw new RuntimeException("Error: " + response.statusCode() + "body: " + response.body());
+            throw new ExternalServiceException("Respuesta inválida desde el servicio externo");
         }
 
         return objectMapper.readValue(response.body(), TmdbFilmsResponse.class);
@@ -85,13 +86,13 @@ public class TmdbClient {
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException e) {
-            throw new RuntimeException("Error de conexión con TMDB: ", e);
+            throw new ExternalServiceException("Error de conexión con el servicio externo");
         } catch (InterruptedException e) {
-            throw new RuntimeException("Petición interrumpida: ", e);
+            throw new ExternalServiceException("Petición interrumpida");
         }
 
         if (response.statusCode() >= 400) {
-            throw new RuntimeException("Error: " + response.statusCode() + " body: " + response.body());
+            throw new ExternalServiceException("Respuesta inválida desde el servicio externo");
         }
 
         return objectMapper.readValue(response.body(), TmdbFilmsResponse.class);
@@ -109,13 +110,13 @@ public class TmdbClient {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 400) {
-                throw new RuntimeException("Error: " + response.statusCode() + "body: " + response.body());
+                throw new ExternalServiceException("Respuesta inválida desde el servicio externo");
             }
 
             return objectMapper.readValue(response.body(), TmdbFilmResponse.class);
 
         } catch (Exception e) {
-            throw new RuntimeException("Error obteniendo la película con el id: ", e);
+            throw new ExternalServiceException("Error obteniendo la película");
         }
     }
 
@@ -131,13 +132,13 @@ public class TmdbClient {
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException e) {
-            throw new RuntimeException("Error en la conexión con TMDB: ", e);
+            throw new ExternalServiceException("Error en la conexión con el servicio externo");
         } catch (InterruptedException e) {
-            throw new RuntimeException("Petición interrumpida: ", e);
+            throw new ExternalServiceException("Petición interrumpida");
         }
 
         if (response.statusCode() >= 400) {
-            throw new RuntimeException("Error: " + response.statusCode() + " body: " + response.body());
+            throw new ExternalServiceException("Respuesta inválida desde el servicio externo");
         }
 
         return objectMapper.readValue(response.body(), TmdbTvSeriesResponse.class);
@@ -156,13 +157,13 @@ public class TmdbClient {
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException e) {
-            throw new RuntimeException("Error en la conexión con TMDB: ", e);
+            throw new ExternalServiceException("Error en la conexión con el servicio externo");
         } catch (InterruptedException e) {
-            throw new RuntimeException("Petición interrumpida: ", e);
+            throw new ExternalServiceException("Petición interrumpida");
         }
 
         if (response.statusCode() >= 400) {
-            throw new RuntimeException("Error: " + response.statusCode() + " body: " + response.body());
+            throw new ExternalServiceException("Respuesta inválida desde el servicio externo");
         }
 
         return objectMapper.readValue(response.body(), TmdbTvSeriesResponse.class);
@@ -181,13 +182,13 @@ public class TmdbClient {
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException e) {
-            throw new RuntimeException("Error en la conexión con TMDB ", e);
+            throw new ExternalServiceException("Error en la conexión con el servicio externo");
         } catch (InterruptedException e) {
-            throw new RuntimeException("Petición interrumpida: ", e);
+            throw new ExternalServiceException("Petición interrumpida");
         }
 
         if (response.statusCode() >= 400) {
-            throw new RuntimeException("Error: " + response.statusCode() + " body: " + response.body());
+            throw new ExternalServiceException("Respuesta inválida desde el servicio externo");
         }
 
         return objectMapper.readValue(response.body(), TmdbTvSeriesResponse.class);
@@ -205,15 +206,15 @@ public class TmdbClient {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 400) {
-                throw new RuntimeException("Error: " + response.statusCode() + "body: " + response.body());
+                throw new ExternalServiceException("Respuesta inválida desde el servicio externo");
             }
 
             return objectMapper.readValue(response.body(), TmdbTvSerieResponse.class);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error en la conexión con TMDB: ", e);
+            throw new ExternalServiceException("Error en la conexión con el servicio externo");
         } catch (InterruptedException e) {
-            throw new RuntimeException("Petición interrumpida: ", e);
+            throw new ExternalServiceException("Petición interrumpida");
         }
     }
 
@@ -231,15 +232,15 @@ public class TmdbClient {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 400) {
-                throw new RuntimeException("Error: " + response.statusCode() + "body: " + response.body());
+                throw new ExternalServiceException("Respuesta inválida desde el servicio externo");
             }
 
             return objectMapper.readValue(response.body(), TmdbGenreResponse.class);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error en la conexión con TMDB ", e);
+            throw new ExternalServiceException("Error en la conexión con el servicio externo");
         } catch (InterruptedException e) {
-            throw new RuntimeException("Petición interrumpida: ", e);
+            throw new ExternalServiceException("Petición interrumpida");
         }
     }
 
@@ -257,15 +258,15 @@ public class TmdbClient {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 400) {
-                throw new RuntimeException("Error: " + response.statusCode() + "body: " + response.body());
+                throw new ExternalServiceException("Respuesta inválida desde el servicio externo");
             }
 
             return objectMapper.readValue(response.body(), TmdbGenreResponse.class);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error en la conexión con TMDB ", e);
+            throw new ExternalServiceException("Error en la conexión con el servicio externo");
         } catch (InterruptedException e) {
-            throw new RuntimeException("Petición interrumpida: ", e);
+            throw new ExternalServiceException("Petición interrumpida");
         }
     }
 
