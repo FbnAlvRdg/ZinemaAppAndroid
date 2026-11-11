@@ -6,6 +6,7 @@ import com.zinemaapp.zinemaapp.application.usecase.lists.GetListsByUserUseCase;
 import com.zinemaapp.zinemaapp.application.usecase.lists.listItem.AddItemUseCase;
 import com.zinemaapp.zinemaapp.application.usecase.lists.listItem.DeleteItemUseCase;
 import com.zinemaapp.zinemaapp.application.usecase.lists.listItem.GetItemsUseCase;
+import com.zinemaapp.zinemaapp.domain.exception.ResourceNotFoundException;
 import com.zinemaapp.zinemaapp.domain.model.lists.ListItem;
 import com.zinemaapp.zinemaapp.domain.model.lists.ListUser;
 import com.zinemaapp.zinemaapp.domain.model.user.User;
@@ -126,7 +127,7 @@ public class ListController {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if (userOptional.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado el usuario");
+            throw new ResourceNotFoundException("No se ha encontrado el usuario");
         }
 
         User user = userOptional.get();
@@ -162,7 +163,7 @@ public class ListController {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if (userOptional.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado el usuario");
+            throw new ResourceNotFoundException("No se ha encontrado el usuario");
         }
 
         return userOptional.get();

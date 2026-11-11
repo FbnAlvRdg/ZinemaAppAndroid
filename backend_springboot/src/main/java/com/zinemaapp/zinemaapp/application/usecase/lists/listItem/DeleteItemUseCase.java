@@ -1,5 +1,6 @@
 package com.zinemaapp.zinemaapp.application.usecase.lists.listItem;
 
+import com.zinemaapp.zinemaapp.domain.exception.ForbiddenException;
 import com.zinemaapp.zinemaapp.domain.model.lists.ListItem;
 import com.zinemaapp.zinemaapp.domain.model.lists.ListUser;
 import com.zinemaapp.zinemaapp.domain.repository.lists.ListItemRepository;
@@ -20,13 +21,13 @@ public class DeleteItemUseCase {
 
         ListUser listUser = listUserRepository.findById(listId);
         if (!listUser.getUser().getId().equals(userId)) {
-            throw new RuntimeException("El usuario no tiene permisos sobre la lista");
+            throw new ForbiddenException("El usuario no tiene permisos sobre la lista");
         }
 
         ListItem listItem = listItemRepository.findById(itemId);
         Long listItemId = (long) listItem.getList().getId();
         if (!listItemId.equals(listId)) {
-            throw new RuntimeException("El item no pertenece a la lista");
+            throw new ForbiddenException("El item no pertenece a la lista");
         }
 
         listItemRepository.delete(listItem);

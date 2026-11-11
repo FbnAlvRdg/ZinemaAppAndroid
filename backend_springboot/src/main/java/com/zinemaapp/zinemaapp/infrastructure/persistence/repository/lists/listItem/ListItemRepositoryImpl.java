@@ -1,5 +1,6 @@
 package com.zinemaapp.zinemaapp.infrastructure.persistence.repository.lists.listItem;
 
+import com.zinemaapp.zinemaapp.domain.exception.ResourceNotFoundException;
 import com.zinemaapp.zinemaapp.domain.model.lists.ListItem;
 import com.zinemaapp.zinemaapp.domain.repository.lists.ListItemRepository;
 import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.ListItemEntity;
@@ -28,7 +29,7 @@ public class ListItemRepositoryImpl implements ListItemRepository {
         Optional<ListUserEntity> listUserEntityOptional = listUserJpaRepository.findById(listId);
 
         if (listUserEntityOptional.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado la lista");
+            throw new ResourceNotFoundException("No se ha encontrado la lista");
         }
 
         ListUserEntity listUserEntity = listUserEntityOptional.get();
@@ -49,7 +50,7 @@ public class ListItemRepositoryImpl implements ListItemRepository {
         Optional<ListUserEntity> listUserEntityOptional = listUserJpaRepository.findById(listId);
 
         if (listUserEntityOptional.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado la lista");
+            throw new ResourceNotFoundException("No se ha encontrado la lista");
         }
 
         ListUserEntity listUserEntity = listUserEntityOptional.get();
@@ -67,7 +68,7 @@ public class ListItemRepositoryImpl implements ListItemRepository {
         Optional<ListItemEntity> listItemEntityOptional = listItemJpaRepository.findById(itemId);
 
         if (listItemEntityOptional.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado el item");
+            throw new ResourceNotFoundException("No se ha encontrado el item");
         }
 
         ListItemEntity listItemEntity = listItemEntityOptional.get();

@@ -1,5 +1,8 @@
 package com.zinemaapp.zinemaapp.application.usecase.lists.listItem;
 
+import com.zinemaapp.zinemaapp.domain.exception.ConflictException;
+import com.zinemaapp.zinemaapp.domain.exception.ForbiddenException;
+import com.zinemaapp.zinemaapp.domain.exception.InvalidDataException;
 import com.zinemaapp.zinemaapp.domain.model.film.Film;
 import com.zinemaapp.zinemaapp.domain.model.lists.ListItem;
 import com.zinemaapp.zinemaapp.domain.model.lists.ListUser;
@@ -32,11 +35,11 @@ public class AddItemUseCase {
         ListUser listUser = listUserRepository.findById(listId);
 
         if (!listUser.getUser().getId().equals(userId)) {
-            throw new RuntimeException("El usuario no tiene permisos sobre la lista");
+            throw new ForbiddenException("El usuario no tiene permisos sobre la lista");
         }
 
         if (listItemRepository.existsByListAndTmdbId(listId, tmdbId)) {
-            throw new RuntimeException("El item ya se encuentra en la lista");
+            throw new ConflictException("El item ya se encuentra en la lista");
         }
 
         String title;
@@ -50,12 +53,11 @@ public class AddItemUseCase {
         } else if (TYPE_TV.equals(type)) {
 
             TvSerie tvSerie = tvSerieRepository.findById(tmdbId.intValue());
-
             title = tvSerie.getName();
             poster = tvSerie.getPoster();
 
         } else {
-            throw new RuntimeException("Tipo no válido: " + type);
+            throw new InvalidDataException("Tipo no válido: " + type);
         }
 
         ListItem listItem = new ListItem(tmdbId, type, title, poster, listUser);

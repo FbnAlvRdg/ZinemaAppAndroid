@@ -1,5 +1,7 @@
 package com.zinemaapp.zinemaapp.infrastructure.persistence.repository.lists;
 
+import com.zinemaapp.zinemaapp.domain.exception.ForbiddenException;
+import com.zinemaapp.zinemaapp.domain.exception.ResourceNotFoundException;
 import com.zinemaapp.zinemaapp.domain.model.lists.ListUser;
 import com.zinemaapp.zinemaapp.domain.repository.lists.ListUserRepository;
 import com.zinemaapp.zinemaapp.infrastructure.persistence.entity.ListUserEntity;
@@ -30,7 +32,7 @@ public class ListUserRepositoryImpl implements ListUserRepository {
                 userJpaRepository.findById(userId);
 
         if (userOptional.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado el usuario");
+            throw new ResourceNotFoundException("No se ha encontrado el usuario");
         }
 
         UserEntity user = userOptional.get();
@@ -47,7 +49,7 @@ public class ListUserRepositoryImpl implements ListUserRepository {
         Optional<ListUserEntity> listUserOptional = listUserJpaRepository.findById(listId);
 
         if (listUserOptional.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado la lista");
+            throw new ResourceNotFoundException("No se ha encontrado la lista");
         }
 
         return listUserEntityMapper.toDomain(listUserOptional.get());
@@ -58,7 +60,7 @@ public class ListUserRepositoryImpl implements ListUserRepository {
         Optional<UserEntity> userEntity = userJpaRepository.findById(userId);
 
         if (userEntity.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado el usuario");
+            throw new ResourceNotFoundException("No se ha encontrado el usuario");
         }
 
         UserEntity user = userEntity.get();
@@ -76,7 +78,7 @@ public class ListUserRepositoryImpl implements ListUserRepository {
         Optional<UserEntity> userOptional = userJpaRepository.findById(userId);
 
         if (userOptional.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado al usuario");
+            throw new ResourceNotFoundException("No se ha encontrado al usuario");
         }
 
         UserEntity userEntity = userOptional.get();
@@ -84,13 +86,13 @@ public class ListUserRepositoryImpl implements ListUserRepository {
         Optional<ListUserEntity> listUserOptional = listUserJpaRepository.findById(listId);
 
         if (listUserOptional.isEmpty()) {
-            throw new RuntimeException("No se ha encontrado la lista");
+            throw new ResourceNotFoundException("No se ha encontrado la lista");
         }
 
         ListUserEntity listUserEntity = listUserOptional.get();
 
         if (!listUserEntity.getUser().getId().equals(userEntity.getId())) {
-            throw new RuntimeException("El usuario no tiene permisos sobre la lista");
+            throw new ForbiddenException("El usuario no tiene permisos sobre la lista");
         }
 
         listUserJpaRepository.delete(listUserEntity);
