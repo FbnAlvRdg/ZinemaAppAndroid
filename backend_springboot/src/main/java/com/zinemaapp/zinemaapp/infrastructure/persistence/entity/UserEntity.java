@@ -10,9 +10,16 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true, length = 150)
     private String email;
+
+    @Column(unique = true, length = 30)
     private String username;
+
+    @Column(nullable = false)
     private String password;
+
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ListUserEntity> lists;
 

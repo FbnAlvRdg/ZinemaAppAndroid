@@ -25,7 +25,13 @@ public class RegisterUseCase {
             );
         }
 
-        if (userRepository.existsByUsername(registerRequest.getUsername())) {
+        String username = registerRequest.getUsername();
+
+        if (username != null && username.isBlank()){
+            username = null;
+        }
+
+        if (userRepository.existsByUsername(username) && username != null) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT, "Ese nombre de usuario ya se encuentra registrado"
             );
@@ -36,7 +42,7 @@ public class RegisterUseCase {
         User user = new User(
                 null,
                 registerRequest.getEmail(),
-                registerRequest.getUsername(),
+                username,
                 password
         );
 
