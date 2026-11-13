@@ -27,11 +27,11 @@ public class RegisterUseCase {
 
         String username = registerRequest.getUsername();
 
-        if (username != null && username.isBlank()){
+        if (username != null && username.isBlank()) {
             username = null;
         }
 
-        if (userRepository.existsByUsername(username) && username != null) {
+        if (username != null && userRepository.existsByUsername(username)) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT, "Ese nombre de usuario ya se encuentra registrado"
             );
