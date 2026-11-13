@@ -18,8 +18,8 @@ class AuthRepositoryImpl @Inject constructor(private val dataSource: AuthDataSou
     ): User {
 
         val request = RegisterRequestDTO(
-            username = username,
-            email = email,
+            username = username.trim(),
+            email = email.trim(),
             password = password
         )
 
@@ -32,7 +32,7 @@ class AuthRepositoryImpl @Inject constructor(private val dataSource: AuthDataSou
     ): LoginResponse {
 
         val request = LoginRequestDTO(
-            email = email,
+            email = email.trim(),
             password = password
         )
 
