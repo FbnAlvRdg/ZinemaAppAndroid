@@ -1,5 +1,6 @@
 package com.zinemaapp.zinemaapp.infrastructure.security;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +32,19 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = authorizationHeader.substring(7);
-        String email = jwtService.getSubject(token);
+        String email;
+
+        try {
+            email = jwtService.getSubject(token);
+        } catch (JwtException | IllegalArgumentException exception) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(
+                    "{\"status\":401,\"code\":\"UNAUTHORIZED\",\"message\":\"Sesión no válida o caducada\"}"
+            );
+            return;
+        }
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, null, new ArrayList<>());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);

@@ -1,9 +1,15 @@
 package com.zinemaapp.ui.navigation
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import com.zinemaapp.core.session.SessionManager
 import com.zinemaapp.ui.features.details.DetailFilmScreen
 import com.zinemaapp.ui.features.details.DetailsSerieScreen
 import com.zinemaapp.ui.features.explore.ExploreScreen
@@ -21,6 +27,18 @@ import com.zinemaapp.ui.navigation.navigator.NavigatorImpl
 fun Navigation() {
     val backStack = rememberNavBackStack(LoginScreenKey)
     val navigator: Navigator = NavigatorImpl(backStack)
+    val context = LocalContext.current
+    val sessionExpired by SessionManager.sessionExpired.collectAsState()
+
+    LaunchedEffect(sessionExpired) {
+        if (sessionExpired) {
+            navigator.navigateToLoginClearBackStack()
+
+            Toast.makeText(context, "La sesión ha caducado", Toast.LENGTH_SHORT).show()
+
+            SessionManager.consumeSessionExpired()
+        }
+    }
 
     NavDisplay(
         backStack = backStack,
