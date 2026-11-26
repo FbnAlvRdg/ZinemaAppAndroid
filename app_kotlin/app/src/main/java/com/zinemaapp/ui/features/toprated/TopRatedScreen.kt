@@ -267,7 +267,7 @@ fun TopRatedScreen(navigator: Navigator) {
                                         media = Media.MediaFilm(film),
                                         onLongClick = {
                                             selectedTmdbId = it.id.toLong()
-                                            selectedType = "movies"
+                                            selectedType = "movie"
                                             selectedTitle = it.title
                                             selectedPoster = it.poster
                                             showDialog = true
