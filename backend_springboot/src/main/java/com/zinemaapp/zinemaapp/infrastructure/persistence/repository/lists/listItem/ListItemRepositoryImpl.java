@@ -78,8 +78,11 @@ public class ListItemRepositoryImpl implements ListItemRepository {
 
     @Override
     public boolean delete(ListItem listItem) {
-        ListItemEntity listItemEntity = listItemEntityMapper.toEntity(listItem);
-        listItemJpaRepository.delete(listItemEntity);
+        int deletedRows = listItemJpaRepository.deleteItemById(listItem.getId());
+        if (deletedRows == 0) {
+            throw new ResourceNotFoundException("No se ha encontrado el ítem para eliminar");
+        }
+
         return true;
     }
 }
